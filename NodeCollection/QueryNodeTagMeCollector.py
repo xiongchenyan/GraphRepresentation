@@ -11,7 +11,7 @@ lObjId for each query
 
 import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
-
+site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 
 import os
 from cxBase.Conf import cxConfC
