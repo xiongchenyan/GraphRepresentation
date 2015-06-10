@@ -20,7 +20,7 @@ import logging
 
 from IndriRelate.LmBase import LmBaseC
 from ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
-
+from IndriRelate.CtfLoader import TermCtfC
 
 class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
     
@@ -28,10 +28,38 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'TextSim'
         self.lObjField = ['name','desp','alias']
+        self.CtfCenter = TermCtfC()
+        self.TermCtfIn = ""
         
     def SetConf(self, ConfIn):
         ObjObjEdgeFeatureExtractorC.SetConf(self, ConfIn)
+        self.TermCtfIn = self.conf.GetConf('termctf')
+        self.CtfCenter = TermCtfC(self.TermCtfIn)
         
+    @staticmethod
+    def ShowConf():
+        ObjObjEdgeFeatureExtractorC.ShowConf()
+        print 'termctf'    
+        
+        
+    def process(self, ObjA, ObjB):
+        hFeature = {}
+        
+        hFeature.update(self.ExtractFieldJS(ObjA,ObjB))
+        
+        return hFeature
+    
+    def ExtractFieldJS(self,ObjA,ObjB):
+        hFeature = {}
+        
+        for field in self.lObjField:
+            FeatureName = self.FeatureName + field.title()
+            LmA = LmBaseC(ObjA.GetField(field))
+            LmB = LmBaseC(ObjB.GetField(field))
+            score = LmBaseC.Similarity(LmA, LmB, self.CtfCenter, 'js')
+            hFeature[FeatureName] = score
+            
+        return hFeature
         
         
 
