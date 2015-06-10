@@ -25,6 +25,11 @@ basic function implemented
 not tested
 '''
 
+'''
+Jun 10 add output format:
+    a dir: each file is a q name, and contains all its objid
+'''
+
 
 import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
@@ -116,7 +121,7 @@ class NodeCollectorCenterC(cxBaseC):
         
         return lDocObj
     
-    def PipeRun(self,QInName,OutName):
+    def PipeRun(self,QInName,OutName,OutFormat = 'json'):
         '''
         read qid,query
         run
@@ -126,14 +131,22 @@ class NodeCollectorCenterC(cxBaseC):
         
         lQidQuery = [line.split('\t') for line in open(QInName).read().splitlines()]
         
-        out = open(OutName,'w')
+        if OutFormat == 'json':
+            out = open(OutName,'w')
         
         for qid,query in lQidQuery:
             lDoc,lQObj,lDocObj = self.process(qid, query)
-            print >>out, json.dumps([qid,query,lDoc,lQObj,lDocObj])
-            
-        out.close()
+            if OutFormat == 'json':
+                print >>out, json.dumps([qid,query,lDoc,lQObj,lDocObj])
+            if OutFormat == 'dir':
+                out = open(OutName + '/' + IndriSearchCenterC.GenerateQueryTargetName(query),'w')
+                print >>out, '\n'.join(list(set(lQObj + lDocObj)))
+                out.close()
+        
+        if OutFormat == 'json':    
+            out.close()
         logging.info('query in [%s] node genereated, dumped to [%s]',QInName,OutName)
+    
         
         
 if __name__=='__main__':
