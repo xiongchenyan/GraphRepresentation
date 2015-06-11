@@ -19,7 +19,13 @@ because it is per file, I can store the pairs in memory, and sort them in output
 '''
 
 '''
+June 11
+now only generate target pair's correlation
+will be much smaller
 
+need a major reconstruction.
+pack it into a class
+fiter function is a class function, with choices    
 '''
 
 import ntpath
@@ -33,81 +39,119 @@ from Facc.FaccReader import FaccReaderC
 from Facc.FakbaReader import FakbaReaderC
 import sys
 
-def GenerateOutNameFromInName(InName,InType = 'facc'):
-    '''
-    if facc: then the last two dim of directory + file name
-    if fakba: just InName
-    '''
-    if InType != 'facc':
-        return ntpath.basename(InName)
-    
-    vCol = InName.split('/')
-    return '_'.join(vCol[-3:])
 
 
-def Process(InName,OutDir,hTargetId = {}, InType = 'facc'):
-    hPair = {}
-    if InType == 'facc':
-        Reader = FaccReaderC()
-    else:
-        Reader = FakbaReaderC()
+class EntityCorrelationPerDocCounterC(object):
+    def __init__(self):
+        self.Init()
         
-    Reader.open(InName)
-    OutName = OutDir + '/' + GenerateOutNameFromInName(InName, InType)
-    out = open(OutName,'w')
-    cnt = 0
-    PairCnt = 0
-    for lAna in Reader:
-        for i in range(len(lAna)):
-            for j in range(i + 1,len(lAna)):       
-                if lAna[j].st - lAna[i].st > 100:
-                    break
-                if lAna[i].ObjId == lAna[j].ObjId:
-                    continue
-                if len(hTargetId) != 0:
-                    if (not lAna[i].ObjId in hTargetId) & (not lAna[j].ObjId in hTargetId):
+    def Init(self):
+        self.FilterType = 'targetpair'
+        self.TargetIdInName = ""
+        self.TargetPairInName = ""
+        self.sTargetId = {}
+        self.sTargetPair = {}
+        self.InType = 'facc'
+        
+    
+    def prepare(self):
+        if self.FilterType == 'targetpair':
+            self.ReadTargetPair()
+        if self.FilterType == 'targetid':
+            self.ReadTargetId()
+    
+    def ReadTargetId(self):
+        if "" == self.TargetIdInName:
+            continue
+        lId = open(self.TargetIdInName).read().splitlines()
+        self.sTargetId = set(lId)
+    
+    def ReadTargetPair(self):
+        if "" == self.TargetPairInName:
+            continue
+        lIdPair = [line.split() for line in open(self.TargetPairInName).read().splitlines()]
+        lPairKey = ['\t'.join(vCol.sort()) for vCol in lIdPair]
+        self.sTargetPair = set(lPairKey)
+    
+    def GenerateOutNameFromInName(self,InName):
+        '''
+        if facc: then the last two dim of directory + file name
+        if fakba: just InName
+        '''
+        if self.InType != 'facc':
+            return ntpath.basename(InName)
+        
+        vCol = InName.split('/')
+        return '_'.join(vCol[-3:])
+    
+    
+    
+    def FormObjPairFromFile(self,InName):
+        hPair = {}
+        if self.InType == 'facc':
+            Reader = FaccReaderC()
+        else:
+            Reader = FakbaReaderC()
+            
+        Reader.open(InName)
+        cnt = 0
+        PairCnt = 0
+        for lAna in Reader:
+            for i in range(len(lAna)):
+                for j in range(i + 1,len(lAna)):       
+                    if lAna[j].st - lAna[i].st > 100:
+                        break
+                    if lAna[i].ObjId == lAna[j].ObjId:
                         continue
-                
-                lObjId = [lAna[i].ObjId,lAna[j].ObjId]
-                lObjId.sort()
-                key = ' '.join(lObjId)
-                if not key in hPair:
-                    hPair[key] = 1
-                else:
-                    hPair[key] += 1
-                
-#                 print >>out, lAna[i].ObjId + '\t' + lAna[j].ObjId
-#                 print >>out, lAna[j].ObjId + '\t' + lAna[i].ObjId
-                PairCnt += 1
-        cnt += 1
-        if 0 == (cnt % 100):
-            print 'processed [%d] doc' %(cnt)
+                    if self.Filter(lAna[i].ObjId,lAna[j].ObjId):
+                        continue
+                    
+                    lObjId = [lAna[i].ObjId,lAna[j].ObjId]
+                    lObjId.sort()
+                    key = ' '.join(lObjId)
+                    if not key in hPair:
+                        hPair[key] = 1
+                    else:
+                        hPair[key] += 1
+                    PairCnt += 1
+            cnt += 1
+            if 0 == (cnt % 100):
+                print 'processed [%d] doc' %(cnt)
+        return hPair
     
-    
-    lPairCnt = hPair.items()
-    lPairCnt.sort(key = lambda item: item[0])
-    for Pair,cnt in lPairCnt:
-        print >>out, Pair + ' %d' %(cnt)
-    out.close()        
-    print 'finished to [%s] [%d] in [%d] pair pairwise correlation' %(OutName,PairCnt,len(hPair))
-    
-    return True
-    
-def ReadTargetId(TargetIdInName):
-    hTargetId = {}
-    if "" != TargetIdInName:
-        lId = open(TargetIdInName).read().splitlines()
-        hTargetId = dict(zip(lId,[0]*len(lId)))
-    return hTargetId
+    def Process(self,InName,OutDir):
+        
+        self.Prepare()
+        
+        hPair = self.FormObjPairFromFile(InName)
+        
+        OutName = OutDir + '/' + self.GenerateOutNameFromInName(InName)
+        out = open(OutName,'w')
+        lPairCnt = hPair.items()
+        lPairCnt.sort(key = lambda item: item[0])
+        for Pair,cnt in lPairCnt:
+            print >>out, Pair + ' %d' %(cnt)
+        out.close()        
+        print 'finished to [%s] in [%d] pair pairwise correlation' %(OutName,len(hPair))
+        
+        return True
+        
 
+        
+        
 
-if 5 != len(sys.argv):
-    print "InName + outdir + target id in + intype (facc|fakba)"
-    sys.exit()
+if __name__ == '__main__':
+
+    if 5 != len(sys.argv):
+        print "InName + outdir + target pair in + intype (facc|fakba)"
+        sys.exit()
+        
+    Calcer = EntityCorrelationPerDocCounterC()
+    Calcer.FilterType = 'targetpair'
+    Calcer.TargetPairInName = sys.argv[3]
+    Calcer.InType = sys.argv[4]
+    Calcer.Process(sys.argv[1], sys.argv[2])
     
-hTargetId = ReadTargetId(sys.argv[3])
-Process(sys.argv[1],sys.argv[2],hTargetId,sys.argv[4])
-
 
 
 
