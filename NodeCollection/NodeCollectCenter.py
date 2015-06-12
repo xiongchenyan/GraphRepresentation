@@ -30,6 +30,10 @@ Jun 10 add output format:
     a dir: each file is a q name, and contains all its objid
 '''
 
+'''
+Jun 12 testing
+'''
+
 
 import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
