@@ -157,8 +157,8 @@ if __name__=='__main__':
     import sys,os
 
 if 2 != len(sys.argv):
-    print 'I fetch node for query'
-    print 'in\nout'
+    print 'I fetch node for queries (and their docs) in a given query file'
+    print 'in\nout\noutformat'
     NodeCollectorCenterC.ShowConf()
     sys.exit()
 
@@ -175,10 +175,10 @@ if 2 != len(sys.argv):
     conf = cxConfC(sys.argv[1])
     InName = conf.GetConf('in')
     OutName = conf.GetConf('out')
-    
+    OutFormat = conf.GetConf('outformat')
     NodeCollector = NodeCollectorCenterC(sys.argv[1])
     
-    NodeCollector.PipeRun(InName, OutName)
+    NodeCollector.PipeRun(InName, OutName,OutFormat)
             
             
         
