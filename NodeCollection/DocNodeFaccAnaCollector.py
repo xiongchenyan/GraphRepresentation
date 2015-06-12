@@ -30,7 +30,11 @@ class DocNodeFaccAnaCollectorC(cxBaseC):
     def SetConf(self, ConfIn):
         cxBaseC.SetConf(self, ConfIn)
         self.FaccDataCenter.SetConf(ConfIn)
-        
+    
+    @staticmethod
+    def ShowConf():
+        cxBaseC.ShowConf() 
+        FaccDataCenterC.ShowConf()   
         
     def process(self,lDoc,qid,query):
         lFaccDoc = self.FaccDataCenter.FetchFaccForQ(query)
