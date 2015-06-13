@@ -30,7 +30,7 @@ class QueryTagMeNodeCollectorC(QueryNodeCollectorC):
     def SetConf(self, ConfIn):
         QueryNodeCollectorC.SetConf(self, ConfIn)
         self.TagMeCacheInName = self.conf.GetConf('querytagmecache')
-        self.hQObjId = self.LoadTagMeObj()
+        self.LoadTagMeObj()
         
     @staticmethod
     def ShowConf():
