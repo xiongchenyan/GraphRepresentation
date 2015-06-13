@@ -38,7 +38,7 @@ site.addsitedir('/bos/usr0/cx/PyCode/GoogleAPI')
 from Facc.FaccReader import FaccReaderC
 from Facc.FakbaReader import FakbaReaderC
 import sys
-
+import logging
 
 
 class EntityCorrelationPerDocCounterC(object):
@@ -72,6 +72,7 @@ class EntityCorrelationPerDocCounterC(object):
         lIdPair = [line.split() for line in open(self.TargetPairInName).read().splitlines()]
         lPairKey = ['\t'.join(vCol.sort()) for vCol in lIdPair]
         self.sTargetPair = set(lPairKey)
+        logging.info('[%d] target pair read from [%s]', len(self.sTargetPair),self.TargetPairInName)
     
     def GenerateOutNameFromInName(self,InName):
         '''
