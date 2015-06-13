@@ -31,7 +31,8 @@ Jun 10 add output format:
 '''
 
 '''
-Jun 12 testing
+Jun 14 testing,
+output to dir run successful
 '''
 
 
