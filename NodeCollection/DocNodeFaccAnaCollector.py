@@ -51,6 +51,6 @@ class DocNodeFaccAnaCollectorC(cxBaseC):
             lThisNodeScore = [[ana.DocNo,ana.Prob] for ana in lAnaRes]
             llNodeScore.append(lThisNodeScore)
             FindCnt += 1
-        logging.info('query [%d] doc facc ana node get [%d/%d]',query,FindCnt,len(lDoc))
+        logging.info('query [%s] doc facc ana node get [%d/%d]',query,FindCnt,len(lDoc))
         return llNodeScore
         

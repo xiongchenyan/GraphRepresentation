@@ -115,13 +115,13 @@ class NodeCollectorCenterC(cxBaseC):
         return lQObj
     
     def CollectDocNode(self,lDoc,qid,query):
-        lDocNodeScore = []
-        
+        lDocObj = []
         if 'facc' in self.lDocNodeGroup:
-            lDocNodeScore.extend(self.DocNodeFaccAnaCollector.process(lDoc, qid, query))
+            llDocNodeScore = self.DocNodeFaccAnaCollector.process(lDoc, qid, query)
+            for lDocNodeScore in llDocNodeScore:
+                if [] != lDocNodeScore:
+                    lDocObj.extend([item[0] for item in lDocNodeScore])
             
-            
-        lDocObj = list(set([item[0] for item in lDocNodeScore]))
         
         return lDocObj
     
