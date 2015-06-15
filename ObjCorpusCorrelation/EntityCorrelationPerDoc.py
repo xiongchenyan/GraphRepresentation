@@ -49,8 +49,8 @@ class EntityCorrelationPerDocCounterC(object):
         self.FilterType = 'targetpair'
         self.TargetIdInName = ""
         self.TargetPairInName = ""
-        self.sTargetId = {}
-        self.sTargetPair = {}
+        self.sTargetId = set()
+        self.sTargetPair = set()
         self.InType = 'facc'
         
     
