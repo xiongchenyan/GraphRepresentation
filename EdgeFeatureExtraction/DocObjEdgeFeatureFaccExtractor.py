@@ -24,7 +24,7 @@ from EdgeFeatureExtraction.DocObjEdgeFeatureExtractor import DocObjEdgeFeatureEx
 from Facc.FaccDataCenter import FaccDataCenterC
 
 
-class DocObjEdgeFeatureFaccExtractor(DocObjEdgeFeatureExtractorC):
+class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
     
     def Init(self):
         DocObjEdgeFeatureExtractorC.Init(self)
