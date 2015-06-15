@@ -62,13 +62,13 @@ class EntityCorrelationPerDocCounterC(object):
     
     def ReadTargetId(self):
         if "" == self.TargetIdInName:
-            continue
+            return
         lId = open(self.TargetIdInName).read().splitlines()
         self.sTargetId = set(lId)
     
     def ReadTargetPair(self):
         if "" == self.TargetPairInName:
-            continue
+            return
         lIdPair = [line.split() for line in open(self.TargetPairInName).read().splitlines()]
         lPairKey = ['\t'.join(vCol.sort()) for vCol in lIdPair]
         self.sTargetPair = set(lPairKey)
