@@ -122,7 +122,7 @@ class EntityCorrelationPerDocCounterC(object):
     
     def Process(self,InName,OutDir):
         
-        self.Prepare()
+        self.prepare()
         
         hPair = self.FormObjPairFromFile(InName)
         
