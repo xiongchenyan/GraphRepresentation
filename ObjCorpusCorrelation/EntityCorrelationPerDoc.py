@@ -69,9 +69,11 @@ class EntityCorrelationPerDocCounterC(object):
     def ReadTargetPair(self):
         if "" == self.TargetPairInName:
             return
-        lIdPair = [line.split() for line in open(self.TargetPairInName).read().splitlines()]
-        lPairKey = ['\t'.join(vCol.sort()) for vCol in lIdPair]
-        self.sTargetPair = set(lPairKey)
+        logging.info('start read tart pair from [%s]',self.TargetPairInName)
+        for line in open(self.TargetPairInName):
+            vCol = line.strip().split()
+            vCol.sort()
+            self.sTargetPair.add('\t'.join(vCol))
         logging.info('[%d] target pair read from [%s]', len(self.sTargetPair),self.TargetPairInName)
     
     def GenerateOutNameFromInName(self,InName):
