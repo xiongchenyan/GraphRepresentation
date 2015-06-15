@@ -26,10 +26,13 @@ def CalcSim(ObjInDir,OutName,Word2VecModel):
     
     out = open(OutName,'w')
     hObjPairSim = {}
-    
+    PairCnt = 0
+    QCnt = 0
     for hQObjId in lhQObjId:
         lObjId = hQObjId.keys()
         lObjId.sort()
+        QCnt += 1
+        logging.info('processing [%d] query',QCnt)
         for i in range(len(lObjId)):
             a = lObjId[i]
             if not a in Word2VecModel:
@@ -42,6 +45,9 @@ def CalcSim(ObjInDir,OutName,Word2VecModel):
                 vB = VectorC(list(Word2VecModel[b]))
                 score = VectorC.Similarity(vA, vB, 'cosine')
                 hObjPairSim[a + '\t' + b] = score
+                PairCnt += 1
+                if 0 == (PairCnt % 1000):
+                    logging.info('processed [%d] pair',PairCnt)
     
     pickle.dump(hObjPairSim,out)
     logging.info('word2vec sim for [%s] finished, dump to [%s]',ObjInDir,OutName)
