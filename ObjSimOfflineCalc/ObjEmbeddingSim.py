@@ -44,7 +44,7 @@ def CalcSim(ObjInDir,OutName,Word2VecModel):
                 hObjPairSim[a + '\t' + b] = score
     
     pickle.dump(out,hObjPairSim)
-    logging.info('word2vec sim for [%s] finished, dump to',ObjInName,OutName)
+    logging.info('word2vec sim for [%s] finished, dump to',ObjInDir,OutName)
     return
 
 
