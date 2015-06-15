@@ -34,7 +34,7 @@ def Process(InDir,OutName):
             vCol = line.strip().split()
             if len(vCol) < 3:
                 continue
-            key = vCol[0] + ' ' + vCol[1]
+            key = vCol[0] + '\t' + vCol[1]
             cnt = int(vCol[2])
             if not key in hPair:
                 hPair[key] = cnt
