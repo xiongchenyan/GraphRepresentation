@@ -87,7 +87,20 @@ class EntityCorrelationPerDocCounterC(object):
         vCol = InName.split('/')
         return '_'.join(vCol[-3:])
     
-    
+    def Filter(self,ObjIdA,ObjIdB):
+        if self.FilterType == 'targetid':
+            if not ObjIdA in self.sTargetId:
+                return True
+            if not ObjIdB in self.sTargetId:
+                return True
+        if self.FilterType == 'targetpair':
+            vCol = [ObjIdA,ObjIdB]
+            vCol.sort()
+            key = '\t'.join(vCol)
+            if not key in self.sTargetPair:
+                return True
+        return False
+                
     
     def FormObjPairFromFile(self,InName):
         hPair = {}
