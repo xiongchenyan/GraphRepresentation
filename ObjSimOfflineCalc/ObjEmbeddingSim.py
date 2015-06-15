@@ -43,7 +43,7 @@ def CalcSim(ObjInDir,OutName,Word2VecModel):
                 score = VectorC.Similarity(vA, vB, 'cosine')
                 hObjPairSim[a + '\t' + b] = score
     
-    pickle.dump(out,hObjPairSim)
+    pickle.dump(hObjPairSim,out)
     logging.info('word2vec sim for [%s] finished, dump to',ObjInDir,OutName)
     return
 
