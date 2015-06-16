@@ -42,6 +42,7 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         self.PreCalcFileInName = ""
         self.lSimName = []  #read from PreCalcFileInName's referenced files 
         self.lhObjPairSim = []
+        self.lDirected = []   #whether is directed
         
         
     def SetConf(self, ConfIn):
@@ -56,10 +57,10 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def LoadPreCalcSim(self):
         lLines = open(self.PreCalcFileInName).read().splitlines()
-        
-        self.lSimName = [line.split()[0] for line in lLines]
-        self.lhObjPairSim = [pickle.load(open(line.split()[1])) for line in lLines]
-        
+        lvCol = [line.split() for line in vCol]
+        self.lSimName = [vCol[0] for vCol in lvCol]
+        self.lhObjPairSim = [pickle.load(open(vCol[1])) for vCol in lvCol]
+        self.lDirected = [int(vCol[2]) for vCol in lvCol]
         logging.info('pre calc sim loaded as referenced by [%s]',self.PreCalcFileInName)
         
         
@@ -73,11 +74,24 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         ObjAId = ObjA.GetId()
         ObjBId = ObjB.GetId()
         key = ObjAId + '\t' + ObjBId
+        if ObjAId > ObjBId:
+            DirectKey = ObjBId + '\t' + ObjAId
+        else:
+            DirectKey = key
+            
+              
         hFeature = {}
-        for SimName,hSim in zip(self.lSimName,self.lhObjPairSim):
+        for i in range(len(self.lSimName)):
+            SimName = self.lSimName[i]
+            hSim = self.lhObjPairSim[i]
+            Directed = self.lDirected[i]
+            if Directed:
+                ThisKey = DirectKey
+            else:
+                ThisKey = key
             score = 0
             if key in hSim:
-                score = hSim[key]
+                score = hSim[ThisKey]
             FeatureName = self.FeatureName + SimName.title()
             hFeature[FeatureName] = score
             logging.debug('[%s:%f]',FeatureName,score)

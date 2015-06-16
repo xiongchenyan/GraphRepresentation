@@ -51,8 +51,8 @@ def Process(PairCorrCntDictInName, CtfInName,OutName, SimMetric = 'tfidf'):
     cnt = 0
     for key,tf in hPairCnt.items():
         ObjA,ObjB = key.split()
-        CorrScore = CalcSimilarity(ObjA, ObjB, tf, ObjCtfCenter, SimMetric)
-        hPairCorr[key] = CorrScore
+        hPairCorr[ObjA + '\t' + ObjB] = CalcSimilarity(ObjA, ObjB, tf, ObjCtfCenter, SimMetric)
+        hPairCorr[ObjB + '\t' + ObjA] = CalcSimilarity(ObjB, ObjA, tf, ObjCtfCenter, SimMetric)
         cnt += 1
         if 0 == (cnt % 1000):
             logging.info('processed [%d] pair',cnt)
