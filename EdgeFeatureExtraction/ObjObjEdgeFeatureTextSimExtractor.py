@@ -17,7 +17,7 @@ import os
 from cxBase.Conf import cxConfC
 from cxBase.base import cxBaseC
 import logging
-
+import json
 from IndriRelate.LmBase import LmBaseC
 from ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
 from IndriRelate.CtfLoader import TermCtfC
@@ -45,7 +45,7 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def process(self, ObjA, ObjB):
         hFeature = {}
         hFeature.update(self.ExtractFieldJS(ObjA,ObjB))
-        logging.debug('[%s]-[%s] obj text sim features extracted',ObjA.GetId(),ObjB.GetId())
+        logging.debug('[%s]-[%s] obj text sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
         return hFeature
     
     def ExtractFieldJS(self,ObjA,ObjB):
