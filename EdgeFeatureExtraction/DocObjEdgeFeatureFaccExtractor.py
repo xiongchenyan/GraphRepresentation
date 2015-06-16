@@ -51,7 +51,7 @@ class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
         logging.debug('doc [%s] obj [%s] facc feature extracted',doc.DocNo,obj.GetId())
         return hFeature
     
-    def ExtractFaccAnaProbFeaeture(self,doc,obj):
+    def ExtractFaccAnaProbFeature(self,doc,obj):
         key = doc.DocNo + '\t' + obj.GetId()
         
         score = 0
