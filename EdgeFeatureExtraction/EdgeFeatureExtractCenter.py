@@ -85,7 +85,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         
         if 'tagme' in self.lQObjFeatureGroup:
             self.QObjTagMeExtractor.SetConf(ConfIn)
-        if 'facc' in self.lQObjFeatureGroup:
+        if 'facc' in self.lDocObjFeatureGroup:
             self.DocObjFaccExtractor.SetConf(ConfIn)
         
         if 'kg' in self.lObjObjFeatureGroup:
