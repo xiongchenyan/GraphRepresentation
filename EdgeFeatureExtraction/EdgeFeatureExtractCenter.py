@@ -182,6 +182,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
     
     def ExtractObjObjFeature(self,lObj):
         llhFeature = []   #obj -> obj, diagonal is empty
+        logging.info('start extract [%d] obj pair feature mtx',len(lObj))
         for ObjA in lObj:
             lhFeature = []
             for ObjB in lObj:
