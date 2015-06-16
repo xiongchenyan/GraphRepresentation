@@ -44,19 +44,19 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         
         lObjANeighbor = ObjA.GetField('Neighbor')
         
-        hNeighborId = dict([item[1].GetId() for item in lObjANeighbor])
+        sNeighborId = set([item[1].GetId() for item in lObjANeighbor])
         
         FeatureName = self.FeatureName + 'Connected'
         score = 0
-        if ObjB.GetId() in hNeighborId:
+        if ObjB.GetId() in sNeighborId:
             score = 1
         hFeature[FeatureName] = score
         logging.debug('[%s:%f]',FeatureName,score)
         
         FeatureName = self.FeatureName + 'HopOneProb'
         score = 0
-        if ObjB.GetId() in hNeighborId:
-            score = 1.0 / float(len(hNeighborId))
+        if ObjB.GetId() in sNeighborId:
+            score = 1.0 / float(len(sNeighborId))
         hFeature[FeatureName] = score
         logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
