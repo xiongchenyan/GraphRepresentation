@@ -57,7 +57,7 @@ def Process(PairCorrCntDictInName, CtfInName,OutName, SimMetric = 'tfidf'):
         if 0 == (cnt % 1000):
             logging.info('processed [%d] pair',cnt)
     
-    pickle.dump(open(OutName,'w'),hPairCorr)
+    pickle.dump(hPairCorr,open(OutName,'w'))
     logging.info('corr score dumped to [%s]',OutName)
     return
 
