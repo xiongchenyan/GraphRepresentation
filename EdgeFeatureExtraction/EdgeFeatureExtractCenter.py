@@ -245,7 +245,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
             lDoc,lObj, lQObjFeature,llDocObjFeature,llObjObjFeature = self.Process(qid, query)
             OutName = OutDir + '/' + IndriSearchCenterC.GenerateQueryTargetName(query)
             logging.info('[%s][%s] extracted, dumpping to [%s]',qid,query, OutName)
-            self.DumpRes(OutName, lDoc,lObj,lQObjFeature,llDocObjFeature,llObjObjFeature)
+            self.DumpRes(OutName, query, lDoc,lObj,lQObjFeature,llDocObjFeature,llObjObjFeature)
         
         logging.info('all finished')
         return
