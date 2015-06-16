@@ -59,7 +59,7 @@ class QueryObjEdgeFeatureTagMeExtractorC(QueryObjEdgeFeatureExtractorC):
         
         return hFeature
     
-    def GetTagmeRhoFeature(self,qid,ObjId):
+    def GetTagMeRhoFeature(self,qid,ObjId):
         key = qid + '\t' + ObjId
         score = 0
         
