@@ -48,7 +48,7 @@ class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
         hFeature = {}
         
         hFeature.update(self.ExtractFaccAnaProbFeature(doc,obj))
-        logging.debug('doc [%s] obj [%s] facc feature extracted',doc.DocNo,obj.GetId())
+        logging.debug('doc [%s] obj [%s] facc feature extracted [%s]',doc.DocNo,obj.GetId())
         return hFeature
     
     def ExtractFaccAnaProbFeature(self,doc,obj):
@@ -60,7 +60,7 @@ class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
         
         
         FeatureName = self.FeatureName + 'AnaProb'
-        
+        logging.debug('%s:%f',FeatureName,score)
         return {FeatureName:score}
 
 
