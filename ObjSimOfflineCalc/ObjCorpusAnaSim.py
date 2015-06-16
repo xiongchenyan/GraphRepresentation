@@ -27,13 +27,13 @@ def CalcSimilarity(ObjA,ObjB,CorrCnt,ObjCtfCenter,SimMetric = 'tfidf'):
     if SimMetric == 'tfidf':
         if not ObjA in ObjCtfCenter.hTermCtf:
             return 0
-        return float(CorrCnt) * ObjCtfCenter.GetLogIdf()
+        return float(CorrCnt) * ObjCtfCenter.GetLogIdf(ObjA)
     if SimMetric == 'tf':
         return CorrCnt
     if SimMetric == 'prob':
         if not ObjA in ObjCtfCenter.hTermCtf:
             return 0
-        return float(CorrCnt) / float(ObjCtfCenter.GetCtf())
+        return float(CorrCnt) / float(ObjCtfCenter.GetCtf(ObjA))
     return CorrCnt
 
 
