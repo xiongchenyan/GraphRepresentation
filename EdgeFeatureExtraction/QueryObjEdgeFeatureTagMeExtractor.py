@@ -33,7 +33,7 @@ class QueryObjEdgeFeatureTagMeExtractorC(QueryObjEdgeFeatureExtractorC):
         QueryObjEdgeFeatureExtractorC.SetConf(self, ConfIn)
         
         self.TagMeCacheInName = self.conf.GetConf('querytagmecache')
-        self.hQObjAnaScore = self.LoadQObjTagMeRho()
+        self.LoadQObjTagMeRho()
         
         
         
