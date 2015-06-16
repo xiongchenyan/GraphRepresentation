@@ -14,7 +14,6 @@ TBD:
         so that they can be used in numpy+sckipy based graph ranking model
 @author: chenyanxiong
 '''
-from Facc.GenerateFaccDocAnaDict import ObjId
 
 '''
 pipeline:
