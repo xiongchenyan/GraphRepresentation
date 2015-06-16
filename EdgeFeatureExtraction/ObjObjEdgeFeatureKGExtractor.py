@@ -67,20 +67,20 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         
         
         lObjANeighbor = ObjA.GetNeighbor()
-        hANeighborId = dict([item[1].GetId() for item in lObjANeighbor])
+        sANeighborId = set([item[1].GetId() for item in lObjANeighbor])
         lObjBNeighbor = ObjB.GetNeighbor()
-        hBNeighborId = dict([item[1].GetId() for item in lObjBNeighbor])
+        sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
         
         FeatureName = 'CommonNeighborFrac'
         score = 0
             
         
-        for ObjId in hANeighborId.keys():
-            if ObjId in hBNeighborId:
+        for ObjId in sANeighborId:
+            if ObjId in sBNeighborId:
                 score += 1
                 break
-        if len(hANeighborId) != 0:
-            score /= len(hANeighborId)
+        if len(sANeighborId) != 0:
+            score /= len(sANeighborId)
             
         hFeature[FeatureName] = score
         logging.debug('[%s:%f]',FeatureName,score)
