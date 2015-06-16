@@ -57,8 +57,8 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def LoadPreCalcSim(self):
         lLines = open(self.PreCalcFileInName).read().splitlines()
         
-        self.lSimName = [line.split('\t')[0] for line in lLines]
-        self.lhObjPairSim = [pickle.load(open(line.split('\t')[1])) for line in lLines]
+        self.lSimName = [line.split()[0] for line in lLines]
+        self.lhObjPairSim = [pickle.load(open(line.split()[1])) for line in lLines]
         
         logging.info('pre calc sim loaded as referenced by [%s]',self.PreCalcFileInName)
         
