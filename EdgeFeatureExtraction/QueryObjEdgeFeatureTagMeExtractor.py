@@ -45,8 +45,8 @@ class QueryObjEdgeFeatureTagMeExtractorC(QueryObjEdgeFeatureExtractorC):
     
     def LoadQObjTagMeRho(self):
         lLines = open(self.TagMeCacheInName).read().splitlines()
-        
-        lQObjRho = [[vCol[0],vCol[2],vCol[-1]] for vCol in lLines]
+        lvCol = [line.split('\t') for line in lLines]
+        lQObjRho = [[vCol[0],vCol[2],float(vCol[-1])] for vCol in lvCol]
         lKeyRho = [[item[0] + '\t' + item[1],item[2]] for item in lQObjRho]
         
         self.hQObjAnaScore = dict(lKeyRho)
