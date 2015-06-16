@@ -231,7 +231,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
                 each line is query|doc|obj \t obj \t json.dumps(hFeature)
         '''
         
-        lQidQuery = [line.split() for line in open(QInName).read().splitlines()]
+        lQidQuery = [line.split('\t') for line in open(QInName).read().splitlines()]
         
         for qid,query in lQidQuery:
             logging.info('start extracting for [%s][%s]',qid,query)
