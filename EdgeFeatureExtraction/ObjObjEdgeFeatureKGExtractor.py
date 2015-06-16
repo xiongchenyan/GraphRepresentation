@@ -39,7 +39,7 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
     
     def ExtractDirectConnectFeature(self,ObjA,ObjB):
         hFeature = {}
-        logging.debug('[%s-%s] direct connection features:',ObjA.Getid(),ObjB.GetId())
+        logging.debug('[%s-%s] direct connection features:',ObjA.GetId(),ObjB.GetId())
         
         
         lObjANeighbor = ObjA.GetField('Neighbor')
