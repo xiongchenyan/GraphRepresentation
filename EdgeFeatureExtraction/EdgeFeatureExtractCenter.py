@@ -117,24 +117,27 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         get ldoc and read lObjId
         fill lObjId
         '''
+        logging.info('formulating node for q [%s][%s]',qid,query)
         lDoc = self.Searcher.RunQuery(query, qid)
         
         lObjId = open(self.NodeDir + IndriSearchCenterC.GenerateQueryTargetName(query)).read().splitlines()
         
         lObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in lObjId]
-        
+        logging.info('q[%s] [%d] doc [%d] obj',query,len(lDoc),len(lObj))
         return lDoc,lObj
     
     
     def ExtractPerQObj(self,qid,query,obj):
         hFeature = {}
+        logging.debug('start extracting q[%s]-obj[%s] feature',query,obj.GetId())
         if 'tagme' in self.lQObjFeatureGroup:
             hFeature.update(self.QObjTagMeExtractor.process(qid, query, obj))
+        logging.debug('q[%s]-obj[%s] feature extracted',query,obj.GetId())
         return hFeature
     
     def ExtractQObjFeature(self,qid,query,lObj):
-        lhFeature = {}
-        
+        lhFeature = []
+        logging.info('start extracting [%s][%s] q-obj feature [%d] obj',qid,query,len(lObj))
         for obj in lObj:
             hFeature = self.ExtractPerQObj(qid, query, obj)
             lhFeature.append(hFeature)
@@ -145,15 +148,18 @@ class EdgeFeatureExtractCenterC(cxBaseC):
     
     def ExtractPerDocObj(self,doc,obj):
         hFeature = {}
+        logging.debug('start extracting doc[%s]-obj[%s] feature',doc.DocNo,obj.GetId())
         if 'facc' in self.lDocObjFeatureGroup:
             hFeature.update(self.DocObjFaccExtractor.process(doc, obj))
-        
+            
+        logging.debug('doc[%s]-obj[%s] feature extracted',doc.DocNo,obj.GetId())
         return hFeature
     
     def ExtractDocObjFeature(self,lDoc,lObj):
-        llhFeature = {}   #doc \times obj
+        llhFeature = []   #doc \times obj
+        logging.info('start extract [%d] doc - [%d] obj feature mtx',len(lDoc),len(lObj))
         for doc in lDoc:
-            lhFeature = {}
+            lhFeature = []
             for obj in lObj:
                 hFeature = self.ExtractPerDocObj(doc,obj)
                 lhFeature.append(hFeature)
@@ -164,19 +170,20 @@ class EdgeFeatureExtractCenterC(cxBaseC):
     
     def ExtractPerObjObj(self,ObjA,ObjB):
         hFeature = {}
+        logging.debug('start extracting for obj pair [%s-%s]',ObjA.GetId(),ObjB.GetId())
         if 'kg' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjKGExtractor.process(ObjA, ObjB))
         if 'precalc' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjPreCalcExtractor.process(ObjA, ObjB))
         if 'textsim' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjTextSimExtractor.process(ObjA, ObjB))
-            
+        logging.debug('obj pair [%s-%s] feature extracted',ObjA.GetId(),ObjB.GetId())    
         return hFeature
     
     def ExtractObjObjFeature(self,lObj):
-        llhFeature = {}   #obj -> obj, diagonal is empty
+        llhFeature = []   #obj -> obj, diagonal is empty
         for ObjA in lObj:
-            lhFeature = {}
+            lhFeature = []
             for ObjB in lObj:
                 if ObjA.GetId() == ObjB.GetId():
                     continue
@@ -237,6 +244,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
             logging.info('start extracting for [%s][%s]',qid,query)
             lDoc,lObj, lQObjFeature,llDocObjFeature,llObjObjFeature = self.Process(qid, query)
             OutName = OutDir + '/' + IndriSearchCenterC.GenerateQueryTargetName(query)
+            logging.info('[%s][%s] extracted, dumpping to [%s]',qid,query, OutName)
             self.DumpRes(OutName, lDoc,lObj,lQObjFeature,llDocObjFeature,llObjObjFeature)
         
         logging.info('all finished')

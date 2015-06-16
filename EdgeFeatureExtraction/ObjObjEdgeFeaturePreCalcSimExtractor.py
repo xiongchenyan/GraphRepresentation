@@ -65,9 +65,8 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def process(self, ObjA, ObjB):
         hFeature = {}
-        
+        logging.debug('[%s-%s] precalc sim features:',ObjA.GetId(),ObjB.GetId())
         hFeature.update(self.ExtractPreCalcSim(ObjA,ObjB))
-        
         return hFeature
     
     def ExtractPreCalcSim(self,ObjA,ObjB):
@@ -79,7 +78,9 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
             score = 0
             if key in hSim:
                 score = hSim[key]
-            hFeature[self.FeatureName + SimName.title()] = score
+            FeatureName = self.FeatureName + SimName.title()
+            hFeature[FeatureName] = score
+            logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
             
         

@@ -56,7 +56,7 @@ class QueryObjEdgeFeatureTagMeExtractorC(QueryObjEdgeFeatureExtractorC):
         hFeature = {}
         ObjId = obj.GetId()
         hFeature.update(self.GetTagMeRhoFeature(qid,ObjId))
-        
+        logging.debug('query [%s] - obj [%s] tag me feature extracted',query,ObjId)
         return hFeature
     
     def GetTagMeRhoFeature(self,qid,ObjId):
@@ -68,6 +68,7 @@ class QueryObjEdgeFeatureTagMeExtractorC(QueryObjEdgeFeatureExtractorC):
         
         hFeature = {}
         hFeature[self.FeatureName + 'Rho'] = score
+        logging.debug('[%s][%s] tagme rho [%f]',qid,ObjId,score)
         return hFeature
         
         

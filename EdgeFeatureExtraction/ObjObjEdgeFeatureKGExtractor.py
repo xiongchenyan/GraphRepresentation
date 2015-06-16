@@ -29,16 +29,18 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def process(self, ObjA, ObjB):
         hFeature = {}
-        
+        logging.debug('extracting kg feature for [%s]-[%s]',ObjA.GetId(),ObjB.GetId())
         hFeature.update(self.ExtractDirectConnectFeature(ObjA,ObjB))
         
         hFeature.update(self.ExtractTwoHopFeature(ObjA,ObjB))   #the longest path useful in literature is only two hop
-        
+        logging.debug('kg feature done')
         return hFeature
     
     
     def ExtractDirectConnectFeature(self,ObjA,ObjB):
         hFeature = {}
+        logging.debug('[%s-%s] direct connection features:',ObjA.Getid(),ObjB.GetId())
+        
         
         lObjANeighbor = ObjA.GetField('Neighbor')
         
@@ -49,18 +51,20 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         if ObjB.GetId() in hNeighborId:
             score = 1
         hFeature[FeatureName] = score
-        
+        logging.debug('[%s:%f]',FeatureName,score)
         
         FeatureName = self.FeatureName + 'HopOneProb'
         score = 0
         if ObjB.GetId() in hNeighborId:
             score = 1.0 / float(len(hNeighborId))
         hFeature[FeatureName] = score
-        
+        logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
     
     def ExtractTwoHopFeature(self,ObjA,ObjB):
         hFeature = {}
+        logging.debug('[%s-%s] two hop connection features:',ObjA.GetId(),ObjB.GetId())
+        
         
         lObjANeighbor = ObjA.GetNeighbor()
         hANeighborId = dict([item[1].GetId() for item in lObjANeighbor])
@@ -79,6 +83,7 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
             score /= len(hANeighborId)
             
         hFeature[FeatureName] = score
+        logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
         
                 

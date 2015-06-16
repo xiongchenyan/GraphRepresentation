@@ -48,7 +48,7 @@ class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
         hFeature = {}
         
         hFeature.update(self.ExtractFaccAnaProbFeature(doc,obj))
-        
+        logging.debug('doc [%s] obj [%s] facc feature extracted',doc.DocNo,obj.GetId())
         return hFeature
     
     def ExtractFaccAnaProbFeaeture(self,doc,obj):

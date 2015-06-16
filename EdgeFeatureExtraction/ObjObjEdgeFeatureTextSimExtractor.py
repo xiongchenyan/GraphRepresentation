@@ -44,9 +44,8 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def process(self, ObjA, ObjB):
         hFeature = {}
-        
         hFeature.update(self.ExtractFieldJS(ObjA,ObjB))
-        
+        logging.debug('[%s]-[%s] obj text sim features extracted',ObjA.GetId(),ObjB.GetId())
         return hFeature
     
     def ExtractFieldJS(self,ObjA,ObjB):
