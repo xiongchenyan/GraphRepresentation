@@ -36,6 +36,7 @@ def Process(NodeInDir,PairDictInName,OutDir):
     lInName = WalkDir(NodeInDir)
     if not os.path.exists(OutDir):
         os.makedirs(OutDir)
+    print 'start load dict'
     hPairDict = pickle.load(open(PairDictInName))
     print 'dict loaded'
     
