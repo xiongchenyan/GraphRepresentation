@@ -16,6 +16,7 @@ import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 
+import json
 import os
 from cxBase.Conf import cxConfC
 from cxBase.base import cxBaseC
@@ -48,7 +49,7 @@ class DocObjEdgeFeatureFaccExtractorC(DocObjEdgeFeatureExtractorC):
         hFeature = {}
         
         hFeature.update(self.ExtractFaccAnaProbFeature(doc,obj))
-        logging.debug('doc [%s] obj [%s] facc feature extracted [%s]',doc.DocNo,obj.GetId())
+        logging.debug('doc [%s] obj [%s] facc feature extracted [%s]',doc.DocNo,obj.GetId(),json.dumps(hFeature))
         return hFeature
     
     def ExtractFaccAnaProbFeature(self,doc,obj):

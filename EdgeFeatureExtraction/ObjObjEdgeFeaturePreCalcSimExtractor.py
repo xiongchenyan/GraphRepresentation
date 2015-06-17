@@ -59,7 +59,10 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         lLines = open(self.PreCalcFileInName).read().splitlines()
         lvCol = [line.split() for line in lLines]
         self.lSimName = [vCol[0] for vCol in lvCol]
-        self.lhObjPairSim = [pickle.load(open(vCol[1])) for vCol in lvCol]
+        for vCol in lvCol:
+            logging.info('start loading [%s][%s]',vCol[0],vCol[1])
+            hObjPairSim = pickle.load(open(vCol[1]))
+            self.lhObjPairSim.append(hObjPairSim)
         self.lDirected = [int(vCol[2]) for vCol in lvCol]
         logging.info('pre calc sim loaded as referenced by [%s]',self.PreCalcFileInName)
         
