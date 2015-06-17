@@ -34,7 +34,8 @@ def FetchForOneQ(lObjId,hPairDict,OutName):
 
 def Process(NodeInDir,PairDictInName,OutDir):
     lInName = WalkDir(NodeInDir)
-    
+    if not os.path.exists(OutDir):
+        os.makedirs(OutDir)
     hPairDict = pickle.load(open(PairDictInName))
     print 'dict loaded'
     
