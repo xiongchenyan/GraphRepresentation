@@ -69,7 +69,7 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def LoadOneQueryObjSim(self,query):
         for i in range(len(self.lPreCalcDir)):
-            InName = self.lPreCalcDir[i] + +'/' + IndriSearchCenterC.GenerateQueryTargetName(query)
+            InName = self.lPreCalcDir[i] +'/' + IndriSearchCenterC.GenerateQueryTargetName(query)
             if not os.path.exists(InName):
                 return False
             hObjPairSim = pickle.load(open(InName))
