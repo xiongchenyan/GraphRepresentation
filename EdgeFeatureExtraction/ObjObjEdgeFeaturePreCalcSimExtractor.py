@@ -50,6 +50,7 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def SetConf(self, ConfIn):
         ObjObjEdgeFeatureExtractorC.SetConf(self, ConfIn)
         self.PreCalcFileInName = self.conf.GetConf('precalcsimfile')
+        self.SetPreCalcSim()
         
     @staticmethod
     def ShowConf():
