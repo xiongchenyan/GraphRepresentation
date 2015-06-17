@@ -168,19 +168,19 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         return llhFeature
     
     
-    def ExtractPerObjObj(self,ObjA,ObjB):
+    def ExtractPerObjObj(self,ObjA,ObjB,query):
         hFeature = {}
         logging.debug('start extracting for obj pair [%s-%s]',ObjA.GetId(),ObjB.GetId())
         if 'kg' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjKGExtractor.process(ObjA, ObjB))
         if 'precalc' in self.lObjObjFeatureGroup:
-            hFeature.update(self.ObjObjPreCalcExtractor.process(ObjA, ObjB))
+            hFeature.update(self.ObjObjPreCalcExtractor.process(ObjA, ObjB,query))
         if 'textsim' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjTextSimExtractor.process(ObjA, ObjB))
         logging.debug('obj pair [%s-%s] feature extracted',ObjA.GetId(),ObjB.GetId())    
         return hFeature
     
-    def ExtractObjObjFeature(self,lObj):
+    def ExtractObjObjFeature(self,lObj,query):
         llhFeature = []   #obj -> obj, diagonal is empty
         logging.info('start extract [%d] obj pair feature mtx',len(lObj))
         for ObjA in lObj:
@@ -188,7 +188,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
             for ObjB in lObj:
                 if ObjA.GetId() == ObjB.GetId():
                     continue
-                hFeature = self.ExtractPerObjObj(ObjA, ObjB)
+                hFeature = self.ExtractPerObjObj(ObjA, ObjB,query)
                 lhFeature.append(hFeature)
             llhFeature.append(lhFeature)
         
@@ -205,7 +205,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         
         llDocObjFeature = self.ExtractDocObjFeature(lDoc, lObj)
         
-        llObjObjFeature = self.ExtractObjObjFeature(lObj)
+        llObjObjFeature = self.ExtractObjObjFeature(lObj,query)
         
         return lDoc,lObj,lQObjFeature,llDocObjFeature,llObjObjFeature
     
