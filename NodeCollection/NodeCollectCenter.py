@@ -46,7 +46,7 @@ import json
 from cxBase.Conf import cxConfC
 from cxBase.base import cxBaseC
 import logging
-from NodeCollection.QueryNodeTagMeCollector import QueryTagMeNodeCollectorC
+from NodeCollection.QueryNodePreFetchedCollector import QueryPreFetchedNodeCollectorC
 from NodeCollection.DocNodeFaccAnaCollector import DocNodeFaccAnaCollectorC
 
 from IndriSearch.IndriSearchCenter import IndriSearchCenterC
@@ -56,7 +56,7 @@ class NodeCollectorCenterC(cxBaseC):
     def Init(self):
         cxBaseC.Init(self)
         self.Searcher = IndriSearchCenterC()
-        self.QueryNodeTagMeCollector = QueryTagMeNodeCollectorC()
+        self.QueryNodePreFetchedCollector = QueryPreFetchedNodeCollectorC()
         self.DocNodeFaccAnaCollector = DocNodeFaccAnaCollectorC()
         
         self.lQueryNodeGroup = []
@@ -80,7 +80,7 @@ class NodeCollectorCenterC(cxBaseC):
     @staticmethod
     def ShowConf():
         cxBaseC.ShowConf()
-        QueryTagMeNodeCollectorC.ShowConf()
+        QueryPreFetchedNodeCollectorC.ShowConf()
         DocNodeFaccAnaCollectorC.ShowConf()
         IndriSearchCenterC.ShowConf()
         print 'querynodegroup tageme'
@@ -108,8 +108,8 @@ class NodeCollectorCenterC(cxBaseC):
     def CollectQueryNode(self,qid,query):
         lQNodeScore = []
         
-        if 'tagme' in self.lQueryNodeGroup:
-            lQNodeScore.extend(self.QueryNodeTagMeCollector.process(qid, query))
+        if 'prefetched' in self.lQueryNodeGroup:
+            lQNodeScore.extend(self.QueryNodePreFetchedCollector.process(qid, query))
             
             
         lQObj = list(set([item[0] for item in lQNodeScore]))
