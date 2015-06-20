@@ -37,7 +37,7 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
         self.PreFetchInName = ""
         self.lSourceName = []
         self.lSourceFile = []
-        self.lhQObjId = {}
+        self.lhQObjId = []
         
         
     def SetConf(self, ConfIn):
