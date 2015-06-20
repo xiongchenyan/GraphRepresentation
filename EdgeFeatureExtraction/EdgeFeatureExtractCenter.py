@@ -40,7 +40,7 @@ from cxBase.base import cxBaseC
 import logging
 import pickle
 
-from EdgeFeatureExtraction.QueryObjEdgeFeatureTagMeExtractor import QueryObjEdgeFeatureTagMeExtractorC
+from EdgeFeatureExtraction.QueryObjEdgeFeatureAnaExtractor import QueryObjEdgeFeatureAnaExtractorC
 from EdgeFeatureExtraction.DocObjEdgeFeatureFaccExtractor import DocObjEdgeFeatureFaccExtractorC
 from EdgeFeatureExtraction.ObjObjEdgeFeatureKGExtractor import ObjObjEdgeFeatureKGExtractorC
 from EdgeFeatureExtraction.ObjObjEdgeFeaturePreCalcSimExtractor import ObjObjEdgeFeaturePreCalcSimExtractorC
@@ -59,7 +59,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         self.lObjObjFeatureGroup = []
         self.lDocObjFeatureGroup = []
         
-        self.QObjTagMeExtractor = QueryObjEdgeFeatureTagMeExtractorC()
+        self.QObjAnaExtractor = QueryObjEdgeFeatureAnaExtractorC()
         self.DocObjFaccExtractor = DocObjEdgeFeatureFaccExtractorC()
         self.ObjObjKGExtractor = ObjObjEdgeFeatureKGExtractorC()
         self.ObjObjPreCalcExtractor = ObjObjEdgeFeaturePreCalcSimExtractorC()
@@ -83,8 +83,8 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         self.lDocObjFeatureGroup = self.conf.GetConf('docobjfeaturegroup', self.lDocObjFeatureGroup)
         self.lObjObjFeatureGroup = self.conf.GetConf('objobjfeaturegroup', self.lObjObjFeatureGroup)
         
-        if 'tagme' in self.lQObjFeatureGroup:
-            self.QObjTagMeExtractor.SetConf(ConfIn)
+        if 'ana' in self.lQObjFeatureGroup:
+            self.QObjAnaExtractor.SetConf(ConfIn)
         if 'facc' in self.lDocObjFeatureGroup:
             self.DocObjFaccExtractor.SetConf(ConfIn)
         
@@ -105,7 +105,7 @@ class EdgeFeatureExtractCenterC(cxBaseC):
         
         print 'nodedir\nqobjfeaturegroup\ndocobjfeaturegroup\nobjobjfeaturegroup'
         
-        QueryObjEdgeFeatureTagMeExtractorC.ShowConf()
+        QueryObjEdgeFeatureAnaExtractorC.ShowConf()
         DocObjEdgeFeatureFaccExtractorC.ShowConf()
         ObjObjEdgeFeatureKGExtractorC.ShowConf()
         ObjObjEdgeFeaturePreCalcSimExtractorC.ShowConf()
@@ -130,8 +130,8 @@ class EdgeFeatureExtractCenterC(cxBaseC):
     def ExtractPerQObj(self,qid,query,obj):
         hFeature = {}
         logging.debug('start extracting q[%s]-obj[%s] feature',query,obj.GetId())
-        if 'tagme' in self.lQObjFeatureGroup:
-            hFeature.update(self.QObjTagMeExtractor.process(qid, query, obj))
+        if 'ana' in self.lQObjFeatureGroup:
+            hFeature.update(self.QObjAnaExtractor.process(qid, query, obj))
         logging.debug('q[%s]-obj[%s] feature extracted',query,obj.GetId())
         return hFeature
     

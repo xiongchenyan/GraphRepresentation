@@ -42,13 +42,13 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
         
     def SetConf(self, ConfIn):
         QueryNodeCollectorC.SetConf(self, ConfIn)
-        self.PreFetchInName = self.conf.GetConf('prefetchedconf')
+        self.PreFetchInName = self.conf.GetConf('qanaconf')
         self.LoadPreFetchedNodes()()
         
     @staticmethod
     def ShowConf():
         QueryNodeCollectorC.ShowConf()
-        print 'prefetchedconf'
+        print 'qanaconf'
         
     def LoadOneSourceObj(self,InName):
         lData = open(InName).read().splitlines()
