@@ -82,8 +82,6 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
     
     
     def process(self, qid, query):
-        if not qid in self.hQObjId:
-            return []
         lObj = []
         for hQObjId in self.lhQObjId:
             if not qid in hQObjId:
