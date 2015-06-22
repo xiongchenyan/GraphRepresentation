@@ -175,14 +175,20 @@ class GraphDataPreparationcC(cxBaseC):
     def LoadData(InDir):
         lInName = WalkDir(InDir)
         lInName = list(set(['_'.join(line.split('_')[:-1]) for line in lInName]))
+        lInName.sort(key=lambda item:int(ntpath.basename(item)))
         
         lGraph = []
         lLabel = []
+        
+        
         
         for InName in lInName:
             GraphTensor, QRelVec = GraphDataPreparationcC.LoadOneQuery(InName)
             lGraph.append(GraphTensor)
             lLabel.append(QRelVec)
+            logging.info('[%s] data loaded',ntpath.basename(InName))
+            
+        logging.info('add graph data and label loaded [%d] query',len(lGraph))
         return lGraph,lLabel
         
         
