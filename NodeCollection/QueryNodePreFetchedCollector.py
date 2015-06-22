@@ -43,7 +43,7 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
     def SetConf(self, ConfIn):
         QueryNodeCollectorC.SetConf(self, ConfIn)
         self.PreFetchInName = self.conf.GetConf('qanaconf')
-        self.LoadPreFetchedNodes()()
+        self.LoadPreFetchedNodes()
         
     @staticmethod
     def ShowConf():
