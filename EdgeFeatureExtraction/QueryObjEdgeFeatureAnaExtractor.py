@@ -94,7 +94,7 @@ class QueryObjEdgeFeatureAnaExtractorC(QueryObjEdgeFeatureExtractorC):
             
             score = 0
             if key in hQObjAnaScore:
-                score = self.hQObjAnaScore[key]
+                score = hQObjAnaScore[key]
                 
             FeatureName = self.FeatureName + self.lSourceName[i] +  'Rho'
             hFeature[FeatureName] = score
