@@ -59,7 +59,7 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
             ObjId = vCol[2]
             score = float(vCol[-1])
             
-            if not qid in self.hQObjId:
+            if not qid in hQObjId:
                 hQObjId[qid] = [[ObjId,score]]
             else:
                 hQObjId[qid].append([ObjId,score])
