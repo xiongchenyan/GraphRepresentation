@@ -63,7 +63,7 @@ class QueryObjEdgeFeatureAnaExtractorC(QueryObjEdgeFeatureExtractorC):
         
         self.lSourceName =[vCol[0] for vCol in lvCol]
         self.lSourceFile = [vCol[1] for vCol in lvCol]
-        self.lhQObjId = [self.LoadOneSourceRho(InName) for InName in self.lSourceFile]
+        self.lhQObjIdScore = [self.LoadOneSourceRho(InName) for InName in self.lSourceFile]
         logging.info('q ana score loaded')
         return
     
