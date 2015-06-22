@@ -85,7 +85,7 @@ class QueryObjEdgeFeatureAnaExtractorC(QueryObjEdgeFeatureExtractorC):
         logging.debug('query [%s] - obj [%s] tag me feature extracted',query,ObjId)
         return hFeature
     
-    def GetTagMeRhoFeature(self,qid,ObjId):
+    def GetAnaRhoFeature(self,qid,ObjId):
         key = qid + '\t' + ObjId
         
         hFeature = {}
