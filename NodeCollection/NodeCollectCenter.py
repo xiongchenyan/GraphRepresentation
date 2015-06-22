@@ -68,8 +68,8 @@ class NodeCollectorCenterC(cxBaseC):
         self.lQueryNodeGroup = self.conf.GetConf('querynodegroup',self.lQueryNodeGroup)
         self.lDocNodeGroup = self.conf.GetConf('docnodegroup', self.lDocNodeGroup)
         self.Searcher.SetConf(ConfIn)
-        if 'tagme' in self.lQueryNodeGroup:
-            self.QueryNodeTagMeCollector.SetConf(ConfIn)
+        if 'ana' in self.lQueryNodeGroup:
+            self.QueryNodePreFetchedCollector.SetConf(ConfIn)
         if 'facc' in self.lDocNodeGroup:
             self.DocNodeFaccAnaCollector.SetConf(ConfIn)
         
@@ -83,7 +83,7 @@ class NodeCollectorCenterC(cxBaseC):
         QueryPreFetchedNodeCollectorC.ShowConf()
         DocNodeFaccAnaCollectorC.ShowConf()
         IndriSearchCenterC.ShowConf()
-        print 'querynodegroup tageme'
+        print 'querynodegroup ana'
         print 'docnodegroup facc'
         
     
@@ -108,7 +108,7 @@ class NodeCollectorCenterC(cxBaseC):
     def CollectQueryNode(self,qid,query):
         lQNodeScore = []
         
-        if 'prefetched' in self.lQueryNodeGroup:
+        if 'ana' in self.lQueryNodeGroup:
             lQNodeScore.extend(self.QueryNodePreFetchedCollector.process(qid, query))
             
             
