@@ -35,7 +35,7 @@ class QueryObjEdgeFeatureAnaExtractorC(QueryObjEdgeFeatureExtractorC):
         QueryObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'Ana'
         
-        
+        self.PreFetchInName = ""
         self.lSourceName = []
         self.lSourceFile = []
         self.lhQObjIdScore = []
@@ -43,7 +43,7 @@ class QueryObjEdgeFeatureAnaExtractorC(QueryObjEdgeFeatureExtractorC):
     def SetConf(self, ConfIn):
         QueryObjEdgeFeatureExtractorC.SetConf(self, ConfIn)
         
-        self.TagMeCacheInName = self.conf.GetConf('qanaconf')
+        self.PreFetchInName = self.conf.GetConf('qanaconf')
         self.LoadAnaScore()
         
         
