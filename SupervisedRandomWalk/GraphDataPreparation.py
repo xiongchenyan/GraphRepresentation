@@ -44,7 +44,7 @@ from cxBase.WalkDirectory import WalkDir
 from cxBase.Conf import cxConfC
 from cxBase.base import cxBaseC
 from AdhocEva.AdhocQRel import AdhocQRelC
-
+from IndriSearch.IndriSearchCenter import IndriSearchCenterC
 class GraphDataPreparationcC(cxBaseC):
     
     def Init(self):
@@ -53,6 +53,7 @@ class GraphDataPreparationcC(cxBaseC):
         self.OutDir = ""
         
         self.QRelCenter = AdhocQRelC()
+        self.hQueryQid = {}  #query name -> qid
         
     
     
@@ -63,11 +64,20 @@ class GraphDataPreparationcC(cxBaseC):
         QRelInName = self.conf.GetConf('qrel')
         self.QRelCenter.Load(QRelInName)
         
+        QIn = self.conf.GetConf('qin')
+        self.LoadQueryQid(QIn)
+        
+        
         
     @staticmethod
     def ShowConf():
         cxBaseC.ShowConf()
-        print 'indir\noutdir\nqrel'
+        print 'indir\noutdir\nqrelnqin'
+
+    def LoadQueryQid(self,QIn):
+        lQidQuery = [line.split('\t') for line in open(QIn).read().splitlines()]
+        lQueryNameQid = [[IndriSearchCenterC.GenerateQueryTargetName(item[1]),item[0]] for item in lQidQuery]
+        self.hQueryQid = dict(lQueryNameQid)
         
 
     def UpdateHashId(self,name,hDict):
@@ -116,11 +126,27 @@ class GraphDataPreparationcC(cxBaseC):
                 
         return GraphTensor
     
-    
+    def FetchQRelVec(self,hNodeId,qid):
+        '''
+        fetch the relevance score from self.QRelCenter
+        if the node is a query or a object, then rel score is np.nan
+        '''
+        
+        QRelVec = np.zeros(len(hNodeId))
+        for name,p in hNodeId:
+            if not name.startswith('clueweb'):
+                QRelVec[p] = np.nan
+                continue
+            
+            QRelVec[p] = self.QRelCenter.GetScore(qid, name)
+            
+        return QRelVec
+        
     
     def ProcessOneQuery(self,InName):
         QName = ntpath.basename(InName)
-        OutPre = self.OutDir + '/' + QName
+        qid = self.hQueryQid[QName]
+        OutPre = self.OutDir + '/' + qid
         
         hNodeId,hEdgeFeatureId = self.GeneratePerQHashMapping(InName)
         
@@ -134,7 +160,7 @@ class GraphDataPreparationcC(cxBaseC):
         logging.info('[%s] graph tensor dumped',QName)
         
         
-        QRelVec = self.FetchQRelVec(hNodeId)
+        QRelVec = self.FetchQRelVec(hNodeId,qid)
         pickle.dump(QRelVec,open(OutPre + '_Label','w'))
         logging.info('[%s] label vec dumped',QName)
         
