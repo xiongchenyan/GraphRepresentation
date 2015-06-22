@@ -139,6 +139,29 @@ class GraphDataPreparationcC(cxBaseC):
         logging.info('[%s] label vec dumped',QName)
         
     
+    @staticmethod
+    def LoadOneQuery(InPre):
+        GraphTensor = pickle.load(open(InPre + '_Graph'))
+        QRelVec = pickle.load(open(InPre + '_Label'))
+        return GraphTensor,QRelVec
+    
+    @staticmethod
+    def LoadData(InDir):
+        lInName = WalkDir(InDir)
+        lInName = list(set(['_'.join(line.split('_')[:-1]) for line in lInName]))
+        
+        lGraph = []
+        lLabel = []
+        
+        for InName in lInName:
+            GraphTensor, QRelVec = GraphDataPreparationcC.LoadOneQuery(InName)
+            lGraph.append(GraphTensor)
+            lLabel.append(QRelVec)
+        return lGraph,lLabel
+        
+        
+        
+    
     
     def Process(self):
         lInName = WalkDir(self.InDir)
