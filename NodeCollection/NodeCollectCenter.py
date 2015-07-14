@@ -35,6 +35,10 @@ Jun 14 testing,
 output to dir run successful
 '''
 
+'''
+July 14 2015 make the node corresponding for each query-doc pair
+'''
+
 
 import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
@@ -99,10 +103,10 @@ class NodeCollectorCenterC(cxBaseC):
         
         lQObj = self.CollectQueryNode(qid,query)
         
-        lDocObj = self.CollectDocNode(lDoc,qid,query)
+        llDocObj = self.CollectDocNode(lDoc,qid,query)
         
         logging.info('[%s][%s] get [%d] doc [%d] q obj node [%d] doc obj node',qid,query,len(lDoc),len(lQObj),len(lDocObj))
-        return lDoc,lQObj,lDocObj
+        return lDoc,lQObj,llDocObj
     
     
     def CollectQueryNode(self,qid,query):
@@ -116,15 +120,15 @@ class NodeCollectorCenterC(cxBaseC):
         return lQObj
     
     def CollectDocNode(self,lDoc,qid,query):
-        lDocObj = []
+        llDocObj = []
         if 'facc' in self.lDocNodeGroup:
             llDocNodeScore = self.DocNodeFaccAnaCollector.process(lDoc, qid, query)
             for lDocNodeScore in llDocNodeScore:
                 if [] != lDocNodeScore:
-                    lDocObj.extend([item[0] for item in lDocNodeScore])
+                    llDocObj.append([item[0] for item in lDocNodeScore])
             
         
-        return lDocObj
+        return llDocObj
     
     def PipeRun(self,QInName,OutName,OutFormat = 'json'):
         '''
@@ -140,18 +144,68 @@ class NodeCollectorCenterC(cxBaseC):
             out = open(OutName,'w')
         
         for qid,query in lQidQuery:
-            lDoc,lQObj,lDocObj = self.process(qid, query)
+            lDoc,lQObj,llDocObj = self.process(qid, query)
             if OutFormat == 'json':
-                print >>out, json.dumps([qid,query,lDoc,lQObj,lDocObj])
+                print >>out, json.dumps([qid,query,lDoc,lQObj,llDocObj])
             if OutFormat == 'dir':
-                out = open(OutName + '/' + IndriSearchCenterC.GenerateQueryTargetName(query),'w')
-                print >>out, '\n'.join(list(set(lQObj + lDocObj)))
-                out.close()
+                
+                #print doc id\t obj id (doc id could be query indicating query obj)
+                self.DumpRawFormat(query)
+                
         
         if OutFormat == 'json':    
             out.close()
         logging.info('query in [%s] node genereated, dumped to [%s]',QInName,OutName)
     
+        
+    def DumpRawFormat(self,qid,query,lDoc,lQObj,llDocObj,OutName):
+        
+        out = open(OutName + '/' + IndriSearchCenterC.GenerateQueryTargetName(query),'w')
+        
+        for QObj in lQObj:
+            print >>out, 'q_' + qid + '\t' + QObj
+            
+        for doc,lDocObj in zip(lDoc,llDocObj):
+            for DocObj in lDocObj:
+                print >>out, doc.DocNo + '\t' + DocObj
+                
+        out.close()
+        logging.info('q [%s] raw node res dumpped',qid)
+        return 
+    
+    @staticmethod
+    def LoadRawFormatNodeRes(query,InDir):
+        '''
+        read results from the disk as dumped
+        '''
+        lQObj = []
+        lDocNo = []
+        llDocObj = []
+        
+        InName = InDir + '/' + IndriSearchCenterC.GenerateQueryTargetName(query)
+        lLines = open(InName).read().splitlines()
+        lvCol = [line.split('\t') for line in lLines]
+        
+        lQCol = [vCol for vCol in lvCol if vCol[0].startswith('q_')]
+        lDocCol = [vCol for vCol in lvCol if not vCol[0].startswith('q_')]
+        
+        lQObj = [vCol[1] for vCol in lQCol]
+        
+        LastDocNo = ""
+        for DocNo,ObjId in lDocCol:
+            if not DocNo == LastDocNo:
+                llDocObj.append([])
+                lDocNo.append(DocNo)
+                LastDocNo = DocNo
+            llDocObj[-1].append(ObjId)
+            
+        return lQObj,lDocNo,llDocObj
+            
+        
+        
+        
+        
+        
         
         
 if __name__=='__main__':
