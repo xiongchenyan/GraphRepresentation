@@ -129,7 +129,7 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         return lDoc,lQObj, llDocObj 
 
 
-    def Process(self,qid,query,OurDir,OutFormat = 'raw'):
+    def Process(self,qid,query,OutDir):
         '''
         
         '''
@@ -137,8 +137,8 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         
         
         for doc,lDocObj in zip(lDoc,llDocObj):
-            hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature = self.ExtractFeatureForOneQDoc(qid, query, doc, lQObj, lDocObj)
-            self.DumpPerQRes(qid,query,doc,lQObj,lDocObj,hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature,OutFormat)
+            hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature = self.ExtractFeatureForOneQDoc(qid, query, doc, lQObj + lDocObj)
+            self.DumpPerQRes(qid,query,doc,lQObj + lDocObj,hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature,OutDir)
         
         
         logging.info('q [%s] processed')
@@ -147,19 +147,27 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
             
         
         
+    def PipeRun(self,QInName,OutDir):
+        lQidQuery = [line.split('\t') for line in open(QInName).read().splitlines()]
         
+        for qid,query in lQidQuery:
+            self.Process(qid, query, OutDir)
+            
+        logging.info('queries in [%s] processed features at [%s]',QInName,OutDir)
+        return True
+        
+            
         
     
-    def ExtractFeatureForOneQDoc(self,qid,query,doc,lQObj,lDocObj):
+    def ExtractFeatureForOneQDoc(self,qid,query,doc,lObj):
         #if wanna speed up, cache features
         #for clearity, now just extract multiple times
         
-        lObj = lQObj + lDocObj
         
         hQDocFeature = self.QDocFeatureExtractor.Process(qid, query, doc)
         logging.debug('q[%s][%s] ltr feature extracted',query,doc.DocNo)
         
-        lhQObjFeature = self.QObjFeatureExtractor.ProcessOneQuery([qid,query], lQObj + lDocObj)
+        lhQObjFeature = self.QObjFeatureExtractor.ProcessOneQuery([qid,query], lObj)
         logging.debug('q[%s][%s]  obj feature extracted',query,doc.DocNo)
         
         lhDocObjFeature = self.DocObjFeatureExtractor.ProcessOneQueryDocPair([qid,query], doc, lObj)
@@ -174,32 +182,75 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         return hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature
     
     
-    def DumpPerQRes(self,qid,query,doc,lQObj,lDocObj,hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature,OutFormat):
+    def DumpPerQRes(self,qid,query,doc,lObj,hQDocFeature,lhQObjFeature,lhDocObjFeature,llhObjObjFeature,OutDir):
         '''
-        choose from raw or numpy
         raw:
             a dir for this q
                 a file for each doc
                     node a, node b, hFeature.json
-        numpy:
-            a dir
-                two files for each doc
-                    node feature mtx
-                    edge feature tensor
         '''
-        
-        if OutFormat == 'raw':
-            self.DumpPerQResRaw(qid, query, doc, lQObj, lDocObj, hQDocFeature, lhQObjFeature, lhDocObjFeature, llhObjObjFeature)
-            
-        if OutFormat == 'numpy':
-            self.DumpPerQResNumpy(qid, query, doc, lQObj, lDocObj, hQDocFeature, lhQObjFeature, lhDocObjFeature, llhObjObjFeature)
-            
 
-        return
+        if not os.path.exists(OutDir + '/' + qid):
+            os.makedirs(OutDir + '/' + qid)
+        
+        OutName =     OutDir + '/' + qid + doc.DocNo
+        out = open(OutName,'w')
+        
+        #q doc
+        print >>out, 'q_%s' %(qid) + '\t' + doc.DocNo + '\t' + json.dumps(hQDocFeature)
+        
+        #obj doc
+        for Obj, hDocObjFeature in zip(lObj,lhDocObjFeature):
+            print >>out, Obj.GetId() + '\t' + doc.DocNo + '\t' + json.dumps(hDocObjFeature)
+
+        #q obj
+        for Obj, hQObjFeature in zip(lObj,lhQObjFeature):
+            print >>out, 'q_%s' %(qid) + '\t' + Obj.GetId() + json.dumps(hQObjFeature)
+            
+        #obj obj
+        for i in range(len(lObj)):
+            for j in range(len(lObj)):
+                if i == j:
+                    continue
+                print >>out, lObj[i].GetId() + '\t' + lObj[j].GetId() + '\t' + json.dumps(llhObjObjFeature[i][j])
+
+        logging.info('q[%s] doc [%s] graph dumped to file [%s]',qid,doc.DocNo,OutName)
+        return True
     
-    
+
             
         
+        
+if __name__ == '__main__':
+    import sys
+    if 2 != len(sys.argv):
+        print "I extract graph features for given query and node dir"
+        GraphFullFeatureExtractCenterC.ShowConf()
+        print 'in\noutdir'
+        sys.exit()
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)       
+        
+    Extractor = GraphFullFeatureExtractCenterC(sys.argv[1])
+    
+    conf = cxConfC(sys.argv[1])
+    QInName = conf.GetConf('in')
+    OutDir = conf.GetConf('outdir')
+    
+    Extractor.PipeRun(QInName, OutDir)
+    
+            
+            
+        
+        
+        
+   
         
         
         
