@@ -7,6 +7,7 @@
 		<project>cxPyLib</project>
 		<project>Geektools</project>
 		<project>GoogleAPI</project>
+		<project>SemanticSearch</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
