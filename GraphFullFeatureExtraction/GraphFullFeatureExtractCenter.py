@@ -98,6 +98,8 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
     def ShowConf(cls):
         cxBaseC.ShowConf()
         print cls.__name__
+        print 'nodedir'
+        
         IndriSearchCenterC.ShowConf()
         FbObjCacheCenterC.ShowConf()
         
