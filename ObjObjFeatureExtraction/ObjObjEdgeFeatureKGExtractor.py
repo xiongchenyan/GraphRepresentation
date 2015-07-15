@@ -19,7 +19,7 @@ from cxBase.Conf import cxConfC
 from cxBase.base import cxBaseC
 import logging
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
-
+import json
 class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
     
     def Init(self):
@@ -45,6 +45,8 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         lObjANeighbor = ObjA.GetField('Neighbor')
         
         sNeighborId = set([item[1].GetId() for item in lObjANeighbor])
+        
+        logging.debug('%s neighbor: %s  target %s',ObjA.GetId(),json.dumps(sNeighborId),ObjB.GetId())
         
         FeatureName = self.FeatureName + 'Connected'
         score = 0

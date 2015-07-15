@@ -199,7 +199,7 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         if not os.path.exists(OutDir + '/' + qid):
             os.makedirs(OutDir + '/' + qid)
         
-        OutName =     OutDir + '/' + qid + doc.DocNo
+        OutName =     OutDir + '/' + qid + '/' + doc.DocNo
         out = open(OutName,'w')
         
         #q doc
