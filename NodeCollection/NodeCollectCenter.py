@@ -150,7 +150,7 @@ class NodeCollectorCenterC(cxBaseC):
             if OutFormat == 'dir':
                 
                 #print doc id\t obj id (doc id could be query indicating query obj)
-                self.DumpRawFormat(query)
+                self.DumpRawFormat(qid,query,lDoc,lQObj,llDocObj,OutName)
                 
         
         if OutFormat == 'json':    
