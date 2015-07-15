@@ -194,6 +194,8 @@ class NodeCollectorCenterC(cxBaseC):
         lDocCol = [vCol for vCol in lvCol if not vCol[0].startswith('q_')]
         
         lQObj = [vCol[1] for vCol in lQCol]
+        logging.debug('q[%s] get q obj %s',query,json.dumps(lQObj))
+        
         
         LastDocNo = ""
         for DocNo,ObjId in lDocCol:
@@ -202,7 +204,7 @@ class NodeCollectorCenterC(cxBaseC):
                 lDocNo.append(DocNo)
                 LastDocNo = DocNo
             llDocObj[-1].append(ObjId)
-            
+        
         return lDocNo,lQObj,llDocObj
             
         
