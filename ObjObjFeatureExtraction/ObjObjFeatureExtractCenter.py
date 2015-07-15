@@ -95,9 +95,9 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         for ObjA in lObj:
             lhFeature = []
             for ObjB in lObj:
-                if ObjA.GetId() == ObjB.GetId():
-                    continue
-                hFeature = self.ExtractPerObjObj(ObjA, ObjB,query)
+                hFeature = {}
+                if ObjA.GetId() != ObjB.GetId():
+                    hFeature = self.ExtractPerObjObj(ObjA, ObjB,query)
                 lhFeature.append(hFeature)
             llhFeature.append(lhFeature)
         

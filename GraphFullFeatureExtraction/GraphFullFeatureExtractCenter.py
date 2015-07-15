@@ -131,8 +131,8 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
                 #if lQObj is also empty, then it is LeToR
             llDocObj.append([])
         
-        logging.info('q[%s] all node fetched', qid)        
-        return lDoc,lQObj, llDocObj 
+        logging.info('q[%s] all node fetched, q node %s', qid,json.dumps([Obj.GetId() for Obj in lQObj]))        
+        return lDoc,lQObj, llDocObj
 
 
     def Process(self,qid,query,OutDir):
