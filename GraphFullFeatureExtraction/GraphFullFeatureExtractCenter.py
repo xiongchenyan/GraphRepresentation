@@ -11,7 +11,7 @@ what's my output:
     the features of the graph
 
 '''
-from NodeCollection.NodeCollectCenter import NodeCollectorCenterC
+
 
 '''
 pipeline:
