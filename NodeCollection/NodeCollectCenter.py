@@ -183,7 +183,6 @@ class NodeCollectorCenterC(cxBaseC):
         '''
         read results from the disk as dumped
         '''
-        lQObj = []
         lDocNo = []
         llDocObj = []
         
@@ -204,7 +203,7 @@ class NodeCollectorCenterC(cxBaseC):
                 LastDocNo = DocNo
             llDocObj[-1].append(ObjId)
             
-        return lQObj,lDocNo,llDocObj
+        return lDocNo,lQObj,llDocObj
             
         
         

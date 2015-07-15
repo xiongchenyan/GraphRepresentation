@@ -123,9 +123,13 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         
         #match lDoc dim lDocNo dim
         lDoc = IndriSearchCenterC.RearrangeDocOrder(lDoc,lDocNo)
+        
         lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in lQObjId]
         llDocObj = [[ self.ObjCenter.FetchObj(ObjId) for ObjId in lDocObjId] for lDocObjId in llDocObjId]
-        
+        while len(llDocObj) < len(lDoc):
+            #add empty list for docs have no objects (thus will restrict to EsdRank)
+                #if lQObj is also empty, then it is LeToR
+            llDocObj.append([])
         
         logging.info('q[%s] all node fetched', qid)        
         return lDoc,lQObj, llDocObj 
