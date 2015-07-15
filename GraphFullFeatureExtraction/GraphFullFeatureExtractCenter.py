@@ -94,10 +94,10 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
         logging.info('graph full feature extractor conf setted')
         
         
-    @staticmethod
-    def ShowConf():
+    @classmethod
+    def ShowConf(cls):
         cxBaseC.ShowConf()
-        
+        print cls.__name__
         IndriSearchCenterC.ShowConf()
         FbObjCacheCenterC.ShowConf()
         

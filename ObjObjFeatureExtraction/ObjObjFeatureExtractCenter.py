@@ -60,9 +60,9 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             
         logging.info('edge feature center confs setted')
         
-    @staticmethod
-    def ShowConf():
-        cxBaseC.ShowConf()
+    @classmethod
+    def ShowConf(cls):
+        print cls.__name__
         FbObjCacheCenterC.ShowConf()
         
         print 'objobjfeaturegroup'
