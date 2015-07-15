@@ -105,7 +105,7 @@ class NodeCollectorCenterC(cxBaseC):
         
         llDocObj = self.CollectDocNode(lDoc,qid,query)
         
-        logging.info('[%s][%s] get [%d] doc [%d] q obj node [%d] doc obj node',qid,query,len(lDoc),len(lQObj),len(lDocObj))
+        logging.info('[%s][%s] node collected',qid,query)
         return lDoc,lQObj,llDocObj
     
     
