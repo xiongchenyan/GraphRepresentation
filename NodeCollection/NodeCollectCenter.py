@@ -125,7 +125,9 @@ class NodeCollectorCenterC(cxBaseC):
             llDocNodeScore = self.DocNodeFaccAnaCollector.process(lDoc, qid, query)
             for lDocNodeScore in llDocNodeScore:
                 if [] != lDocNodeScore:
-                    llDocObj.append([item[0] for item in lDocNodeScore])
+                    lDocObj = [item[0] for item in lDocNodeScore]
+                    lDocObj = list(set(lDocObj))
+                    llDocObj.append(lDocObj)
             
         
         return llDocObj
