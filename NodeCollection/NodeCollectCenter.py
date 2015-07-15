@@ -160,6 +160,9 @@ class NodeCollectorCenterC(cxBaseC):
         
     def DumpRawFormat(self,qid,query,lDoc,lQObj,llDocObj,OutName):
         
+        if not os.path.exists(OutName):
+            os.makedirs(OutName)
+        
         out = open(OutName + '/' + IndriSearchCenterC.GenerateQueryTargetName(query),'w')
         
         for QObj in lQObj:
