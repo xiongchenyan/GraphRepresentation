@@ -152,6 +152,15 @@ class GraphFeaturePostProcessorC(cxBaseC):
     
     
     def GetFeatureName(self,lLines):
+        lhFeature = []
+        for line in lLines:
+            FStr = line.split('\t')[-1]
+            try:
+                hFeature = json.loads(FStr)
+            except ValueError:
+                logging.error('[%s] cannot be json loaded', FStr)
+                sys.exit()
+        
         lhFeature = [json.loads(line.split('\t')[-1]) for line in lLines]
         
         lName = []
