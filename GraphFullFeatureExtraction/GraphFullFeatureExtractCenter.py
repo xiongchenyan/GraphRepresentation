@@ -211,7 +211,7 @@ class GraphFullFeatureExtractCenterC(cxBaseC):
 
         #q obj
         for Obj, hQObjFeature in zip(lObj,lhQObjFeature):
-            print >>out, 'q_%s' %(qid) + '\t' + Obj.GetId() + json.dumps(hQObjFeature)
+            print >>out, 'q_%s' %(qid) + '\t' + Obj.GetId() + '\t' + json.dumps(hQObjFeature)
             
         #obj obj
         for i in range(len(lObj)):
