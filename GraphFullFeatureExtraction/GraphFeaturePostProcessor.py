@@ -185,6 +185,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
         hFeatureMin = {}
         lDocName = WalkDir(QDir)
         for DocName in lDocName:
+            logging.info('finding max min of [%s]',DocName)
             for line in open(DocName):
                 vCol = line.strip().split('\t')
                 hFeature = json.loads(vCol[-1])
