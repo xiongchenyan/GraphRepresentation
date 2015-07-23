@@ -95,7 +95,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
         lFName = WalkDir(self.InDir)
         
         for FName in lFName:
-            logging.info('checking feature names in [%s]',FName)
+#             logging.info('checking feature names in [%s]',FName)
             lLines = open(FName).read().splitlines()
             lNodeLines = [line for line in lLines if self.IsNodeFeatureLine(line)]
             lEdgeLines = [line for line in lLines if not self.IsNodeFeatureLine(line)]
@@ -153,17 +153,17 @@ class GraphFeaturePostProcessorC(cxBaseC):
     
     
     def GetFeatureName(self,lLines):
-        lhFeature = []
-        for line in lLines:
-            FStr = line.split('\t')[-1]
-            try:
-                hFeature = json.loads(FStr)
-                lhFeature.append(hFeature)
-            except ValueError:
-                logging.error('[%s] cannot be json loaded', FStr)
-                sys.exit()
+#         lhFeature = []
+#         for line in lLines:
+#             FStr = line.split('\t')[-1]
+#             try:
+#                 hFeature = json.loads(FStr)
+#                 lhFeature.append(hFeature)
+#             except ValueError:
+#                 logging.error('[%s] cannot be json loaded', FStr)
+#                 sys.exit()
         
-#         lhFeature = [json.loads(line.split('\t')[-1]) for line in lLines]
+        lhFeature = [json.loads(line.split('\t')[-1]) for line in lLines]
         
         lName = []
         for hFeature in lhFeature:
