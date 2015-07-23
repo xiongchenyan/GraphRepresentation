@@ -320,7 +320,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
         
         self.HashFeatureName()
         
-        for QDir,mid,lDocName in os.walk(QDir):
+        for QDir,mid,lDocName in os.walk(self.InDir):
             hFeatureMax,hFeatureMin = self.FindMaxMinFeatureValuesForQ(QDir)
             qid = ntpath.basename(QDir)
             for DocName in lDocName:
