@@ -296,7 +296,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
             hFeature = json.loads(vCol[2])
             hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax, hFeatureMin)
             
-            FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hNodeFeatureId)
+            FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hEdgeFeatureId)
         
             EdgeTensor[NodeA,NodeB] = FeatureVec
         
