@@ -27,7 +27,7 @@ def FixOneFile(FName):
         if len(vCol) == 3:
             continue
         
-        vCol[2].replace('{','\t{')
+        vCol[1].replace('{','\t{')
         lLines[i] = '\t'.join(vCol)
     
     out = open(FName,'w')
