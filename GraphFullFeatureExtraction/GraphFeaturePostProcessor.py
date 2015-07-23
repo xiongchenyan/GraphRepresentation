@@ -69,8 +69,8 @@ class GraphFeaturePostProcessorC(cxBaseC):
     def SetConf(self, ConfIn):
         cxBaseC.SetConf(self, ConfIn)
         
-        self.InDir = self.conf.GetConf('indir')
-        self.OutDir = self.conf.GetConf('outdir')
+        self.InDir = self.conf.GetConf('indir') + '/'
+        self.OutDir = self.conf.GetConf('outdir') + '/'
         self.RelCenter.SetConf(ConfIn)
         
     
@@ -78,8 +78,9 @@ class GraphFeaturePostProcessorC(cxBaseC):
     def ShowConf(cls):
         cxBaseC.ShowConf()
         print cls.__name__
-        AdhocQRelC.ShowConf()
         print 'indir\noutdir'
+        AdhocQRelC.ShowConf()
+        
         
         
     
