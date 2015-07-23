@@ -309,12 +309,6 @@ class GraphFeaturePostProcessorC(cxBaseC):
             
             
             
-        
-        
-        
-        
-        
-    
     
     
     def Process(self):
@@ -326,7 +320,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
             hFeatureMax,hFeatureMin = self.FindMaxMinFeatureValuesForQ(QDir)
             qid = ntpath.basename(QDir)
             for DocName in lDocName:
-                self.ProcessOneDoc(qid, QDir + DocName, hFeatureMax, hFeatureMin)
+                self.ProcessOneDoc(qid, QDir + '/' + DocName, hFeatureMax, hFeatureMin)
                 
             logging.info('q [%s] processed',qid)
         
