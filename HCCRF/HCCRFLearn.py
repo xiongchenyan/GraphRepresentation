@@ -1,0 +1,273 @@
+'''
+Created on Jul 24, 2015 11:48:36 AM
+@author: cx
+
+what I do:
+    The learner of HCCRF
+    I only contain the API's of the model
+        pipeline run stuff are not included
+what's my input:
+    the graph data (list of)
+what's my output:
+    the trained w1, w2
+    
+    
+procedure:
+    implement gradients
+    implement loss func
+    initialize parameter?
+    and put all these to scikit learn's
+
+
+
+'''
+
+
+
+'''
+to call scipy.optimize.minimize
+API of loss func:
+    loss(theta(w1 + w2), lGraphData)
+        return loss function value (remind it is mimization)
+API of gradient func:
+    gradient(theta(w1 + w2), lGraphData)
+        return gradients
+
+scipy.optimize.minimize(self.loss,theta,arg=(lGraphData),method='BFGS',jac=self.Gradient)
+check: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize
+for more details
+'''
+
+
+import numpy as np
+# import scipy
+from scipy.optimize import minimize
+import logging
+from math import log,sqrt,pi
+
+from HCCRFBase import HCCRFBaseC
+import os
+
+class HCCRFLearnerC(object):
+
+    @classmethod    
+    def Loss(cls,theta,lGraphData):
+        f = sum([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
+        
+        return f
+    @classmethod  
+    def Gradient(cls,theta,lGraphData):
+        gf = sum([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
+        return gf
+    
+    
+    @classmethod  
+    def LossPerGraph(cls,theta,GraphData):
+        w1 = theta[:GraphData.NodeFeatureDim]
+        w2 = theta[-GraphData.EdgeFeatureDim:]
+        
+        A = HCCRFBaseC.NodeA(w1, GraphData)
+        OmegaInv = np.linalg.inv(HCCRFBaseC.EdgeOmega(w2,GraphData))
+        
+        mu = HCCRFBaseC.JointMu(w1, w2, GraphData,A,OmegaInv)[0]
+        sigma = OmegaInv[0,0]
+        y = GraphData.rel
+        l = - (1.0/(2.0 * sigma**2)) * ((y - mu)**2) - log(sigma) - log(sqrt(2.0 * pi))
+        
+        return -l
+    
+    
+    @classmethod
+    def GradientPerGraph(cls,theta,GraphData):
+        w1 = theta[:GraphData.NodeFeatureDim]
+        w2 = theta[-GraphData.EdgeFeatureDim:]
+        
+        
+        A = HCCRFBaseC.NodeA(w1, GraphData)
+        OmegaInv = np.linalg.inv(HCCRFBaseC.EdgeOmega(w2,GraphData))
+        mu = HCCRFBaseC.JointMu(w1, w2, GraphData,A,OmegaInv)[0]
+        sigma = OmegaInv[0,0]
+        y = GraphData.rel
+        
+        MuPW1 = cls.MuPartialW1(GraphData,A,OmegaInv)
+        MuPW2 = cls.MuPartialW2(GraphData,A,OmegaInv,w2)
+        SigmaPW2 = cls.SigmaPartialW2(GraphData,A,OmegaInv,w2)
+        
+        gW1 = -(1.0/(sigma**2)) * (y-mu) * MuPW1
+        gW2 = -(1/(sigma**3)) * ((y-mu)**2) * SigmaPW2 \
+              -(1/(sigma**2)) * (y-mu) * MuPW2 \
+              +(1/sigma) * SigmaPW2
+        
+        gW1 = gW1.reshape(w1.shape)  #reshape from column mtx to vector
+        gW2 = gW2.reshape(w2.shape)  #same
+        
+        gf = np.array(list(gW1) + list(gW2))
+        
+        return gf
+    
+    
+    '''
+    TBD: make sure the tensor/matrix operation's dimension alignments are correct...
+    first level derivative operations
+    '''
+    @classmethod
+    def MuPartialW1(cls,GraphData,A,OmegaInv):
+        
+        res = (OmegaInv[0,:].dot(cls.APartialW1(GraphData))).T  #careful
+        return res
+    
+    @classmethod
+    def MuPartialW2(cls, GraphData,A,OmegaInv,w2):
+        OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv)
+        
+        TargetOmegaInvPartial = OmegaInvPartial[0,:,:]  #careful tensor slice
+        res = TargetOmegaInvPartial.T.dot(A)   #careful
+         
+        return res
+    
+    @classmethod
+    def SigmaPartialW2(cls,GraphData,A,OmegaInv,w2):
+        
+        OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv,w2)  #n*n*|w2| tensor
+        res = OmegaInvPartial[0,0,:]  #|w2| vector corresponding to first dim
+        res = res.reshape([res.shape[0],1])
+        return res
+    
+    
+    '''
+    second level derivative operations
+    '''
+    
+    @classmethod
+    def APartialW1(cls,GraphData):
+        return GraphData.NodeMtx
+    
+    @classmethod
+    def OmegaInvPartialW2(cls,GraphData,OmegaInv,w2):
+        '''
+        return a n*n*|w2| tensor
+        '''
+        
+        OmegaPartial = cls.OmegaPartialW2(GraphData,w2)
+        
+        res = np.zeros(GraphData.EdgeTensor.shape)
+        
+        for i in range(GraphData.EdgeFeatureDim):
+            res[:,:,i] = OmegaInv.dot(OmegaPartial[:,:,i]).dot(OmegaInv)
+            
+        return res
+    
+    
+    @classmethod
+    def OmegaPartialW2(cls,GraphData,w2):
+        gB = cls.BPartialW2(GraphData, w2)
+        
+        gD = np.array.zeros(gB.shape)
+        SumMid = np.sum(gB,1) #n * w2 mtx
+        for i in range(GraphData.NodeN):
+            gD[i,i,:] = SumMid[i,:]
+        
+        res = gD - gB
+        
+        
+        return res
+    
+    
+    @classmethod
+    def BPartialW2(cls,GraphData,w2):
+        gB = np.zeros(GraphData.EdgeTensor.shape)
+        
+        B = HCCRFBaseC.EdgeB(w2, GraphData)
+        WMtx = B * B * np.exp(-GraphData.EdgeTensor.dot(w2))
+        
+        for i in range(GraphData.EdgeFeatureDim):
+            gB[:,:,i] = WMtx * GraphData.EdgeTensor[:,:,i]
+        
+        
+        return gB
+    
+    
+    
+    def Train(self,lGraphData):
+        '''
+        call bfgs to train
+        '''
+        
+        logging.info('start training')
+        InitTheta = np.random.rand(lGraphData[0].NodeFeatureDim + lGraphData[0].EdgeFeatureDim)
+        TrainRes = minimize(self.Loss,InitTheta,args=(lGraphData), \
+                            method='BFGS', \
+                            jac=self.Gradient)
+        
+        logging.info('training result message: [%s]',TrainRes.message)
+        
+        w1 = TrainRes.x[:lGraphData[0].NodeFeatureDim]
+        w2 = TrainRes.x[-lGraphData[0].EdgeFeatureDim:]
+        return w1,w2
+    
+    
+    '''
+    these could be put into the class that runs training process
+    '''
+    def PipeTrain(self,QueryInName,DataDir):
+        '''
+        QueryInName contains all training queries
+        DataDir contains all data (train test could all be there, will only read those 
+            in QueryInName
+        '''
+        
+        lGraphData = self.ReadTargetGraphData(QueryInName,DataDir)
+        
+        return self.Train(lGraphData)
+    
+    @classmethod
+    def ReadTargetGraphData(cls,QueryInName,DataDir):
+        lQid = [line.split('\t')[0] for line in open(QueryInName).read().splitlines()]
+        
+        lGraphData = []
+        
+        for qid in lQid:
+            QDir = DataDir + '/' + qid + '/'
+            for dirname,dirnames,lDocName in os.walk(QDir):
+                lInName = [dirname + '/' + DocName for DocName in lDocName]
+                lGraphData.extend([HCCRFBaseC.LoadGraphData(InName) for InName in lInName])
+                
+        return lGraphData
+    
+    
+    
+    
+                
+                
+            
+        
+        
+        
+        
+        
+            
+        
+        
+    
+        
+        
+    
+    
+    
+    
+        
+    
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    
+
+
+
+
