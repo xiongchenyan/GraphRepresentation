@@ -324,9 +324,26 @@ class GraphFeaturePostProcessorC(cxBaseC):
                 
             logging.info('q [%s] processed',qid)
         
+        self.DumpFeatureHash()
+        
         logging.info('feature normalized and transformed')
         return True
-            
+    
+    
+    def DumpFeatureHash(self):
+        out = open(self.OutDir + 'NodeFeatureId','w')
+        lNodeF = self.hNodeFeatureId.items()
+        lNodeF.sort(key=lambda item:int(item[1]))
+        print >>out, '\n'.join(lNodeF)
+        out.close()
+        
+        out = open(self.OutDir + 'EdgeFeatureId','w')
+        lEdgeF = self.hEdgeFeatureId.items()
+        lEdgeF.sort(key=lambda item:int(item[1]))
+        print >>out, '\n'.join(lEdgeF)
+        out.close()
+        logging.info('feature id name dumped')
+        return    
         
     
     
