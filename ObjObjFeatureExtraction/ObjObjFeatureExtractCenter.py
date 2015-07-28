@@ -27,7 +27,7 @@ import pickle
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureKGExtractor import ObjObjEdgeFeatureKGExtractorC
 from ObjObjFeatureExtraction.ObjObjEdgeFeaturePreCalcSimExtractor import ObjObjEdgeFeaturePreCalcSimExtractorC
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureTextSimExtractor import ObjObjEdgeFeatureTextSimExtractorC
-
+from ObjObjFeatureExtraction.ObjObjEdgeFeatureTypeExtractor import ObjObjEdgeFeatureTypeExtractorC
 from ObjCenter.FbObjCacheCenter import FbObjCacheCenterC
 
 
@@ -41,7 +41,7 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         self.ObjObjKGExtractor = ObjObjEdgeFeatureKGExtractorC()
         self.ObjObjPreCalcExtractor = ObjObjEdgeFeaturePreCalcSimExtractorC()
         self.ObjObjTextSimExtractor = ObjObjEdgeFeatureTextSimExtractorC()
-        
+        self.ObjObjTypeSimExtractor = ObjObjEdgeFeatureTypeExtractorC() 
         self.NodeDir = ""
         
         
@@ -57,6 +57,9 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             self.ObjObjPreCalcExtractor.SetConf(ConfIn)
         if 'textsim' in self.lObjObjFeatureGroup:
             self.ObjObjTextSimExtractor.SetConf(ConfIn)
+        if 'typesim' in self.lObjObjFeatureGroup:
+            self.ObjObjTypeSimExtractor.SetConf(ConfIn)
+            
             
         logging.info('edge feature center confs setted')
         
@@ -70,7 +73,7 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         ObjObjEdgeFeatureKGExtractorC.ShowConf()
         ObjObjEdgeFeaturePreCalcSimExtractorC.ShowConf()
         ObjObjEdgeFeatureTextSimExtractorC.ShowConf()
-        
+        ObjObjEdgeFeatureTypeExtractorC.ShowConf()
         
    
     
@@ -86,6 +89,9 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             hFeature.update(self.ObjObjPreCalcExtractor.process(ObjA, ObjB,query))
         if 'textsim' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjTextSimExtractor.process(ObjA, ObjB))
+        if 'typesim' in self.lObjObjFeatureGroup:
+            hFeature.update(self.ObjObjTypeSimExtractor.process(ObjA, ObjB))
+            
         logging.debug('obj pair [%s-%s] feature extracted',ObjA.GetId(),ObjB.GetId())    
         return hFeature
     
