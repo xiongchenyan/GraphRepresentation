@@ -14,6 +14,7 @@ what's my output:
 import pickle,logging,json
 import numpy as np
 from scipy.special import expit
+import ntpath
 
 class DocGraphC(object):
     
@@ -25,6 +26,7 @@ class DocGraphC(object):
         self.NodeN = 0
         self.NodeFeatureDim = 0
         self.EdgeFeatureDim = 0
+        self.DocNo = ""
         
     def SetDims(self):
         self.NodeN = self.NodeMtx.shape[0]
@@ -39,12 +41,12 @@ class HCCRFBaseC(object):
     def LoadGraphData(cls,InName):
         '''
         load the data of a graph
+        #default the file name is doc no
         '''
-        
-        
         GraphData = DocGraphC()
         [GraphData.NodeMtx,GraphData.EdgeTensor,GraphData.rel,GraphData.hNodeId] = pickle.load(open(InName))
         GraphData.SetDims()
+        GraphData.DocNo = ntpath.basename(InName)
         return GraphData
     
     
