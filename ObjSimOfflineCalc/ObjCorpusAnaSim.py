@@ -27,7 +27,7 @@ def CalcSimilarity(ObjA,ObjB,CorrCnt,ObjCtfCenter,SimMetric = 'tfidf'):
     if SimMetric == 'tfidf':
         if not ObjA in ObjCtfCenter.hTermCtf:
             return 0
-        return float(CorrCnt) * ObjCtfCenter.GetLogIdf(ObjA)
+        return float(CorrCnt) * (ObjCtfCenter.GetLogIdf(ObjA) + ObjCtfCenter.GetLogIdf(ObjB)) / 2.0
     if SimMetric == 'tf':
         return CorrCnt
     if SimMetric == 'prob':
