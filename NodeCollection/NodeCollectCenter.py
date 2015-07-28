@@ -123,7 +123,7 @@ class NodeCollectorCenterC(cxBaseC):
         llDocObj = []
         if 'facc' in self.lDocNodeGroup:
             llDocNodeScore = self.DocNodeFaccAnaCollector.process(lDoc, qid, query)
-            llDocObj = [[item[0] for item in lDocNodeScore] for lDocNodeScore in llDocNodeScore]
+            llDocObj = [list(set([item[0] for item in lDocNodeScore])) for lDocNodeScore in llDocNodeScore]
 #             for lDocNodeScore in llDocNodeScore:
 #                 lDocObj = [item[0] for item in lDocNodeScore]
 #                 lDocObj = list(set(lDocObj))
