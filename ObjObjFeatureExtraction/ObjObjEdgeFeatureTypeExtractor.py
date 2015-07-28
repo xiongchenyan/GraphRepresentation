@@ -58,8 +58,8 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
         hFeature[self.FeatureName + 'SameTypeFrac'] = OverlapCnt / max((len(lAType) + len(lBType)),1)
         
         return hFeature
-    
-    def ExtractNotableTypeSimeFeature(self,ObjA,ObjB):
+        
+    def ExtractNotableTypeSimFeature(self,ObjA,ObjB):
         hFeature = {}
         
         score = int(ObjA.GetField('NotableType') == ObjB.GetField('NotableType'))
