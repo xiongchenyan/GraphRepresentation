@@ -92,11 +92,12 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
               
         ObjAId = ObjA.GetId()
         ObjBId = ObjB.GetId()
-        key = ObjAId + '\t' + ObjBId
-        if ObjAId > ObjBId:
-            DirectKey = ObjBId + '\t' + ObjAId
-        else:
-            DirectKey = key
+        DirectKey = ObjAId + '\t' + ObjBId
+        
+        lMid = [ObjAId,ObjBId]
+        lMid.sort()
+        UndirectKey = '\t'.join(lMid)
+        
           
               
         hFeature = {}
@@ -107,9 +108,9 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
             if Directed:
                 ThisKey = DirectKey
             else:
-                ThisKey = key
+                ThisKey = UndirectKey
             score = 0
-            if key in hSim:
+            if ThisKey in hSim:
                 score = hSim[ThisKey]
             FeatureName = self.FeatureName + SimName.title()
             hFeature[FeatureName] = score
