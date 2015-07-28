@@ -21,6 +21,7 @@ procedure:
 
 
 '''
+import itertools
 
 
 
@@ -207,7 +208,7 @@ class HCCRFLearnerC(object):
     
     
     '''
-    these could be put into the class that runs training process
+    these should be put into the class that runs training process?
     '''
     def PipeTrain(self,QueryInName,DataDir):
         '''
@@ -216,23 +217,23 @@ class HCCRFLearnerC(object):
             in QueryInName
         '''
         
-        lGraphData = self.ReadTargetGraphData(QueryInName,DataDir)
-        
+        llGraphData = self.ReadTargetGraphData(QueryInName,DataDir)
+        lGraphData = list(itertools.chain(*llGraphData))
         return self.Train(lGraphData)
     
     @classmethod
     def ReadTargetGraphData(cls,QueryInName,DataDir):
         lQid = [line.split('\t')[0] for line in open(QueryInName).read().splitlines()]
         
-        lGraphData = []
+        llGraphData = []
         
         for qid in lQid:
             QDir = DataDir + '/' + qid + '/'
             for dirname,dirnames,lDocName in os.walk(QDir):
                 lInName = [dirname + '/' + DocName for DocName in lDocName]
-                lGraphData.extend([HCCRFBaseC.LoadGraphData(InName) for InName in lInName])
+                llGraphData.append([HCCRFBaseC.LoadGraphData(InName) for InName in lInName])
                 
-        return lGraphData
+        return llGraphData
     
     
     
