@@ -61,8 +61,11 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def ExtractNotableTypeSimFeature(self,ObjA,ObjB):
         hFeature = {}
-        
-        score = int(ObjA.GetField('NotableType') == ObjB.GetField('NotableType'))
+        ANotable = ObjA.GetField('NotableType')
+        BNotable = ObjB.GetField('NotableType')
+        score = 0
+        if (ANotable == BNotable) & (ANotable != ""):
+            score = 1  
         hFeature[self.FeatureName + 'SameNotable'] = score
         
         return hFeature
