@@ -24,7 +24,8 @@ class HCCRFPredictorC(object):
     def PipePredict(self,QueryInName,DataDir,w1,w2):
         
         llGraphData = HCCRFLearnerC.ReadTargetGraphData(QueryInName, DataDir)
-        llDocScore = [[self.Predict(GraphData, w1, w2) for GraphData in lGraphData] for lGraphData in llGraphData]
+        llDocScore = [[self.Predict(GraphData, w1, w2) for GraphData in lGraphData] \
+                       for lGraphData in llGraphData]
         
         lQid = [line.split('\t')[0] for line in open(QueryInName).read().splitlines()]
         return lQid,llDocScore

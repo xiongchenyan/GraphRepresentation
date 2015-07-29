@@ -38,7 +38,10 @@ scipy.optimize.minimize(self.loss,theta,arg=(lGraphData),method='BFGS',jac=self.
 check: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize
 for more details
 '''
-
+'''
+July 28 2015
+reviewed, seems right, tensor operations are the most worried part.
+'''
 
 import numpy as np
 # import scipy
@@ -53,12 +56,12 @@ class HCCRFLearnerC(object):
 
     @classmethod    
     def Loss(cls,theta,lGraphData):
-        f = sum([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
+        f = np.mean([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
         
         return f
     @classmethod  
     def Gradient(cls,theta,lGraphData):
-        gf = sum([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
+        gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
         return gf
     
     
@@ -73,7 +76,7 @@ class HCCRFLearnerC(object):
         mu = HCCRFBaseC.JointMu(w1, w2, GraphData,A,OmegaInv)[0]
         sigma = OmegaInv[0,0]
         y = GraphData.rel
-        l = - (1.0/(2.0 * sigma**2)) * ((y - mu)**2) - log(sigma) - log(sqrt(2.0 * pi))
+        l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
         
         return -l
     
@@ -121,7 +124,12 @@ class HCCRFLearnerC(object):
     def MuPartialW2(cls, GraphData,A,OmegaInv,w2):
         OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv)
         
-        TargetOmegaInvPartial = OmegaInvPartial[0,:,:]  #careful tensor slice
+        TargetOmegaInvPartial = OmegaInvPartial[0,:,:]  #careful tensor slice, should be a n\times |w1| mtx
+        
+        logging.debug('Target Omega Inv partial dim [%d*%d] should be [%d*%d]'  \
+                      ,TargetOmegaInvPartial.shape[0],TargetOmegaInvPartial.shape[1],\
+                      GraphData.NodeN,GraphData.EdgeFeatureDim)
+        
         res = TargetOmegaInvPartial.T.dot(A)   #careful
          
         return res

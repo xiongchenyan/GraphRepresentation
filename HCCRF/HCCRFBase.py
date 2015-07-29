@@ -11,6 +11,11 @@ what's my output:
 
 '''
 
+'''
+July 28 2015
+reviewed, seems all right
+'''
+
 import pickle,logging,json
 import numpy as np
 from scipy.special import expit
