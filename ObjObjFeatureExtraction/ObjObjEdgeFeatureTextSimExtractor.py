@@ -28,6 +28,7 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'TextSim'
         self.lObjField = ['name','desp','alias']
+        self.lFieldSimMetric = ['coor','js','coor']
         self.CtfCenter = TermCtfC()
         self.TermCtfIn = ""
         
@@ -44,18 +45,19 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def process(self, ObjA, ObjB):
         hFeature = {}
-        hFeature.update(self.ExtractFieldJS(ObjA,ObjB))
+        hFeature.update(self.ExtractTextSimFeature(ObjA,ObjB))
         logging.debug('[%s]-[%s] obj text sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
         return hFeature
     
-    def ExtractFieldJS(self,ObjA,ObjB):
+    def ExtractTextSimFeature(self,ObjA,ObjB):
         hFeature = {}
         
-        for field in self.lObjField:
+        for SimMetric,field in zip(self.lFieldSimMetric,self.lObjField):
+            
             FeatureName = self.FeatureName + field.title()
             LmA = LmBaseC(ObjA.GetField(field))
             LmB = LmBaseC(ObjB.GetField(field))
-            score = LmBaseC.Similarity(LmA, LmB, self.CtfCenter, 'js')
+            score = LmBaseC.Similarity(LmA, LmB, self.CtfCenter, SimMetric)
             hFeature[FeatureName] = score
             
         return hFeature
