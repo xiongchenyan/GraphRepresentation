@@ -73,7 +73,7 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         lObjBNeighbor = ObjB.GetNeighbor()
         sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
         
-        FeatureName = 'CommonNeighborFrac'
+        FeatureName = self.FeatureName + 'CommonNeighborFrac'
         score = 0
             
         
