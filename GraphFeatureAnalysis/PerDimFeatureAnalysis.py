@@ -67,10 +67,7 @@ class PerDimFeatureAnalysiserC(cxBaseC):
         fetch all target feature dim
         '''
         
-        lQid = [line.split('\t')[0] for line in open(self.QInName).read().splitlines()]
-        
         lRes = []
-        
         lFName = WalkDir(self.DataDir)
         for InName in lFName:
             lTriple = self.LoadFeatureFromOneFile(InName)
