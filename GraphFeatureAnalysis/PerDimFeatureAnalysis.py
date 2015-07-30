@@ -58,7 +58,7 @@ class PerDimFeatureAnalysiserC(cxBaseC):
             score = 0
             if FeatureName in hFeature:
                 score = hFeature[FeatureName]
-            lRes.append([a,b,score])
+                lRes.append([a,b,score])
         return lRes
     
     
