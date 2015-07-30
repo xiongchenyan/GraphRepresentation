@@ -193,7 +193,8 @@ class GraphFeaturePostProcessorC(cxBaseC):
                 hFeatureMin = FeatureProcessorC.Min(hFeature,hFeatureMin)
         
         logging.info('q [%s] max-min feature score get',ntpath.basename(QDir))
-        
+        logging.info('q [%s] max %s',ntpath.basename(QDir),json.dumps(hFeatureMax))
+        logging.info('q [%s] min %s',ntpath.basename(QDir),json.dumps(hFeatureMin))
         return hFeatureMax,hFeatureMin
     
     def ProcessOneDoc(self,Qid,DocInName,hFeatureMax,hFeatureMin):
@@ -270,7 +271,8 @@ class GraphFeaturePostProcessorC(cxBaseC):
             NodeP = hNodeId[vCol[0]]
             
             hFeature = json.loads(vCol[-1])
-#             hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax,hFeatureMin)
+            
+            hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax,hFeatureMin)
             
             FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hNodeFeatureId)
             
@@ -294,7 +296,8 @@ class GraphFeaturePostProcessorC(cxBaseC):
             NodeA = hNodeId[vCol[0]]
             NodeB = hNodeId[vCol[1]]
             hFeature = json.loads(vCol[2])
-#             hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax, hFeatureMin)
+            
+            hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax, hFeatureMin)
             
             FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hEdgeFeatureId)
         
