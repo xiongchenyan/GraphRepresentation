@@ -270,7 +270,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
             NodeP = hNodeId[vCol[0]]
             
             hFeature = json.loads(vCol[-1])
-            hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax,hFeatureMin)
+#             hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax,hFeatureMin)
             
             FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hNodeFeatureId)
             
@@ -294,7 +294,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
             NodeA = hNodeId[vCol[0]]
             NodeB = hNodeId[vCol[1]]
             hFeature = json.loads(vCol[2])
-            hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax, hFeatureMin)
+#             hFeature = FeatureProcessorC.MaxMinNormalization(hFeature, hFeatureMax, hFeatureMin)
             
             FeatureVec = FeatureProcessorC.VectorlizeFeature(hFeature, self.hEdgeFeatureId)
         
