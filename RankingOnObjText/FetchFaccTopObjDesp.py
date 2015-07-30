@@ -28,6 +28,7 @@ def LoadTopKFaccObjId(InName,k):
 
 def FetchTargetDesp(DespInName,lObjId,OutName):
     sObjId = set(lObjId)
+    print 'target [%d] obj' %(len(sObjId))
     out = open(OutName,'w')
     for line in open(DespInName):
         line = line.strip()
@@ -43,7 +44,7 @@ def Process(DespInName,FaccIdfInName,k,OutName):
     
     lObjId = LoadTopKFaccObjId(FaccIdfInName, k)
     FetchTargetDesp(DespInName, lObjId, OutName)
-    logging.info('done')
+    print 'done'
     
     
 if 5 != len(sys.argv):
