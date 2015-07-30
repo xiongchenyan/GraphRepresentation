@@ -53,6 +53,6 @@ if 5 != len(sys.argv):
     sys.exit()
     
     
-Process(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])        
+Process(sys.argv[1],sys.argv[2],int(sys.argv[3]),sys.argv[4])        
         
     
