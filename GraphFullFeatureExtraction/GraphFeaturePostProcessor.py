@@ -334,13 +334,13 @@ class GraphFeaturePostProcessorC(cxBaseC):
         out = open(self.OutDir + 'NodeFeatureId','w')
         lNodeF = self.hNodeFeatureId.items()
         lNodeF.sort(key=lambda item:int(item[1]))
-        print >>out, '\n'.join(['\t'.join(item) for item in lNodeF])
+        print >>out, '\n'.join(['%s\t%s' %(item[0],item[1]) for item in lNodeF])
         out.close()
         
         out = open(self.OutDir + 'EdgeFeatureId','w')
         lEdgeF = self.hEdgeFeatureId.items()
         lEdgeF.sort(key=lambda item:int(item[1]))
-        print >>out, '\n'.join(['\t'.join(item) for item in lEdgeF])
+        print >>out, '\n'.join(['%s\t%s' %(item[0],item[1]) for item in lEdgeF])
         out.close()
         logging.info('feature id name dumped')
         return    
