@@ -50,7 +50,7 @@ import logging
 from math import log,sqrt,pi
 import json
 from HCCRFBase import HCCRFBaseC
-import os
+import os,sys
 
 class HCCRFLearnerC(object):
 
@@ -106,7 +106,7 @@ class HCCRFLearnerC(object):
         
         
         logging.debug('w2 shape %s, gw2 shape %s',json.dumps(w2.shape),json.dumps(gW2.shape))
-        
+        sys.exit()
         gW1 = gW1.reshape(w1.shape)  #reshape from column mtx to vector
         gW2 = gW2.reshape(w2.shape)  #same
         
@@ -123,6 +123,7 @@ class HCCRFLearnerC(object):
     def MuPartialW1(cls,GraphData,A,OmegaInv):
         
         res = (OmegaInv[0,:].dot(cls.APartialW1(GraphData))).T  #careful
+        res.reshape(GraphData.NodeFeatureDim)
         return res
     
     @classmethod
@@ -136,7 +137,8 @@ class HCCRFLearnerC(object):
                       GraphData.NodeN,GraphData.EdgeFeatureDim)
         
         res = TargetOmegaInvPartial.T.dot(A)   #careful
-         
+        
+        res.reshape(w2.shape) 
         return res
     
     @classmethod
@@ -144,7 +146,7 @@ class HCCRFLearnerC(object):
         
         OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv,w2)  #n*n*|w2| tensor
         res = OmegaInvPartial[0,0,:]  #|w2| vector corresponding to first dim
-        res = res.reshape([res.shape[0],1])
+        res = res.reshape(w2.shape)
         return res
     
     
