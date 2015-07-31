@@ -77,7 +77,7 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
-        logging.debug('Sigma matrix: %s',json.dumps(OmegaInv))
+        logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
         
         logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
         l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
