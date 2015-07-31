@@ -97,6 +97,8 @@ class HCCRFLearnerC(object):
         MuPW2 = cls.MuPartialW2(GraphData,A,OmegaInv,w2)
         SigmaPW2 = cls.SigmaPartialW2(GraphData,A,OmegaInv,w2)
         
+        logging.debug('Shape:MuPW1: %s, MuPW2: %s, SigmaPW2: %s',json.dumps(MuPW1.shape),json.dumps(MuPW2.shape),json.dumps(SigmaPW2.shape))
+        
         gW1 = -(1.0/(sigma**2)) * (y-mu) * MuPW1
         gW2 = -(1/(sigma**3)) * ((y-mu)**2) * SigmaPW2 \
               -(1/(sigma**2)) * (y-mu) * MuPW2 \
