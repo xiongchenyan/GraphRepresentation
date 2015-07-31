@@ -171,7 +171,7 @@ class HCCRFLearnerC(object):
     def OmegaPartialW2(cls,GraphData,w2):
         gB = cls.BPartialW2(GraphData, w2)
         
-        gD = np.array.zeros(gB.shape)
+        gD = np.zeros(gB.shape)
         SumMid = np.sum(gB,1) #n * w2 mtx
         for i in range(GraphData.NodeN):
             gD[i,i,:] = SumMid[i,:]
