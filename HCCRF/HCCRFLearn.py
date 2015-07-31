@@ -77,6 +77,8 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
+        logging.debug('Sigma matrix: %s',json.dumps(OmegaInv))
+        
         logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
         l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
         
@@ -134,9 +136,9 @@ class HCCRFLearnerC(object):
         
         TargetOmegaInvPartial = OmegaInvPartial[0,:,:]  #careful tensor slice, should be a n\times |w1| mtx
         
-        logging.debug('Target Omega Inv partial dim [%d*%d] should be [%d*%d]'  \
-                      ,TargetOmegaInvPartial.shape[0],TargetOmegaInvPartial.shape[1],\
-                      GraphData.NodeN,GraphData.EdgeFeatureDim)
+#         logging.debug('Target Omega Inv partial dim [%d*%d] should be [%d*%d]'  \
+#                       ,TargetOmegaInvPartial.shape[0],TargetOmegaInvPartial.shape[1],\
+#                       GraphData.NodeN,GraphData.EdgeFeatureDim)
         
         res = TargetOmegaInvPartial.T.dot(A)   #careful
         
