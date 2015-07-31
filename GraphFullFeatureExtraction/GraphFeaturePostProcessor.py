@@ -319,6 +319,8 @@ class GraphFeaturePostProcessorC(cxBaseC):
         self.HashFeatureName()
         
         for QDir,mid,lDocName in os.walk(self.InDir):
+            if QDir == self.InDir:
+                continue                
             logging.info('start working on query dir [%s]',QDir)
             hFeatureMax,hFeatureMin = self.FindMaxMinFeatureValuesForQ(QDir)
             qid = ntpath.basename(QDir)
