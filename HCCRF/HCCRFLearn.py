@@ -122,7 +122,7 @@ class HCCRFLearnerC(object):
     
     @classmethod
     def MuPartialW2(cls, GraphData,A,OmegaInv,w2):
-        OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv)
+        OmegaInvPartial = cls.OmegaInvPartialW2(GraphData,OmegaInv,w2)
         
         TargetOmegaInvPartial = OmegaInvPartial[0,:,:]  #careful tensor slice, should be a n\times |w1| mtx
         
