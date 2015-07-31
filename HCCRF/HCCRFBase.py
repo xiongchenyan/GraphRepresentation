@@ -77,14 +77,14 @@ class HCCRFBaseC(object):
         if B == None:
             B = cls.EdgeB(w2, GraphData)
         
-        D = np.diag(B.dot(np.ones(GraphData.NodeN,1)))
+        D = np.diag(B.dot(np.ones([GraphData.NodeN,1])))
         
         return D
     @classmethod
     def EdgeOmega(cls,w2,GraphData):
         B = cls.EdgeB(w2, GraphData)
         D = cls.EdgeD(w2, GraphData, B)
-        Omega = np.diag(np.ones(GraphData.NodeN)) + D - B 
+        Omega = np.diag(np.ones([GraphData.NodeN])) + D - B 
         return Omega
     
     @classmethod
