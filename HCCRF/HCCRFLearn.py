@@ -76,6 +76,8 @@ class HCCRFLearnerC(object):
         mu = HCCRFBaseC.JointMu(w1, w2, GraphData,A,OmegaInv)[0]
         sigma = OmegaInv[0,0]
         y = GraphData.rel
+        
+        logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
         l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
         
         return -l
@@ -97,7 +99,7 @@ class HCCRFLearnerC(object):
         MuPW2 = cls.MuPartialW2(GraphData,A,OmegaInv,w2)
         SigmaPW2 = cls.SigmaPartialW2(GraphData,A,OmegaInv,w2)
         
-        logging.debug('Shape:MuPW1: %s, MuPW2: %s, SigmaPW2: %s',json.dumps(MuPW1.shape),json.dumps(MuPW2.shape),json.dumps(SigmaPW2.shape))
+#         logging.debug('Shape:MuPW1: %s, MuPW2: %s, SigmaPW2: %s',json.dumps(MuPW1.shape),json.dumps(MuPW2.shape),json.dumps(SigmaPW2.shape))
         
         gW1 = -(1.0/(sigma**2)) * (y-mu) * MuPW1
         gW2 = -(1/(sigma**3)) * ((y-mu)**2) * SigmaPW2 \
@@ -105,7 +107,7 @@ class HCCRFLearnerC(object):
               +(1/sigma) * SigmaPW2
         
         
-        logging.debug('w2 shape %s, gw2 shape %s',json.dumps(w2.shape),json.dumps(gW2.shape))
+#         logging.debug('w2 shape %s, gw2 shape %s',json.dumps(w2.shape),json.dumps(gW2.shape))
 #         sys.exit()
         gW1 = gW1.reshape(w1.shape)  #reshape from column mtx to vector
         gW2 = gW2.reshape(w2.shape)  #same
