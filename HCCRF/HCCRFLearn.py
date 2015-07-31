@@ -48,7 +48,7 @@ import numpy as np
 from scipy.optimize import minimize
 import logging
 from math import log,sqrt,pi
-
+import json
 from HCCRFBase import HCCRFBaseC
 import os
 
@@ -101,6 +101,9 @@ class HCCRFLearnerC(object):
         gW2 = -(1/(sigma**3)) * ((y-mu)**2) * SigmaPW2 \
               -(1/(sigma**2)) * (y-mu) * MuPW2 \
               +(1/sigma) * SigmaPW2
+        
+        
+        logging.debug('w2 shape %s, gw2 shape %s',json.dumps(w2.shape),json.dumps(gW2.shape))
         
         gW1 = gW1.reshape(w1.shape)  #reshape from column mtx to vector
         gW2 = gW2.reshape(w2.shape)  #same
