@@ -106,7 +106,7 @@ class HCCRFLearnerC(object):
         
         
         logging.debug('w2 shape %s, gw2 shape %s',json.dumps(w2.shape),json.dumps(gW2.shape))
-        sys.exit()
+#         sys.exit()
         gW1 = gW1.reshape(w1.shape)  #reshape from column mtx to vector
         gW2 = gW2.reshape(w2.shape)  #same
         
