@@ -149,7 +149,7 @@ class HCCRFLearnerC(object):
         
         gf = np.array(list(gW1) + list(gW2))
         
-        logging.debug('gf %s: %s',np.array_str(gf.shape),np.array_str(gf))
+        logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
         return gf
     
     
