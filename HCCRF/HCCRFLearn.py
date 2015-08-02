@@ -58,11 +58,12 @@ class HCCRFLearnerC(object):
     @classmethod    
     def Loss(cls,theta,lGraphData):
         f = np.mean([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
-        
+        logging.info('loss [%f]',f)
         return f
     @classmethod  
     def Gradient(cls,theta,lGraphData):
         gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
+        logging.info('gradient: %s',np.array_str(gf))
         return gf
     
     
@@ -98,13 +99,17 @@ class HCCRFLearnerC(object):
             B = HCCRFBaseC.EdgeB(w2, GraphData)
             D = HCCRFBaseC.EdgeD(w2, GraphData, B)
             
-            print "D:"
-            print np.array_str(D)
-            print "B:"
-            print np.array_str(B)
-            print B
+#             print "D:"
+#             print np.array_str(D)
+#             print "B:"
+#             print np.array_str(B)
+#             print B
+            sys.exit()
             
-            
+        try:
+            lCskRes = np.linalg.cholesky(OmegaInv)
+        except LinAlgError:
+            logging.error('Sigma not postive definite')
             sys.exit()
         
         
