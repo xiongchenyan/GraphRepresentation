@@ -91,6 +91,17 @@ class HCCRFLearnerC(object):
             lCskRes = np.linalg.cholesky(Omega)
         except LinAlgError:
             logging.error('Omega is not postive definite')
+            '''
+            this is impossible, there must be something wrong with D or B
+            show D and B
+            '''
+            B = HCCRFBaseC.EdgeB(w2, GraphData)
+            D = HCCRFBaseC.EdgeD(w2, GraphData, B)
+            
+            print D
+            print B
+            
+            
             sys.exit()
         
         
