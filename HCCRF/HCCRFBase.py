@@ -68,7 +68,7 @@ class HCCRFBaseC(object):
 #             B += GraphData.EdgeTensor[i].dot(w2[i])
             
         B = GraphData.EdgeTensor.dot(w2)    
-        logging.debug('B is symmetric %d',int(np.array_equal(B.T, B)))
+#         logging.debug('B is symmetric %d',int(np.array_equal(B.T, B)))
         B = expit(B)
         
         return B

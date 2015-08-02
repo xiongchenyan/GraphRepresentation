@@ -42,25 +42,26 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         logging.debug('[%s-%s] direct connection features:',ObjA.GetId(),ObjB.GetId())
         
         
-        lObjANeighbor = ObjA.GetField('Neighbor')
+        lObjANeighbor = ObjA.GetNeighbor()
+        sANeighborId = set([item[1].GetId() for item in lObjANeighbor])
+        lObjBNeighbor = ObjB.GetNeighbor()
+        sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
         
-        sNeighborId = set([item[1].GetId() for item in lObjANeighbor])
-        
-        logging.debug('%s neighbor: %s  target %s',ObjA.GetId(),json.dumps(list(sNeighborId)),ObjB.GetId())
+#         logging.debug('%s neighbor: %s  target %s',ObjA.GetId(),json.dumps(list(sANeighborId)),ObjB.GetId())
         
         FeatureName = self.FeatureName + 'Connected'
         score = 0
-        if ObjB.GetId() in sNeighborId:
+        if (ObjB.GetId() in sANeighborId) | (ObjA.GetId() in sBNeighborId):
             score = 1
         hFeature[FeatureName] = score
         logging.debug('[%s:%f]',FeatureName,score)
         
-        FeatureName = self.FeatureName + 'HopOneProb'
-        score = 0
-        if ObjB.GetId() in sNeighborId:
-            score = 1.0 / float(len(sNeighborId))
-        hFeature[FeatureName] = score
-        logging.debug('[%s:%f]',FeatureName,score)
+#         FeatureName = self.FeatureName + 'HopOneProb'
+#         score = 0
+#         if ObjB.GetId() in sNeighborId:
+#             score = 1.0 / float(len(ObjA.GetField('Neighbor')) + len(ObjB.GetField('Neighbor')))
+#         hFeature[FeatureName] = score
+#         logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
     
     def ExtractTwoHopFeature(self,ObjA,ObjB):
@@ -73,19 +74,26 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         lObjBNeighbor = ObjB.GetNeighbor()
         sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
         
-        FeatureName = self.FeatureName + 'CommonNeighborFrac'
+#         FeatureName = self.FeatureName + 'CommonNeighborFrac'
+#         score = 0
+#             
+#         
+#         for ObjId in sANeighborId:
+#             if ObjId in sBNeighborId:
+#                 score += 1
+#         if len(sANeighborId) != 0:
+#             score /= len(sANeighborId)
+#             
+#         hFeature[FeatureName] = score
+#         logging.debug('[%s:%f]',FeatureName,score)
+
+        FeatureName = self.FeatureName + 'HasCommonNeighbor'
         score = 0
-            
-        
         for ObjId in sANeighborId:
             if ObjId in sBNeighborId:
-                score += 1
+                score = 1
                 break
-        if len(sANeighborId) != 0:
-            score /= len(sANeighborId)
-            
         hFeature[FeatureName] = score
-        logging.debug('[%s:%f]',FeatureName,score)
         return hFeature
         
                 

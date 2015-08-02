@@ -74,7 +74,10 @@ class HCCRFLearnerC(object):
         for i in range(GraphData.EdgeFeatureDim):
             if not np.array_equal(GraphData.EdgeTensor[:,:,i].T,GraphData.EdgeTensor[:,:,i]):
                 logging.warn('Graph Edge Tensor [%d] dim not symmetric',i)
-                logging.warn(GraphData.EdgeTensor[:,:,i])
+                Mtx = GraphData.EdgeTensor[:,:,i]
+                ErrorMtx = [(a,b,Mtx[a,b]) for a in range(Mtx.shape[0]) for b in range(Mtx.shape[1]) if Mtx[a,b] != Mtx[b,a]]
+                logging.warn(ErrorMtx)
+#                 logging.warn(GraphData.EdgeTensor[:,:,i])
         
         
         w1 = theta[:GraphData.NodeFeatureDim]
