@@ -78,8 +78,8 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
-        logging.debug('w1: %f',json.dumps(w1.tolist()))
-        logging.debug('w2: %f', json.dumps(w2.tolist()))
+        logging.debug('w1: %s',json.dumps(w1.tolist()))
+        logging.debug('w2: %s', json.dumps(w2.tolist()))
         logging.debug('Omega: %s',json.dumps(Omega.tolist()))
         logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
         
