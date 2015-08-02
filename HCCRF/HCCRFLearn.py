@@ -98,7 +98,10 @@ class HCCRFLearnerC(object):
             B = HCCRFBaseC.EdgeB(w2, GraphData)
             D = HCCRFBaseC.EdgeD(w2, GraphData, B)
             
-            print D
+            print "D:"
+            print np.array_str(D)
+            print "B:"
+            print np.array_str(B)
             print B
             
             
