@@ -64,7 +64,7 @@ class HCCRFLearnerC(object):
     @classmethod  
     def Gradient(cls,theta,lGraphData):
         logging.info('calling gradients func')
-        gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
+        gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData],0)
         logging.info('gradient: %s',np.array_str(gf))
         return gf
     
@@ -149,6 +149,7 @@ class HCCRFLearnerC(object):
         
         gf = np.array(list(gW1) + list(gW2))
         
+        logging.debug('gf %s: %s',np.array_str(gf.shape),np.array_str(gf))
         return gf
     
     
