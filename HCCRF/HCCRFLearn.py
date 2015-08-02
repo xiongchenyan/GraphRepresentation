@@ -248,9 +248,13 @@ class HCCRFLearnerC(object):
         
         logging.info('start training')
         InitTheta = np.random.rand(lGraphData[0].NodeFeatureDim + lGraphData[0].EdgeFeatureDim)
-        TrainRes = minimize(self.Loss,InitTheta,args=(lGraphData), \
+        gf = self.Gradient(InitTheta, lGraphData)
+        
+        TrainRes = minimize(self.Loss,InitTheta,\
+                            args=(lGraphData), \
                             method='BFGS', \
-                            jac=self.Gradient)
+                            jac=self.Gradient \
+                            )
         
         logging.info('training result message: [%s]',TrainRes.message)
         
