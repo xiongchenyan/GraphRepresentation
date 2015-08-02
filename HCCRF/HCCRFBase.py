@@ -93,7 +93,7 @@ class HCCRFBaseC(object):
         if B == None:
             B = cls.EdgeB(w2, GraphData)
         
-        D = np.diag(B.dot(np.ones([GraphData.NodeN,1])))
+        D = np.diag(B.dot(np.ones([GraphData.NodeN,1])).reshape(GraphData.NodeN))
         
         return D
     @classmethod
