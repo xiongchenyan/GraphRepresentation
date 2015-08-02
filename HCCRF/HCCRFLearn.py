@@ -59,13 +59,13 @@ class HCCRFLearnerC(object):
     def Loss(cls,theta,lGraphData):
         f = np.mean([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
         f = float(f)
-        logging.info('loss [%f] type [%s]',f,type(f))
+        logging.info('loss [%f]',f)
         return f
     @classmethod  
     def Gradient(cls,theta,lGraphData):
-        logging.info('calling gradients func')
+#         logging.info('calling gradients func')
         gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData],0)
-        logging.info('gradient: %s',np.array_str(gf))
+#         logging.info('gradient: %s',np.array_str(gf))
         return gf
     
     
