@@ -58,6 +58,7 @@ class HCCRFLearnerC(object):
     @classmethod    
     def Loss(cls,theta,lGraphData):
         f = np.mean([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
+        f = float(f)
         logging.info('loss [%f] type [%s]',f,type(f))
         return f
     @classmethod  
