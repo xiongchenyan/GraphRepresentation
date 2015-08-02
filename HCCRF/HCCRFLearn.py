@@ -71,12 +71,16 @@ class HCCRFLearnerC(object):
         w2 = theta[-GraphData.EdgeFeatureDim:]
         
         A = HCCRFBaseC.NodeA(w1, GraphData)
-        OmegaInv = np.linalg.inv(HCCRFBaseC.EdgeOmega(w2,GraphData))
+        Omega = HCCRFBaseC.EdgeOmega(w2,GraphData)
+        OmegaInv = np.linalg.inv(Omega)
         
         mu = HCCRFBaseC.JointMu(w1, w2, GraphData,A,OmegaInv)[0]
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
+        logging.debug('w1: %f',json.dumps(w1.tolist()))
+        logging.debug('w2: %f', json.dumps(w2.tolist()))
+        logging.debug('Omega: %s',json.dumps(Omega.tolist()))
         logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
         
         logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
