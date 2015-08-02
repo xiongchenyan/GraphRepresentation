@@ -78,12 +78,12 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
-        if sigma < 0:
-            logging.debug('w1: %s',json.dumps(w1.tolist()))
-            logging.debug('w2: %s', json.dumps(w2.tolist()))
-            logging.debug('Omega: %s',json.dumps(Omega.tolist()))
+        if True:
+#             logging.debug('w1: %s',json.dumps(w1.tolist()))
+#             logging.debug('w2: %s', json.dumps(w2.tolist()))
+#             logging.debug('Omega: %s',json.dumps(Omega.tolist()))
             logging.debug('Omega symmetric %d',int(np.array_equal(Omega.T,Omega)))
-            logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
+#             logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
             logging.debug('Sigma symmetric %d',int(np.array_equal(OmegaInv.T,OmegaInv)))
             logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
         l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
