@@ -22,6 +22,7 @@ procedure:
 
 '''
 import itertools
+from numpy.linalg.linalg import LinAlgError
 
 
 
@@ -80,14 +81,22 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
-        if True:
+#         if True:
 #             logging.debug('w1: %s',json.dumps(w1.tolist()))
 #             logging.debug('w2: %s', json.dumps(w2.tolist()))
 #             logging.debug('Omega: %s',json.dumps(Omega.tolist()))
-            logging.debug('Omega symmetric %d',int(np.array_equal(Omega.T,Omega)))
+        logging.debug('Omega symmetric %d',int(np.array_equal(Omega.T,Omega)))
+        #pd metrix?
+        try:
+            lCskRes = np.linalg.cholesky(Omega)
+        except LinAlgError:
+            logging.error('Omega is not postive definite')
+            sys.exit()
+        
+        
 #             logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
-            logging.debug('Sigma symmetric %d',int(np.array_equal(OmegaInv.T,OmegaInv)))
-            logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
+        logging.debug('Sigma symmetric %d',int(np.array_equal(OmegaInv.T,OmegaInv)))
+        logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
         l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
         
         return -l
