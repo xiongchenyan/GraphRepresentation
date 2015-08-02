@@ -52,6 +52,21 @@ class HCCRFBaseC(object):
         [GraphData.NodeMtx,GraphData.EdgeTensor,GraphData.rel,GraphData.hNodeId] = pickle.load(open(InName))
         GraphData.SetDims()
         GraphData.DocNo = ntpath.basename(InName)
+        '''
+        checking graphdata,
+            if the edge tensor not symmetric, 
+                using average (convert directed edge to undirected edge)
+        '''
+        for i in range(GraphData.EdgeFeatureDim):
+            if not np.array_equal(GraphData.EdgeTensor[:,:,i].T,GraphData.EdgeTensor[:,:,i]):
+                logging.warn('Graph Edge Tensor [%d] dim not symmetric',i)
+                GraphData.EdgeTensor[:,:,i] = (GraphData.EdgeTensor[:,:,i] + GraphData.EdgeTensor[:,:,i].T)/ 2.0
+#                 Mtx = GraphData.EdgeTensor[:,:,i]
+#                 ErrorMtx = [(a,b,Mtx[a,b],Mtx[b,a]) for a in range(Mtx.shape[0]) for b in range(a+1,Mtx.shape[1]) if Mtx[a,b] != Mtx[b,a]]
+#                 logging.warn(ErrorMtx)
+#                 logging.warn(GraphData.EdgeTensor[:,:,i])
+        
+        
         return GraphData
     
     
