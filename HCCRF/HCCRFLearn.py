@@ -62,6 +62,7 @@ class HCCRFLearnerC(object):
         return f
     @classmethod  
     def Gradient(cls,theta,lGraphData):
+        logging.info('calling gradients func')
         gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData])
         logging.info('gradient: %s',np.array_str(gf))
         return gf
@@ -94,10 +95,10 @@ class HCCRFLearnerC(object):
             logging.error('Omega is not postive definite')
             '''
             this is impossible, there must be something wrong with D or B
-            show D and B
+#             show D and B
             '''
-            B = HCCRFBaseC.EdgeB(w2, GraphData)
-            D = HCCRFBaseC.EdgeD(w2, GraphData, B)
+#             B = HCCRFBaseC.EdgeB(w2, GraphData)
+#             D = HCCRFBaseC.EdgeD(w2, GraphData, B)
             
 #             print "D:"
 #             print np.array_str(D)
@@ -106,12 +107,7 @@ class HCCRFLearnerC(object):
 #             print B
             sys.exit()
             
-        try:
-            lCskRes = np.linalg.cholesky(OmegaInv)
-        except LinAlgError:
-            logging.error('Sigma not postive definite')
-            sys.exit()
-        
+
         
 #             logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
         logging.debug('Sigma symmetric %d',int(np.allclose(OmegaInv.T,OmegaInv)))
