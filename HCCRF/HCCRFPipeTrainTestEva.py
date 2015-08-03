@@ -15,6 +15,7 @@ what's my output:
 
 import site
 import logging
+from cxBase.Conf import cxConfC
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 
 # from HCCRFBase import HCCRFBaseC
@@ -37,19 +38,36 @@ class HCCRFPipeTrainTestEvaC(object):
         self.Learner = HCCRFLearnerC()
         self.Predictor = HCCRFPredictorC()
         
+    
+    def ParseParaStr(self,ParaStr):
+        lPara = ParaStr.split(';')
+        lParaScore = [Para.split('=') for Para in lPara]
+        hPara = dict(lParaScore)
+        conf = cxConfC()
+        conf.hConf = hPara
+        return conf
         
-    def Process(self,TrainQueryIn,TestQueryIn,EvaOutName):
+        
+        
+    def Process(self,TrainQueryIn,TestQueryIn,ParaStr, EvaOutName):
         logging.info('training using [%s] testing using [%s] eva out to [%s]',TrainQueryIn,TestQueryIn,EvaOutName)
         
-        logging.info('start training')
-        w1,w2 = self.Learner.PipeTrain(TrainQueryIn, self.DataDir)
         
-        logging.info('start testing')
+        conf = self.ParseParaStr(ParaStr)
         
-        lQid,llDocScore = self.Predictor.PipePredict(TestQueryIn, self.DataDir, w1, w2)
+        EvidenceGroup = conf.GetConf('evidencegroup', 'hccrf') 
+        
+        logging.info('pipe start training')
         
         
-        logging.info('start evaluating')
+        w1,w2 = self.Learner.PipeTrain(TrainQueryIn, self.DataDir,EvidenceGroup)
+        
+        logging.info('pipe start testing')
+        
+        lQid,llDocScore = self.Predictor.PipePredict(TestQueryIn, self.DataDir, w1, w2,EvidenceGroup)
+        
+        
+        logging.info('pipe start evaluating')
         
         lEvaRes = []
         
@@ -77,7 +95,8 @@ if __name__ == '__main__':
     import sys
     import sys
     if 5 != len(sys.argv):
-        print "4 para: train q, test q , para str (not in use now), out"
+        print "4 para: train q, test q , para str, out"
+        print 'parastr: EvidenceGroup:letor|esdrank|hccrf'
         sys.exit()
         
     root = logging.getLogger()
@@ -91,7 +110,7 @@ if __name__ == '__main__':
 
         
     Processor = HCCRFPipeTrainTestEvaC()
-    Processor.Process(sys.argv[1],sys.argv[2],sys.argv[4])    
+    Processor.Process(sys.argv[1],sys.argv[2],sys.argv[3], sys.argv[4])    
             
         
         

@@ -21,9 +21,9 @@ class HCCRFPredictorC(object):
         score = HCCRFBaseC.JointMu(w1, w2, GraphData)[0]
         return GraphData.DocNo,score
     
-    def PipePredict(self,QueryInName,DataDir,w1,w2):
+    def PipePredict(self,QueryInName,DataDir,w1,w2,EvidenceGroup = 'hccrf'):
         
-        llGraphData = HCCRFLearnerC.ReadTargetGraphData(QueryInName, DataDir)
+        llGraphData = HCCRFBaseC.ReadTargetGraphData(QueryInName, DataDir,EvidenceGroup)
         llDocScore = [[self.Predict(GraphData, w1, w2) for GraphData in lGraphData] \
                        for lGraphData in llGraphData]
         

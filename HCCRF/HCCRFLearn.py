@@ -287,30 +287,18 @@ class HCCRFLearnerC(object):
     '''
     these should be put into the class that runs training process?
     '''
-    def PipeTrain(self,QueryInName,DataDir):
+    def PipeTrain(self,QueryInName,DataDir,EvidenceGroup = 'hccrf'):
         '''
         QueryInName contains all training queries
         DataDir contains all data (train test could all be there, will only read those 
             in QueryInName
         '''
         
-        llGraphData = self.ReadTargetGraphData(QueryInName,DataDir)
+        llGraphData = HCCRFBaseC.ReadTargetGraphData(QueryInName,DataDir,EvidenceGroup)
         lGraphData = list(itertools.chain(*llGraphData))
         return self.Train(lGraphData)
     
-    @classmethod
-    def ReadTargetGraphData(cls,QueryInName,DataDir):
-        lQid = [line.split('\t')[0] for line in open(QueryInName).read().splitlines()]
-        
-        llGraphData = []
-        
-        for qid in lQid:
-            QDir = DataDir + '/' + qid + '/'
-            for dirname,dirnames,lDocName in os.walk(QDir):
-                lInName = [dirname + '/' + DocName for DocName in lDocName]
-                llGraphData.append([HCCRFBaseC.LoadGraphData(InName) for InName in lInName])
-                
-        return llGraphData
+
     
     
     

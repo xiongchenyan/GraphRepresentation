@@ -20,6 +20,7 @@ import pickle,logging,json
 import numpy as np
 from scipy.special import expit
 import ntpath
+import os
 
 class DocGraphC(object):
     
@@ -38,20 +39,48 @@ class DocGraphC(object):
         self.NodeFeatureDim = self.NodeMtx.shape[1]
         self.EdgeFeatureDim = self.EdgeTensor.shape[2]
         
+    def PickEvidenceGroup(self,Group):
+        '''
+        choose evidecne group from data:
+            letor: only query node features (node 0)
+            esdrank: all node features, edge features only between node 0 and other nodes
+            hccrf: everything            
+        '''
+        Group = Group.lower()
+        if Group == 'letor':
+            self.KeepLeToR()
+        if Group == 'esdrank':
+            self.KeepEsdRank()
+            
+        return
+    
+    
+    def KeepLeToR(self):
+        self.NodeMtx = self.NodeMtx[0,:].reshappe([1,self.NodeMtx.shape[1]])
+        self.EdgeTensor = self.EdgeTensor[0,0,:].reshape([1,1,self.EdgeTensor.shape[2]])
+        logging.debug('restrict graph data to LeToR only')
+        
+    def KeepEsdRank(self):
+        self.EdgeTensor[1:,1:,:] = 0 
+        logging.debug('restrict graph data to EsdRank only (no obj-obj edges)')
+        
+        
         
 
 class HCCRFBaseC(object):
     
     @classmethod
-    def LoadGraphData(cls,InName):
+    def LoadGraphData(cls,InName,EvidenceGroup = 'hccrf'):
         '''
         load the data of a graph
         #default the file name is doc no
         '''
         GraphData = DocGraphC()
         [GraphData.NodeMtx,GraphData.EdgeTensor,GraphData.rel,GraphData.hNodeId] = pickle.load(open(InName))
-        GraphData.SetDims()
         GraphData.DocNo = ntpath.basename(InName)
+        GraphData.PickEvidenceGroup(EvidenceGroup)
+        GraphData.SetDims()
+        
         '''
         checking graphdata,
             if the edge tensor not symmetric, 
@@ -68,6 +97,20 @@ class HCCRFBaseC(object):
         
         
         return GraphData
+    
+    @classmethod
+    def ReadTargetGraphData(cls,QueryInName,DataDir,EvidenceGroup = 'hccrf'):
+        lQid = [line.split('\t')[0] for line in open(QueryInName).read().splitlines()]
+        
+        llGraphData = []
+        
+        for qid in lQid:
+            QDir = DataDir + '/' + qid + '/'
+            for dirname,dirnames,lDocName in os.walk(QDir):
+                lInName = [dirname + '/' + DocName for DocName in lDocName]
+                llGraphData.append([HCCRFBaseC.LoadGraphData(InName,EvidenceGroup) for InName in lInName])
+                
+        return llGraphData
     
     
     @classmethod
