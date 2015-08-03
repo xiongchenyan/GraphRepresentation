@@ -14,10 +14,11 @@ what's my output:
 
 
 import site
-import logging
-from cxBase.Conf import cxConfC
+
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 
+import logging
+from cxBase.Conf import cxConfC
 # from HCCRFBase import HCCRFBaseC
 from HCCRFLearn import HCCRFLearnerC
 from HCCRFPredict import HCCRFPredictorC
