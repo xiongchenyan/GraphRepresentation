@@ -21,8 +21,7 @@ procedure:
 
 
 '''
-import itertools
-from numpy.linalg.linalg import LinAlgError
+
 
 
 
@@ -43,7 +42,8 @@ for more details
 July 28 2015
 reviewed, seems right, tensor operations are the most worried part.
 '''
-
+import itertools
+from numpy.linalg.linalg import LinAlgError
 import numpy as np
 # import scipy
 from scipy.optimize import minimize
@@ -54,6 +54,7 @@ from HCCRFBase import HCCRFBaseC
 import os,sys
 
 class HCCRFLearnerC(object):
+    
 
     @classmethod    
     def Loss(cls,theta,lGraphData):
@@ -247,21 +248,40 @@ class HCCRFLearnerC(object):
         call bfgs to train
         '''
         
-        logging.info('start training')
-        InitTheta = np.random.rand(lGraphData[0].NodeFeatureDim + lGraphData[0].EdgeFeatureDim)
-#         gf = self.Gradient(InitTheta, lGraphData)
+        '''
+        retrain 5 times and pick the best
+        '''
+        ReTrainRound = 5
         
-        TrainRes = minimize(self.Loss,InitTheta,\
-                            args=(lGraphData), \
-                            method='BFGS', \
-                            jac=self.Gradient \
-                            )
+        LastLoss = np.inf
+        BestW1 = None
+        BestW2 = None
         
-        logging.info('training result message: [%s]',TrainRes.message)
+        for i in range(ReTrainRound):
         
-        w1 = TrainRes.x[:lGraphData[0].NodeFeatureDim]
-        w2 = TrainRes.x[-lGraphData[0].EdgeFeatureDim:]
-        return w1,w2
+            logging.info('start training round [%d]',i)
+            InitTheta = np.random.rand(lGraphData[0].NodeFeatureDim + lGraphData[0].EdgeFeatureDim)
+    #         gf = self.Gradient(InitTheta, lGraphData)
+            
+            TrainRes = minimize(self.Loss,InitTheta,\
+                                args=(lGraphData), \
+                                method='BFGS', \
+                                jac=self.Gradient, \
+                                options = {'disp':True, 'gtol':1e-04}
+                                )
+            
+            logging.info('training result message: [%s]',TrainRes.message)
+            
+            w1 = TrainRes.x[:lGraphData[0].NodeFeatureDim]
+            w2 = TrainRes.x[-lGraphData[0].EdgeFeatureDim:]
+            
+            if LastLoss > TrainRes.fun:
+                LastLoss = TrainRes.fun
+                BestW1 = w1
+                BestW2 = w2
+                logging.info('better res [%f] find in round [%d]',LastLoss,i)
+            
+        return BestW1,BestW2
     
     
     '''
