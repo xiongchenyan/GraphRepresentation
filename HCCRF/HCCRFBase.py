@@ -56,7 +56,7 @@ class DocGraphC(object):
     
     
     def KeepLeToR(self):
-        self.NodeMtx = self.NodeMtx[0,:].reshappe([1,self.NodeMtx.shape[1]])
+        self.NodeMtx = self.NodeMtx[0,:].reshape([1,self.NodeMtx.shape[1]])
         self.EdgeTensor = self.EdgeTensor[0,0,:].reshape([1,1,self.EdgeTensor.shape[2]])
         logging.debug('restrict graph data to LeToR only')
         
