@@ -251,7 +251,7 @@ class HCCRFLearnerC(object):
         '''
         retrain 5 times and pick the best
         '''
-        ReTrainRound = 5
+        ReTrainRound = 1
         
         LastLoss = np.inf
         BestW1 = None
@@ -267,7 +267,7 @@ class HCCRFLearnerC(object):
                                 args=(lGraphData), \
                                 method='BFGS', \
                                 jac=self.Gradient, \
-                                options = {'disp':True, 'gtol':1e-02}
+                                options = {'disp':True, 'gtol':1e-02 * 5}
                                 )
             
             logging.info('training result message: [%s]',TrainRes.message)
