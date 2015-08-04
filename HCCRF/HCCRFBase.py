@@ -79,9 +79,10 @@ class DocGraphC(object):
                 lTargetNode.append(i)
                 
         self.NodeMtx = self.NodeMtx[lTargetNode,:]
-        self.EdgeTensor = self.EdgeTensor[lTargetNode,lTargetNode,:]
+        self.EdgeTensor = self.EdgeTensor[lTargetNode,:,:][:,lTargetNode,:]
+        
         logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
-            
+        logging.debug('node shape %s, edge shape %s',json.dumps(self.NodeMtx.shape),json.dumps(self.EdgeTensor.shape))    
         
         
         
