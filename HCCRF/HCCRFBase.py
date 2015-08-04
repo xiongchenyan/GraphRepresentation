@@ -89,7 +89,7 @@ class DocGraphC(object):
     def ReadEdgeFeatureFromDir(self,InName):
         vCol = InName.split('/')
         vCol = [item for item in vCol if item]
-        EdgeFeatureName = '/'.join(vCol[:-2]) + 'EdgeFeatureId'
+        EdgeFeatureName = '/'.join(vCol[:-2]) + '/EdgeFeatureId'
         
         lLines = open(EdgeFeatureName).read().splitlines()
         hFeature = dict([line.split('\t') for line in lLines])
