@@ -114,9 +114,9 @@ class HCCRFLearnerC(object):
 #             logging.debug('Sigma matrix: %s',json.dumps(OmegaInv.tolist()))
         logging.debug('Sigma symmetric %d',int(np.allclose(OmegaInv.T,OmegaInv)))
         logging.debug('y [%f] Mu [%f] Sigma [%f]',y,mu,sigma)
-        l = - (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) - log(sigma)
+        l = (1.0/(2.0 * (sigma**2))) * ((y - mu)**2) + log(sigma)
         
-        return -l
+        return l
     
     
     @classmethod
