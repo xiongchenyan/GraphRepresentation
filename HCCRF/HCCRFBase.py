@@ -39,7 +39,7 @@ class DocGraphC(object):
         self.NodeFeatureDim = self.NodeMtx.shape[1]
         self.EdgeFeatureDim = self.EdgeTensor.shape[2]
         
-    def PickEvidenceGroup(self,Group):
+    def PickEvidenceGroup(self,Group,InName = ""):
         '''
         choose evidecne group from data:
             letor: only query node features (node 0)
@@ -51,6 +51,9 @@ class DocGraphC(object):
             self.KeepLeToR()
         if Group == 'esdrank':
             self.KeepEsdRank()
+            
+        if Group == 'tagme':
+            self.KeepEsdRankTagMeNode(InName)
             
         return
     
@@ -64,7 +67,35 @@ class DocGraphC(object):
         self.EdgeTensor[1:,1:,:] = 0 
         logging.debug('restrict graph data to EsdRank only (no obj-obj edges)')
         
+    
+    def KeepEsdRankTagMeNode(self,InName):
+        hFeature = self.ReadEdgeFeatureFromDir(InName)
         
+        TagMeDim = hFeature['QObjSourceScore_TagMe']
+        
+        lTargetNode = [0]
+        for i in range(1,self.EdgeTensor.shape[1]):
+            if self.EdgeTensor[0,i,TagMeDim] != 0:
+                lTargetNode.append(i)
+                
+        self.NodeMtx = self.NodeMtx[lTargetNode,:]
+        self.EdgeTensor = self.EdgeTensor[lTargetNode,lTargetNode,:]
+        logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
+            
+        
+        
+        
+
+    def ReadEdgeFeatureFromDir(self,InName):
+        vCol = InName.split('/')
+        
+        EdgeFeatureName = '/'.join(vCol[:-2]) + 'EdgeFeatureId'
+        
+        lLines = open(EdgeFeatureName).read().splitlines()
+        hFeature = dict([line.split('\t') for line in lLines])
+        return hFeature
+    
+            
         
 
 class HCCRFBaseC(object):
@@ -78,7 +109,7 @@ class HCCRFBaseC(object):
         GraphData = DocGraphC()
         [GraphData.NodeMtx,GraphData.EdgeTensor,GraphData.rel,GraphData.hNodeId] = pickle.load(open(InName))
         GraphData.DocNo = ntpath.basename(InName)
-        GraphData.PickEvidenceGroup(EvidenceGroup)
+        GraphData.PickEvidenceGroup(EvidenceGroup,InName)
         GraphData.SetDims()
         
         '''
