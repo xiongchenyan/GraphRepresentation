@@ -38,6 +38,11 @@ class DocGraphC(object):
         self.NodeN = self.NodeMtx.shape[0]
         self.NodeFeatureDim = self.NodeMtx.shape[1]
         self.EdgeFeatureDim = self.EdgeTensor.shape[2]
+    
+    
+    def GetRelScore(self):
+        return self.rel
+    
         
     def PickEvidenceGroup(self,Group,InName = ""):
         '''
