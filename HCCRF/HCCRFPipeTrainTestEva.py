@@ -107,7 +107,7 @@ if __name__ == '__main__':
         sys.exit()
         
     root = logging.getLogger()
-    root.setLevel(logging.INFO)
+    root.setLevel(logging.DEBUG)
     
     ch = logging.StreamHandler(sys.stdout)
 #     ch.setLevel(logging.INFO)
