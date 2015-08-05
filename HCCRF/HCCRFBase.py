@@ -66,11 +66,11 @@ class DocGraphC(object):
     def KeepLeToR(self):
         self.NodeMtx = self.NodeMtx[0,:].reshape([1,self.NodeMtx.shape[1]])
         self.EdgeTensor = self.EdgeTensor[0,0,:].reshape([1,1,self.EdgeTensor.shape[2]])
-        logging.debug('restrict graph data to LeToR only')
+#         logging.debug('restrict graph data to LeToR only')
         
     def KeepEsdRank(self):
         self.EdgeTensor[1:,1:,:] = 0 
-        logging.debug('restrict graph data to EsdRank only (no obj-obj edges)')
+#         logging.debug('restrict graph data to EsdRank only (no obj-obj edges)')
         
     
     def KeepEsdRankTagMeNode(self,InName):
@@ -86,8 +86,8 @@ class DocGraphC(object):
         self.NodeMtx = self.NodeMtx[lTargetNode,:]
         self.EdgeTensor = self.EdgeTensor[lTargetNode,:,:][:,lTargetNode,:]
         
-        logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
-        logging.debug('node shape %s, edge shape %s',json.dumps(self.NodeMtx.shape),json.dumps(self.EdgeTensor.shape))    
+#         logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
+#         logging.debug('node shape %s, edge shape %s',json.dumps(self.NodeMtx.shape),json.dumps(self.EdgeTensor.shape))    
         
         
         
