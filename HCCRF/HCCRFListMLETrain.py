@@ -43,8 +43,9 @@ class HCCRFListMLETrainC(HCCRFLearnerC):
         w1 = theta[:GraphData.NodeFeatureDim]
         w2 = theta[-GraphData.EdgeFeatureDim:]
         
-        return HCCRFPredictorC.Predict(GraphData, w1, w2)
+        DocNo,score = HCCRFPredictorC.Predict(GraphData, w1, w2)
         
+        return score
 
 
     @classmethod
