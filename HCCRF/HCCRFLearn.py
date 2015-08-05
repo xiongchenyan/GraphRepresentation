@@ -42,6 +42,9 @@ for more details
 July 28 2015
 reviewed, seems right, tensor operations are the most worried part.
 '''
+
+
+
 import itertools
 from numpy.linalg.linalg import LinAlgError
 import numpy as np
@@ -57,16 +60,18 @@ class HCCRFLearnerC(object):
     
 
     @classmethod    
-    def Loss(cls,theta,lGraphData):
-        f = np.mean([cls.LossPerGraph(theta, GraphData) for GraphData in lGraphData])
+    def Loss(cls,theta,llGraphData):
+        f = np.mean([cls.LossPerGraph(theta, GraphData) \
+                     for GraphData in list(itertools.chain(*llGraphData))])
         f = float(f)
         logging.info('loss [%f]',f)
         return f
     @classmethod  
-    def Gradient(cls,theta,lGraphData):
+    def Gradient(cls,theta,llGraphData):
 #         logging.info('calling gradients func')
-        gf = np.mean([cls.GradientPerGraph(theta, GraphData) for GraphData in lGraphData],0)
-#         logging.info('gradient: %s',np.array_str(gf))
+        gf = np.mean([cls.GradientPerGraph(theta, GraphData) \
+                      for GraphData in list(itertools.chain(*llGraphData))],0)
+        logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
         return gf
     
     
@@ -85,29 +90,24 @@ class HCCRFLearnerC(object):
         sigma = OmegaInv[0,0]
         y = GraphData.rel
         
-#         if True:
-#             logging.debug('w1: %s',json.dumps(w1.tolist()))
-#             logging.debug('w2: %s', json.dumps(w2.tolist()))
-#             logging.debug('Omega: %s',json.dumps(Omega.tolist()))
         logging.debug('Omega symmetric %d',int(np.allclose(Omega.T,Omega)))
-        #pd metrix?
-        try:
-            lCskRes = np.linalg.cholesky(Omega)
-        except LinAlgError:
-            logging.error('Omega is not postive definite')
-            '''
-            this is impossible, there must be something wrong with D or B
-#             show D and B
-            '''
-#             B = HCCRFBaseC.EdgeB(w2, GraphData)
-#             D = HCCRFBaseC.EdgeD(w2, GraphData, B)
-            
-#             print "D:"
-#             print np.array_str(D)
-#             print "B:"
-#             print np.array_str(B)
-#             print B
-            sys.exit()
+#         try:
+#             lCskRes = np.linalg.cholesky(Omega)
+#         except LinAlgError:
+#             logging.error('Omega is not postive definite')
+#             '''
+#             this is impossible, there must be something wrong with D or B
+# #             show D and B
+#             '''
+# #             B = HCCRFBaseC.EdgeB(w2, GraphData)
+# #             D = HCCRFBaseC.EdgeD(w2, GraphData, B)
+#             
+# #             print "D:"
+# #             print np.array_str(D)
+# #             print "B:"
+# #             print np.array_str(B)
+# #             print B
+#             sys.exit()
             
 
         
@@ -150,7 +150,7 @@ class HCCRFLearnerC(object):
         
         gf = np.array(list(gW1) + list(gW2))
         
-        logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
+#         logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
         return gf
     
     
@@ -243,7 +243,7 @@ class HCCRFLearnerC(object):
     
     
     
-    def Train(self,lGraphData):
+    def Train(self,llGraphData):
         '''
         call bfgs to train
         '''
@@ -251,20 +251,23 @@ class HCCRFLearnerC(object):
         '''
         retrain 5 times and pick the best
         '''
+        NodeFeatureDim = llGraphData[0][0].NodeFeatureDim
+        EdgeFeatureDim = llGraphData[0][0].EdgeFeatureDim
         ReTrainRound = 1
         
         LastLoss = np.inf
         BestW1 = None
         BestW2 = None
         
+        
+        
         for i in range(ReTrainRound):
         
             logging.info('start training round [%d]',i)
-            InitTheta = np.random.rand(lGraphData[0].NodeFeatureDim + lGraphData[0].EdgeFeatureDim)
-    #         gf = self.Gradient(InitTheta, lGraphData)
+            InitTheta = np.random.rand(NodeFeatureDim + EdgeFeatureDim)
             
             TrainRes = minimize(self.Loss,InitTheta,\
-                                args=(lGraphData), \
+                                args=(llGraphData), \
                                 method='BFGS', \
                                 jac=self.Gradient, \
                                 options = {'disp':True, 'gtol':1e-03}
@@ -272,8 +275,8 @@ class HCCRFLearnerC(object):
             
             logging.info('training result message: [%s]',TrainRes.message)
             
-            w1 = TrainRes.x[:lGraphData[0].NodeFeatureDim]
-            w2 = TrainRes.x[-lGraphData[0].EdgeFeatureDim:]
+            w1 = TrainRes.x[:NodeFeatureDim]
+            w2 = TrainRes.x[-EdgeFeatureDim:]
             
             if LastLoss > TrainRes.fun:
                 LastLoss = TrainRes.fun
@@ -295,8 +298,7 @@ class HCCRFLearnerC(object):
         '''
         
         llGraphData = HCCRFBaseC.ReadTargetGraphData(QueryInName,DataDir,EvidenceGroup)
-        lGraphData = list(itertools.chain(*llGraphData))
-        return self.Train(lGraphData)
+        return self.Train(llGraphData)
     
 
     
