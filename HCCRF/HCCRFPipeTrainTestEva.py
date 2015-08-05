@@ -42,7 +42,7 @@ class HCCRFPipeTrainTestEvaC(object):
         
     
     def ParseParaStr(self,ParaStr):
-        lPara = ParaStr.split(';')
+        lPara = ParaStr.split(',')
         lParaScore = [Para.split('=') for Para in lPara]
         hPara = dict(lParaScore)
         conf = cxConfC()
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     import sys
     if 5 != len(sys.argv):
         print "4 para: train q, test q , para str, out"
-        print 'parastr: evidencegroup=letor|esdrank|hccrf;trainmethod=pointwise|listmle'
+        print 'parastr: evidencegroup=letor|esdrank|hccrf,trainmethod=pointwise|listmle'
         sys.exit()
         
     root = logging.getLogger()
