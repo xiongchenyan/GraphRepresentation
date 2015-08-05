@@ -11,7 +11,6 @@ what's my output:
 '''
 
 from HCCRFBase import HCCRFBaseC
-from HCCRFLearn import HCCRFLearnerC
 
 
 class HCCRFPredictorC(object):

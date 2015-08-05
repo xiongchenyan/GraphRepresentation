@@ -21,6 +21,7 @@ import logging
 from cxBase.Conf import cxConfC
 # from HCCRFBase import HCCRFBaseC
 from HCCRFLearn import HCCRFLearnerC
+from HCCRFListMLETrain import HCCRFListMLETrainC
 from HCCRFPredict import HCCRFPredictorC
 
 from AdhocEva.AdhocEva import AdhocEvaC
@@ -57,6 +58,11 @@ class HCCRFPipeTrainTestEvaC(object):
         conf = self.ParseParaStr(ParaStr)
         
         EvidenceGroup = conf.GetConf('evidencegroup', 'hccrf') 
+        TrainMethod = conf.GetConf('trainmethod','pointwise')
+        if TrainMethod == 'listmle':
+            logging.info('use listmle loss')
+            self.Learner = HCCRFListMLETrainC()
+        
         
         logging.info('pipe start training')
         
@@ -97,7 +103,7 @@ if __name__ == '__main__':
     import sys
     if 5 != len(sys.argv):
         print "4 para: train q, test q , para str, out"
-        print 'parastr: evidencegroup=letor|esdrank|hccrf'
+        print 'parastr: evidencegroup=letor|esdrank|hccrf;trainmethod=pointwise|listmle'
         sys.exit()
         
     root = logging.getLogger()
