@@ -28,9 +28,10 @@ class HCCRFListMLETrainC(HCCRFLearnerC):
     
     @classmethod
     def Loss(cls, theta, llGraphData):
+        logging.debug('start calc hccrf listmle loss')
         l = ListMLEModelC.Loss(theta, llGraphData, cls.RankingScore)
         
-        logging.info('listmle loss [%f]',l)
+        logging.info('hccrf listmle loss [%f]',l)
         
         return l
         
@@ -50,10 +51,10 @@ class HCCRFListMLETrainC(HCCRFLearnerC):
 
     @classmethod
     def Gradient(cls, theta, llGraphData):
+        logging.debug('start calc hccrf listmle gradient')
         gf = ListMLEModelC.Gradient(theta, llGraphData, cls.RankingScore, cls.RankingScoreGradient)
-        
 
-        logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
+        logging.debug('hccrf listmle gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
         return gf
         
     
