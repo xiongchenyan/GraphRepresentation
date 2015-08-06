@@ -113,6 +113,23 @@ class GraphFeaturePostProcessorC(cxBaseC):
         return True
     
     
+    def FindGlobalFeatureMaxMin(self):
+        hMin = {}
+        hMax = {}
+        
+        for QDir,mid,lFname in os.walk(self.InDir):
+            if QDir == self.InDir:
+                continue
+            hQMax,hQMin = self.FindMaxMinFeatureValuesForQ(QDir)
+            hMax = FeatureProcessorC.Max(hMax, hQMax)
+            hMin = FeatureProcessorC.Min(hMin, hQMin)
+            
+        logging.info('Global feature max-min found')
+        return hMax,hMin
+            
+        
+    
+    
     def MakeNodeFeatureHash(self,sNodeFeatureName):
         '''
         put LeToR features first
@@ -317,15 +334,15 @@ class GraphFeaturePostProcessorC(cxBaseC):
     def Process(self):
         
         self.HashFeatureName()
-        
+        hGlobalFeatureMax,hGlobalFeatureMin = self.FindGlobalFeatureMaxMin()
         for QDir,mid,lDocName in os.walk(self.InDir):
             if QDir == self.InDir:
                 continue                
             logging.info('start working on query dir [%s]',QDir)
-            hFeatureMax,hFeatureMin = self.FindMaxMinFeatureValuesForQ(QDir)
+#             hFeatureMax,hFeatureMin = self.FindMaxMinFeatureValuesForQ(QDir)
             qid = ntpath.basename(QDir)
             for DocName in lDocName:
-                self.ProcessOneDoc(qid, QDir + '/' + DocName, hFeatureMax, hFeatureMin)
+                self.ProcessOneDoc(qid, QDir + '/' + DocName, hGlobalFeatureMax, hGlobalFeatureMin)
                 
             logging.info('q [%s] processed',qid)
         
