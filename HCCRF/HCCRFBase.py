@@ -192,6 +192,7 @@ class HCCRFBaseC(object):
         logging.debug('info in JointMu')
         logging.debug('OmegaInv:\n %s',np.array2string(OmegaInv))
         logging.debug('A:\n %s', np.array2string(A))
+        logging.debug('NodeMtx:\n %s', np.array2string(GraphData.NodeMtx))
         Mu = OmegaInv.dot(A)
         return Mu
     
