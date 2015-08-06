@@ -52,10 +52,7 @@ class HCCRFListMLETrainC(HCCRFLearnerC):
     def Gradient(cls, theta, llGraphData):
         gf = ListMLEModelC.Gradient(theta, llGraphData, cls.RankingScore, cls.RankingScoreGradient)
         
-        w1 = theta[:llGraphData[0][0].NodeFeatureDim]
-        w2 = theta[-llGraphData[0][0].EdgeFeatureDim:]
-        logging.debug('w1:\n %s',np.array2string(w1))
-        logging.debug('w2:\n %s',np.array2string(w2))
+
         logging.debug('gf %s: %s',json.dumps(gf.shape),np.array_str(gf))
         return gf
         
