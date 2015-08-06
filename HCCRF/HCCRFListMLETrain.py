@@ -31,7 +31,7 @@ class HCCRFListMLETrainC(HCCRFLearnerC):
         logging.debug('start calc hccrf listmle loss')
         l = ListMLEModelC.Loss(theta, llGraphData, cls.RankingScore)
         
-        logging.info('hccrf listmle loss [%f]',l)
+        logging.info('hccrf listmle loss %f',l)
         
         return l
         
