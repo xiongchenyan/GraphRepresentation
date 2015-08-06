@@ -190,8 +190,6 @@ class HCCRFBaseC(object):
             OmegaInv = np.linalg.inv(cls.EdgeOmega(w2, GraphData))
         
         logging.debug('info in JointMu')
-        logging.debug('w1:\n %s',np.array2string(w1))
-        logging.debug('w2:\n %s',np.array2string(w2))
         logging.debug('OmegaInv:\n %s',np.array2string(OmegaInv))
         logging.debug('A:\n %s', np.array2string(A))
         Mu = OmegaInv.dot(A)
