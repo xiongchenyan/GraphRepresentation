@@ -44,7 +44,7 @@ llGraphData = [DocGraphC.LoadEsdRankOneQGraph(InDir, qid) for qid in lQid]
 
 logging.info('loaded')
 
-llGraphData = DocGraphC.FeatureMinMaxNormalization(llGraphData)
+# llGraphData = DocGraphC.FeatureMinMaxNormalization(llGraphData)
 
 logging.info('normalized')
 
