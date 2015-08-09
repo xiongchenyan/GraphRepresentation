@@ -191,7 +191,7 @@ class DocGraphC(object):
         
         
         for i in range(len(llGraphData)):
-            for j in range(llGraphData[i]):
+            for j in range(len(llGraphData[i])):
                 NodeMtx = llGraphData[i][j].NodeMtx
                 EdgeTensor = llGraphData[i][j].EdgeTensor
                 
