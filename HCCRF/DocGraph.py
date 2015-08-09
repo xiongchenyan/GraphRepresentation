@@ -148,7 +148,7 @@ class DocGraphC(object):
                 mtx = np.array([mtx])
                 
             GraphData.NodeMtx = mtx
-            GraphData.EdgeFeatureDim = np.ones([1,1,1])
+            GraphData.EdgeTensor = np.ones([1,1,1])
             GraphData.hNodeId = {'q_%s'%(qid):1}
             GraphData.rel = lRelScore[i]
             GraphData.SetDims()
