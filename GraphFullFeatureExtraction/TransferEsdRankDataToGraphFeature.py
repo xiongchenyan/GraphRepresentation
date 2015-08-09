@@ -49,9 +49,11 @@ llGraphData = DocGraphC.FeatureMinMaxNormalization(llGraphData)
 logging.info('normalized')
 
 for qid,lGraphData in zip(lQid,llGraphData):
-    os.makedirs(OutDir + '/' + qid)
+    QDir = OutDir + '/' + qid
+    if not os.path.exists(QDir):
+        os.makedirs(QDir)
     for GraphData in lGraphData:
-        OutName = OutDir + '/' + qid + '/' + GraphData.DocNo
+        OutName = QDir + '/' + GraphData.DocNo
         GraphData.dump(OutName)
         
  
