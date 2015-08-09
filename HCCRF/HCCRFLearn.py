@@ -272,7 +272,7 @@ class HCCRFLearnerC(object):
                                 args=(llGraphData), \
                                 method='BFGS', \
                                 jac=self.Gradient, \
-                                options = {'disp':True, 'gtol':1e-04}
+                                options = {'disp':True, 'gtol':1e-05}
                                 )
             
             logging.info('training result message: [%s]',TrainRes.message)
