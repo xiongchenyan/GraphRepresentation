@@ -183,9 +183,15 @@ class DocGraphC(object):
                 
         lNodeZeroP = [i for i in range(NodeMax.shape[0]) if NodeMax[i] == NodeMin[i]]
         lNodeElseP = list(set(range(NodeMax.shape[0])) - set(lNodeZeroP) )
+        lNodeElseP.sort()
         
         lEdgeZeroP = [i for i in range(EdgeMax.shape[0]) if EdgeMax[i] == EdgeMin[i]]
         lEdgeElseP = list(set(range(EdgeMax.shape[0])) - set(lEdgeZeroP) )
+        lEdgeElseP.sort()
+        
+        logging.debug('EdgeElse P: ',json.dumps(lEdgeElseP))
+        logging.debug('max: %s',np.array2string(EdgeMax))
+        logging.debug('min %s',np.array2string(EdgeMin))
         
         logging.info('max-min value found')
         
