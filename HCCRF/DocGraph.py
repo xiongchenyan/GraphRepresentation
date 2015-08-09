@@ -115,7 +115,7 @@ class DocGraphC(object):
     
     
     
-    def Load(self,InName):
+    def load(self,InName):
         [self.NodeMtx,self.EdgeTensor,self.rel,self.hNodeId] = pickle.load(open(InName))
         self.DocNo = ntpath.basename(InName)
         self.EdgeTensorSymmetricCheck()
@@ -123,7 +123,7 @@ class DocGraphC(object):
         return True
     
     
-    def Dump(self,OutName):
+    def dump(self,OutName):
         pickle.dump([self.NodeMtx,self.EdgeTensor,self.rel,self.hNodeId],open(OutName,'w'))
         return True
     

@@ -32,7 +32,7 @@ class HCCRFBaseC(object):
         #default the file name is doc no
         '''
         GraphData = DocGraphC()
-        GraphData.Load(InName)
+        GraphData.load(InName)
         GraphData.PickEvidenceGroup(EvidenceGroup,InName)
         
         return GraphData
