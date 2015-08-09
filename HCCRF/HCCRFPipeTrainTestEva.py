@@ -59,10 +59,12 @@ class HCCRFPipeTrainTestEvaC(object):
         
         EvidenceGroup = conf.GetConf('evidencegroup', 'hccrf') 
         TrainMethod = conf.GetConf('trainmethod','pointwise')
+        
         if TrainMethod == 'listmle':
             logging.info('use listmle loss')
             self.Learner = HCCRFListMLETrainC()
         
+        self.DataDir = conf.GetConf('datadir',self.DataDir)
         
         logging.info('pipe start training')
         
@@ -103,7 +105,7 @@ if __name__ == '__main__':
     import sys
     if 5 != len(sys.argv):
         print "4 para: train q, test q , para str, out"
-        print 'parastr: evidencegroup=letor|esdrank|hccrf,trainmethod=pointwise|listmle'
+        print 'parastr: evidencegroup=letor|esdrank|hccrf,trainmethod=pointwise|listmle,datadir='
         sys.exit()
         
     root = logging.getLogger()
