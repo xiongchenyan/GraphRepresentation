@@ -178,8 +178,8 @@ class DocGraphC(object):
         
         NodeMax = np.max(NodeMax,0)
         NodeMin = np.min(NodeMin,0)
-        EdgeMax = np.max(EdgeMax,0)
-        EdgeMin = np.min(EdgeMin,0)
+        EdgeMax = np.max(np.max(EdgeMax,0),0)
+        EdgeMin = np.min(np.min(EdgeMin,0),0)
                 
         lNodeZeroP = [i for i in range(NodeMax.shape[0]) if NodeMax[i] == NodeMin[i]]
         lNodeElseP = list(set(range(NodeMax.shape[0])) - set(lNodeZeroP) )
@@ -189,7 +189,7 @@ class DocGraphC(object):
         lEdgeElseP = list(set(range(EdgeMax.shape[0])) - set(lEdgeZeroP) )
         lEdgeElseP.sort()
         
-        logging.debug('EdgeElse P: ',json.dumps(lEdgeElseP))
+        logging.debug('EdgeElse P: %s',json.dumps(lEdgeElseP))
         logging.debug('max: %s',np.array2string(EdgeMax))
         logging.debug('min %s',np.array2string(EdgeMin))
         
