@@ -21,88 +21,7 @@ import numpy as np
 from scipy.special import expit
 import ntpath
 import os
-
-class DocGraphC(object):
-    
-    def __init__(self):
-        self.NodeMtx = np.zeros([0,0])
-        self.EdgeTensor = np.zeros([0,0,0])
-        self.rel = 0
-        self.hNodeId = {}
-        self.NodeN = 0
-        self.NodeFeatureDim = 0
-        self.EdgeFeatureDim = 0
-        self.DocNo = ""
-        
-    def SetDims(self):
-        self.NodeN = self.NodeMtx.shape[0]
-        self.NodeFeatureDim = self.NodeMtx.shape[1]
-        self.EdgeFeatureDim = self.EdgeTensor.shape[2]
-    
-    
-    def GetRelScore(self):
-        return self.rel
-    
-        
-    def PickEvidenceGroup(self,Group,InName = ""):
-        '''
-        choose evidecne group from data:
-            letor: only query node features (node 0)
-            esdrank: all node features, edge features only between node 0 and other nodes
-            hccrf: everything            
-        '''
-        Group = Group.lower()
-        if Group == 'letor':
-            self.KeepLeToR()
-        if Group == 'esdrank':
-            self.KeepEsdRank()
-            
-        if Group == 'tagme':
-            self.KeepEsdRankTagMeNode(InName)
-            
-        return
-    
-    
-    def KeepLeToR(self):
-        self.NodeMtx = self.NodeMtx[0,:].reshape([1,self.NodeMtx.shape[1]])
-        self.EdgeTensor = self.EdgeTensor[0,0,:].reshape([1,1,self.EdgeTensor.shape[2]])
-#         logging.debug('restrict graph data to LeToR only')
-        
-    def KeepEsdRank(self):
-        self.EdgeTensor[1:,1:,:] = 0 
-#         logging.debug('restrict graph data to EsdRank only (no obj-obj edges)')
-        
-    
-    def KeepEsdRankTagMeNode(self,InName):
-        hFeature = self.ReadEdgeFeatureFromDir(InName)
-        
-        TagMeDim = hFeature['QObjSourceScore_TagMe']
-        
-        lTargetNode = [0]
-        for i in range(1,self.EdgeTensor.shape[1]):
-            if self.EdgeTensor[0,i,TagMeDim] != 0:
-                lTargetNode.append(i)
-                
-        self.NodeMtx = self.NodeMtx[lTargetNode,:]
-        self.EdgeTensor = self.EdgeTensor[lTargetNode,:,:][:,lTargetNode,:]
-        
-#         logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
-#         logging.debug('node shape %s, edge shape %s',json.dumps(self.NodeMtx.shape),json.dumps(self.EdgeTensor.shape))    
-        
-        
-        
-
-    def ReadEdgeFeatureFromDir(self,InName):
-        vCol = InName.split('/')
-        vCol = [item for item in vCol if item]
-        EdgeFeatureName = '/'+ '/'.join(vCol[:-2]) + '/EdgeFeatureId'
-        
-        lLines = open(EdgeFeatureName).read().splitlines()
-        hFeature = dict([line.split('\t') for line in lLines])
-        return hFeature
-    
-            
-        
+from HCCRF.DocGraph import DocGraphC  
 
 class HCCRFBaseC(object):
     
@@ -113,25 +32,8 @@ class HCCRFBaseC(object):
         #default the file name is doc no
         '''
         GraphData = DocGraphC()
-        [GraphData.NodeMtx,GraphData.EdgeTensor,GraphData.rel,GraphData.hNodeId] = pickle.load(open(InName))
-        GraphData.DocNo = ntpath.basename(InName)
+        GraphData.Load(InName)
         GraphData.PickEvidenceGroup(EvidenceGroup,InName)
-        GraphData.SetDims()
-        
-        '''
-        checking graphdata,
-            if the edge tensor not symmetric, 
-                using average (convert directed edge to undirected edge)
-        '''
-        for i in range(GraphData.EdgeFeatureDim):
-            if not np.array_equal(GraphData.EdgeTensor[:,:,i].T,GraphData.EdgeTensor[:,:,i]):
-#                 logging.warn('Graph Edge Tensor [%d] dim not symmetric',i)
-                GraphData.EdgeTensor[:,:,i] = (GraphData.EdgeTensor[:,:,i] + GraphData.EdgeTensor[:,:,i].T)/ 2.0
-#                 Mtx = GraphData.EdgeTensor[:,:,i]
-#                 ErrorMtx = [(a,b,Mtx[a,b],Mtx[b,a]) for a in range(Mtx.shape[0]) for b in range(a+1,Mtx.shape[1]) if Mtx[a,b] != Mtx[b,a]]
-#                 logging.warn(ErrorMtx)
-#                 logging.warn(GraphData.EdgeTensor[:,:,i])
-        
         
         return GraphData
     

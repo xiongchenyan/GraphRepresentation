@@ -55,6 +55,7 @@ from math import log,sqrt,pi
 import json
 from HCCRFBase import HCCRFBaseC
 import os,sys
+from HCCRF.DocGraph import DocGraphC  
 
 class HCCRFLearnerC(object):
     

@@ -23,7 +23,6 @@ from HCCRFLearn import HCCRFLearnerC
 from HCCRFPredict import HCCRFPredictorC
 from ListMLE.ListMLEModel import ListMLEModelC
 import logging,json
-
 class HCCRFListMLETrainC(HCCRFLearnerC):
     
     @classmethod
