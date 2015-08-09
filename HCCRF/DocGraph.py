@@ -151,6 +151,7 @@ class DocGraphC(object):
             GraphData.EdgeTensor = np.ones([1,1,1])
             GraphData.hNodeId = {'q_%s'%(qid):1}
             GraphData.rel = lRelScore[i]
+            GraphData.DocNo = lDocNo[i]
             GraphData.SetDims()
             
             lGraphData.append(GraphData)
