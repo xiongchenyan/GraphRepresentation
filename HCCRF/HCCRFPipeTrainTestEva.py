@@ -16,7 +16,7 @@ what's my output:
 import site
 
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
-
+site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 import logging
 from cxBase.Conf import cxConfC
 # from HCCRFBase import HCCRFBaseC

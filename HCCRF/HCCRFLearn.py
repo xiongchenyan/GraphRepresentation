@@ -43,8 +43,9 @@ July 28 2015
 reviewed, seems right, tensor operations are the most worried part.
 '''
 
-
-
+import site
+site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
+site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 import itertools
 from numpy.linalg.linalg import LinAlgError
 import numpy as np

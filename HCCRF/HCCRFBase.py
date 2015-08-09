@@ -16,6 +16,10 @@ July 28 2015
 reviewed, seems all right
 '''
 
+import site
+site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
+site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
+
 import pickle,logging,json
 import numpy as np
 from scipy.special import expit
