@@ -78,7 +78,7 @@ class HCCRFBaseC(object):
         
         if B == None:
             B = cls.EdgeB(w2, GraphData)
-        logging.debug('B shape %s, VS: %d',json.dumps(B.shape),GraphData.NodeN)
+#         logging.debug('B shape %s, VS: %d',json.dumps(B.shape),GraphData.NodeN)
         D = np.diag(B.dot(np.ones([GraphData.NodeN,1])).reshape(GraphData.NodeN))
         
         return D
