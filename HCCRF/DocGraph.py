@@ -56,7 +56,8 @@ class DocGraphC(object):
             
         if Group == 'tagme':
             self.KeepEsdRankTagMeNode(InName)
-            
+        
+        self.SetDims()    
         return
     
     
