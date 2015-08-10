@@ -33,6 +33,8 @@ class DocGraphC(object):
         self.NodeN = self.NodeMtx.shape[0]
         self.NodeFeatureDim = self.NodeMtx.shape[1]
         self.EdgeFeatureDim = self.EdgeTensor.shape[2]
+        
+        logging.debug('NodeN: %d, NodeFDim: %d, EdgeFeatureDim: %d',self.NodeN,self.NodeFeatureDim,self.EdgeFeatureDim)
     
     
     def GetRelScore(self):
