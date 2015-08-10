@@ -118,8 +118,10 @@ class DocGraphC(object):
     def load(self,InName):
         [self.NodeMtx,self.EdgeTensor,self.rel,self.hNodeId] = pickle.load(open(InName))
         self.DocNo = ntpath.basename(InName)
-        self.EdgeTensorSymmetricCheck()
         self.SetDims()
+        
+        self.EdgeTensorSymmetricCheck()
+        
         return True
     
     
