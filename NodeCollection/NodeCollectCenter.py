@@ -167,12 +167,18 @@ class NodeCollectorCenterC(cxBaseC):
         
         out = open(OutName + '/' + IndriSearchCenterC.GenerateQueryTargetName(query),'w')
         
+        logging.info('q[%s] has [%d] q node',qid,len(lQObj))
         for QObj in lQObj:
             print >>out, 'q_' + qid + '\t' + QObj
-            
-        for doc,lDocObj in zip(lDoc,llDocObj):
-            for DocObj in lDocObj:
-                print >>out, doc.DocNo + '\t' + DocObj
+        
+        if llDocObj == []:
+            logging.info('no doc node')
+        else:        
+            for doc,lDocObj in zip(lDoc,llDocObj):
+                logging.info('doc [%s] has [%d] node',doc.DocNo,len(lDocObj))
+                for DocObj in lDocObj:
+                    print >>out, doc.DocNo + '\t' + DocObj
+                    
                 
         out.close()
         logging.info('q [%s] raw node res dumpped',qid)
