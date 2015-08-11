@@ -84,32 +84,49 @@ class GraphFeaturePostProcessorC(cxBaseC):
         
         
     
-    def HashFeatureName(self):
+    def HashFeatureName(self,hFeature={}):
         '''
         go through the full input dir, hash node features and edge features
         '''
+        if {} == hFeature:
+            self.MakeFeatureHashFromNames(hFeature.keys())
+            return True
         
-        sNodeFeatureName = set()
-        sEdgeFeatureName = set()
         
-        lFName = WalkDir(self.InDir)
+        if {} == hFeature:
+            sNodeFeatureName = set()
+            sEdgeFeatureName = set()
+            
+            lFName = WalkDir(self.InDir)
+            
+            for FName in lFName:
+    #             logging.info('checking feature names in [%s]',FName)
+                lLines = open(FName).read().splitlines()
+                lNodeLines = [line for line in lLines if self.IsNodeFeatureLine(line)]
+                lEdgeLines = [line for line in lLines if not self.IsNodeFeatureLine(line)]
+                
+                sNodeFeatureName.update(self.GetFeatureName(lNodeLines))
+                sEdgeFeatureName.update(self.GetFeatureName(lEdgeLines))
+                
+                
+                
+            
+            self.MakeNodeFeatureHash(sNodeFeatureName)
+            self.MakeEdgeFeatureHash(sEdgeFeatureName)
+            
+            logging.info('feature hash id assigned')
+        return True
+    
+    
+    def MakeFeatureHashFromNames(self,lName):
         
-        for FName in lFName:
-#             logging.info('checking feature names in [%s]',FName)
-            lLines = open(FName).read().splitlines()
-            lNodeLines = [line for line in lLines if self.IsNodeFeatureLine(line)]
-            lEdgeLines = [line for line in lLines if not self.IsNodeFeatureLine(line)]
-            
-            sNodeFeatureName.update(self.GetFeatureName(lNodeLines))
-            sEdgeFeatureName.update(self.GetFeatureName(lEdgeLines))
-            
-            
-            
+        lEdgeFeatureName = [name for name in lName if name.startswith('ObjObj')]
+        sEdgeFeatureName = set(lEdgeFeatureName)
+        sNodeFeatureName = set(lName) - sEdgeFeatureName
         
         self.MakeNodeFeatureHash(sNodeFeatureName)
         self.MakeEdgeFeatureHash(sEdgeFeatureName)
         
-        logging.info('feature hash id assigned')
         return True
     
     
@@ -333,8 +350,10 @@ class GraphFeaturePostProcessorC(cxBaseC):
     
     def Process(self):
         
-        self.HashFeatureName()
+        
         hGlobalFeatureMax,hGlobalFeatureMin = self.FindGlobalFeatureMaxMin()
+        
+        self.HashFeatureName(hGlobalFeatureMax)
         for QDir,mid,lDocName in os.walk(self.InDir):
             if QDir == self.InDir:
                 continue                
