@@ -38,17 +38,19 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
         self.lSourceName = []
         self.lSourceFile = []
         self.lhQObjId = []
+        self.MaxObjPerSource = 5
         
         
     def SetConf(self, ConfIn):
         QueryNodeCollectorC.SetConf(self, ConfIn)
         self.PreFetchInName = self.conf.GetConf('qanaconf')
         self.LoadPreFetchedNodes()
+        self.MaxObjPerSource = self.conf.GetConf('qobjpersource', self.MaxObjPerSource)
         
     @staticmethod
     def ShowConf():
         QueryNodeCollectorC.ShowConf()
-        print 'qanaconf'
+        print 'qanaconf\nqobjpresource'
         
     def LoadOneSourceObj(self,InName):
         lData = open(InName).read().splitlines()
@@ -86,7 +88,7 @@ class QueryPreFetchedNodeCollectorC(QueryNodeCollectorC):
         for hQObjId in self.lhQObjId:
             if not qid in hQObjId:
                 continue
-            lObj.extend(hQObjId[qid])
+            lObj.extend(hQObjId[qid][:self.MaxObjPerSource])
         return lObj
             
             
