@@ -160,7 +160,7 @@ class LESRanker(cxBaseC):
         
         out = open(OutName,'w')
         for qid,EvaRes in lPerQEvaRes:
-            print >> out, qid, EvaRes.dumps()
+            print >> out, qid + '\t' + EvaRes.dumps()
             
         out.close()
         logging.info('%s %s',lPerQEvaRes[-1][0],lPerQEvaRes[-1][1].dumps())
