@@ -57,6 +57,7 @@ class LESRanker(cxBaseC):
         
         self.QDocNodeDataDir = ""
         self.OrigQWeight = 0.5
+        self.UseQObjOnly = True
         
     
     @classmethod
@@ -66,7 +67,7 @@ class LESRanker(cxBaseC):
         FbObjCacheCenterC.ShowConf()
         AdhocEvaC.ShowConf()
         
-        print 'qdocnodedatadir\norigqweight 0.5'
+        print 'qdocnodedatadir\norigqweight 0.5\nqobjonly 1'
         
         
     def SetConf(self, ConfIn):
@@ -77,7 +78,7 @@ class LESRanker(cxBaseC):
         self.ObjCenter.SetConf(ConfIn)
         self.QDocNodeDataDir = self.conf.GetConf('qdocnodedatadir') + '/'
         self.OrigQWeight = self.conf.GetConf('origqweight', self.OrigQWeight)
-        
+        self.UseQObjOnly = bool(self.conf.GetConf('qobjonly', 1))
         
         
     def LoadQDocObj(self,query):
@@ -116,10 +117,13 @@ class LESRanker(cxBaseC):
         lDocLESScore = []
         LesCnt = 0
         for doc in lDoc:
-            if not doc.DocNo in hQDocObj:
-                lDocLESScore.append(0)
-                continue
-            lDocObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[doc.DocNo]]
+            if self.UseQObjOnly:
+                lDocObj = lQObj
+            else:
+                if not doc.DocNo in hQDocObj:
+                    lDocLESScore.append(0)
+                    continue
+                lDocObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[doc.DocNo]]
             
             score = self.Inferener.inference(query, doc, lQObj, lDocObj)
             if score != 0:
