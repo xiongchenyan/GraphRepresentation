@@ -18,6 +18,8 @@ site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 from IndriRelate.LmBase import LmBaseC
 # from IndriSearch.IndriDocBase import IndriDocBaseC
 from IndriRelate.CtfLoader import TermCtfC
+import json
+import logging
 
 class LESInferencerC(object):
     
@@ -38,8 +40,12 @@ class LESInferencerC(object):
         
         lDocObjScore = [LmBaseC.Similarity(ObjLm, DocLm, TermCtfC(), 'cosine') for ObjLm in lObjLm]
         
+        lDocObjNoScore = zip([obj.GetId() for obj in lDocObj],lDocObjScore)
+        logging.debug('doc [%s] obj dist:\n%s',doc.DocNo,json.dumps(lDocObjNoScore))
+        
         Z = float(sum(lDocObjScore))
-        lDocObjScore = [item/Z for item in lDocObjScore]
+        if 0 != Z:
+            lDocObjScore = [item/Z for item in lDocObjScore]
         
         return lDocObjScore
     
