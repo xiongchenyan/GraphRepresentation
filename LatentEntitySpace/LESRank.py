@@ -85,7 +85,7 @@ class LESRanker(cxBaseC):
         hQDocObj = {}
         for line in open(InName):
             key,ObjId = line.strip().split('\t')
-            if not key in self.hQDocObj:
+            if not key in hQDocObj:
                 hQDocObj[key] = [ObjId]
             else:
                 hQDocObj[key].append(ObjId)
