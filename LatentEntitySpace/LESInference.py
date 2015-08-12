@@ -73,9 +73,10 @@ class LESInferencerC(object):
         
         Z = float(sum(lDObjSim))
         logging.debug('ObjDist on Q Z = %f',Z)
-        if Z == 0:
-            logging.debug('Q obj desp: [%s]',lQObj[0].GetDesp())
-            logging.debug('doc obj desp: [%s]',lDocObj[0].GetDesp())
-            
-        lDObjSim = [item / Z for item in lDObjSim]
+        if Z != 0:
+#             logging.debug('Q obj desp: [%s]',lQObj[0].GetDesp())
+#             logging.debug('doc obj desp: [%s]',lDocObj[0].GetDesp())
+            lDObjSim = [item / Z for item in lDObjSim]
+        else:
+            logging.warn('doc obj has no similarity with q obj')
         return lDObjSim

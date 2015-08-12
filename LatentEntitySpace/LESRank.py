@@ -119,10 +119,12 @@ class LESRanker(cxBaseC):
             if not doc.DocNo in hQDocObj:
                 lDocLESScore.append(0)
                 continue
-            LesCnt += 1
             lDocObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[doc.DocNo]]
             
             score = self.Inferener.inference(query, doc, lQObj, lDocObj)
+            if score != 0:
+                #if 0, means the obj has no desp (or very short one), doesn't count as valid score
+                LesCnt += 1
             lDocLESScore.append(score)
         
         #add average score to doc without annotation
@@ -175,7 +177,7 @@ if __name__=='__main__':
         sys.exit()
     
     root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    root.setLevel(logging.INFO)
     
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.DEBUG)
