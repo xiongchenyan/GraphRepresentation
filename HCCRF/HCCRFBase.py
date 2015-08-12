@@ -52,6 +52,7 @@ class HCCRFBaseC(object):
             for dirname,dirnames,lDocName in os.walk(QDir):
                 lInName = [dirname + '/' + DocName for DocName in lDocName]
                 llGraphData.append([HCCRFBaseC.LoadGraphData(InName,EvidenceGroup) for InName in lInName])
+                logging.info('read [%d] graph for q [%s]',len(llGraphData[-1]),qid)
                 
         return llGraphData
     

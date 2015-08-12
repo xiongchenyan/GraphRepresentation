@@ -105,7 +105,7 @@ if __name__ == '__main__':
     import sys
     if 5 != len(sys.argv):
         print "4 para: train q, test q , para str, out"
-        print 'parastr: evidencegroup=letor|esdrank|hccrf,trainmethod=pointwise|listmle,datadir='
+        print 'parastr: evidencegroup=letor|tagme|esdrank|hccrf,trainmethod=pointwise|listmle,datadir='
         sys.exit()
         
     root = logging.getLogger()
