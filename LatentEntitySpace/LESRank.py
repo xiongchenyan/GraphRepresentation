@@ -106,7 +106,7 @@ class LESRanker(cxBaseC):
         if not QKey in hQDocObj:
             #do nothing
             logging.info('query [%s] has no object, return raw raning',qid)
-            return lDoc
+            return [doc.DocNo for doc in lDoc]
         
         
         lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[QKey]]
