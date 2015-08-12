@@ -41,7 +41,7 @@ from ObjCenter.FbObjCacheCenter import FbObjCacheCenterC
 from IndriSearch.IndriSearchCenter import IndriSearchCenterC
 from AdhocEva.AdhocEva import AdhocEvaC
 
-from LESInference import LESInferencer
+from LESInference import LESInferencerC
 
 
 class LESRanker(cxBaseC):
@@ -53,11 +53,21 @@ class LESRanker(cxBaseC):
         self.ObjCenter = FbObjCacheCenterC()
         self.Evaluator = AdhocEvaC()
         
-        self.Inferener = LESInferencer()
+        self.Inferener = LESInferencerC()
         
         self.QDocNodeDataDir = ""
         self.hQDocObj = {}
         self.OrigQWeight = 0.5
+        
+    
+    @classmethod
+    def ShowConf(cls):
+        cxBaseC.ShowConf()
+        IndriSearchCenterC.ShowConf()
+        FbObjCacheCenterC.ShowConf()
+        AdhocEvaC.ShowConf()
+        
+        print 'qdocnodedatadir\norigqweight 0.5'
         
         
     def SetConf(self, ConfIn):

@@ -16,10 +16,10 @@ import site
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 
 from IndriRelate.LmBase import LmBaseC
-from IndriSearch.IndriDocBase import IndriDocBaseC
+# from IndriSearch.IndriDocBase import IndriDocBaseC
 from IndriRelate.CtfLoader import TermCtfC
 
-class LESInferencer(object):
+class LESInferencerC(object):
     
     @classmethod
     def inference(cls,query,doc,lQObj,lDocObj):
