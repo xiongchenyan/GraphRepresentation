@@ -41,7 +41,7 @@ class LESInferencerC(object):
         lDocObjScore = [LmBaseC.Similarity(ObjLm, DocLm, TermCtfC(), 'cosine') for ObjLm in lObjLm]
         
         Z = float(sum(lDocObjScore))
-        logging.debug('Z= %f',Z)
+        logging.debug('Doc obj dist Z= %f',Z)
         if 0 != Z:
             lDocObjScore = [item/Z for item in lDocObjScore]
         else:
@@ -57,9 +57,15 @@ class LESInferencerC(object):
         lDocObjLm = [LmBaseC(obj.GetDesp()) for obj in lDocObj]
         
         llDObjQObjSim = [ [LmBaseC.Similarity(QLm, DLm, TermCtfC(),'cosine') for QLm in lQObjLm] for DLm in lDocObjLm]
+
+        logging.debug('obj-o obj sim mtx:\n %f',json.dumps(llDObjQObjSim,indent=1))
         
         lDObjSim = [sum(lDObjQObjSim) for lDObjQObjSim in llDObjQObjSim]
         
+        logging.debug('obj-o obj sim mtx:\n %f',json.dumps(llDObjQObjSim,indent=1))
+        logging.debug('obj-q sim:\n %f',json.dumps(lDObjSim))
+        
         Z = float(sum(lDObjSim))
+        logging.debug('ObjDist on Q Z = %f',Z)
         lDObjSim = [item / Z for item in lDObjSim]
         return lDObjSim
