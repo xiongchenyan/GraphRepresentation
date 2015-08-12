@@ -40,13 +40,14 @@ class LESInferencerC(object):
         
         lDocObjScore = [LmBaseC.Similarity(ObjLm, DocLm, TermCtfC(), 'cosine') for ObjLm in lObjLm]
         
-        lDocObjNoScore = zip([obj.GetId() for obj in lDocObj],lDocObjScore)
-        logging.debug('doc [%s] obj dist:\n%s',doc.DocNo,json.dumps(lDocObjNoScore))
-        
         Z = float(sum(lDocObjScore))
+        logging.debug('Z= %f',Z)
         if 0 != Z:
             lDocObjScore = [item/Z for item in lDocObjScore]
-        
+        else:
+            logging.warn('sum of doc obj scores is 0. raw scores:\n%s',json.dumps(lDocObjScore))    
+        lDocObjNoScore = zip([obj.GetId() for obj in lDocObj],lDocObjScore)            
+        logging.debug('doc [%s] obj dist:\n%s',doc.DocNo,json.dumps(lDocObjNoScore))
         return lDocObjScore
     
     
