@@ -58,11 +58,11 @@ class LESInferencerC(object):
         
         llDObjQObjSim = [ [LmBaseC.Similarity(QLm, DLm, TermCtfC(),'cosine') for QLm in lQObjLm] for DLm in lDocObjLm]
 
-        logging.debug('obj-o obj sim mtx:\n %f',json.dumps(llDObjQObjSim,indent=1))
+        logging.debug('obj-o obj sim mtx:\n %s',json.dumps(llDObjQObjSim,indent=1))
         
         lDObjSim = [sum(lDObjQObjSim) for lDObjQObjSim in llDObjQObjSim]
         
-        logging.debug('obj-o obj sim mtx:\n %f',json.dumps(llDObjQObjSim,indent=1))
+        logging.debug('obj-o obj sim mtx:\n %s',json.dumps(llDObjQObjSim,indent=1))
         logging.debug('obj-q sim:\n %f',json.dumps(lDObjSim))
         
         Z = float(sum(lDObjSim))
