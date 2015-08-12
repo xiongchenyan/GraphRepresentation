@@ -53,7 +53,7 @@ class HCCRFBaseC(object):
                 lInName = [dirname + '/' + DocName for DocName in lDocName]
                 llGraphData.append([HCCRFBaseC.LoadGraphData(InName,EvidenceGroup) for InName in lInName])
                 logging.info('read [%d] graph for q [%s]',len(llGraphData[-1]),qid)
-                
+        logging.info('read graph for [%d] q',len(Qid))
         return llGraphData
     
     

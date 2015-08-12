@@ -86,7 +86,7 @@ class LESRanker(cxBaseC):
     
     def RankingForOneQ(self,qid,query):
         lDoc = self.Searcher.RunQuery(query, qid)
-        
+        logging.info('LES ranking for [%s-%s]',qid,query)
         QKey = 'q_%s' %(qid)
         if not QKey in self.hQDocObj:
             #do nothing
@@ -149,7 +149,7 @@ class LESRanker(cxBaseC):
         return True
     
 if __name__=='__main__':
-    import sys,os
+    import sys
 
     if 2 != len(sys.argv):
         print 'I evaluate latent entity space (LES) ranking'
