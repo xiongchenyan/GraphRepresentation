@@ -26,6 +26,11 @@ class LESInferencerC(object):
     @classmethod
     def inference(cls,query,doc,lQObj,lDocObj):
         
+        logging.debug('infer q[%s] doc [%s], qobj [%s], doc obj [%s]',\
+                      query,doc.DocNo,
+                      json.dumps([obj.GetId() for obj in lQObj]),\
+                      json.dumps([obj.GetId() for obj in lDocObj]))
+        
         lDObjSimToQ = cls.CalcObjDistributionOnQuery(lQObj, lDocObj)
         lDocObjScore = cls.CalcDocObjDistribution(doc, lDocObj)
         
@@ -58,12 +63,13 @@ class LESInferencerC(object):
         
         llDObjQObjSim = [ [LmBaseC.Similarity(QLm, DLm, TermCtfC(),'cosine') for QLm in lQObjLm] for DLm in lDocObjLm]
 
-        logging.debug('obj-o obj sim mtx:\n %s',json.dumps(llDObjQObjSim,indent=1))
         
         lDObjSim = [sum(lDObjQObjSim) for lDObjQObjSim in llDObjQObjSim]
         
-        logging.debug('obj-o obj sim mtx:\n %s',json.dumps(llDObjQObjSim,indent=1))
-        logging.debug('obj-q sim:\n %f',json.dumps(lDObjSim))
+        
+        
+        logging.debug('obj-o obj sim mtx:\n %s',json.dumps(llDObjQObjSim))
+        logging.debug('obj-q sim:\n %s',json.dumps(lDObjSim))
         
         Z = float(sum(lDObjSim))
         logging.debug('ObjDist on Q Z = %f',Z)

@@ -110,6 +110,8 @@ class LESRanker(cxBaseC):
         
         
         lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[QKey]]
+
+        
         
         lDocLESScore = []
         LesCnt = 0
