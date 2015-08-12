@@ -56,7 +56,6 @@ class LESRanker(cxBaseC):
         self.Inferener = LESInferencerC()
         
         self.QDocNodeDataDir = ""
-        self.hQDocObj = {}
         self.OrigQWeight = 0.5
         
     
@@ -83,37 +82,43 @@ class LESRanker(cxBaseC):
         
     def LoadQDocObj(self,query):
         InName = self.QDocNodeDataDir + IndriSearchCenterC.GenerateQueryTargetName(query)
-        
+        hQDocObj = {}
         for line in open(InName):
             key,ObjId = line.strip().split('\t')
             if not key in self.hQDocObj:
-                self.hQDocObj[key] = [ObjId]
+                hQDocObj[key] = [ObjId]
             else:
-                self.hQDocObj[key].append(ObjId)
-                
-        return True
+                hQDocObj[key].append(ObjId)
+        logging.info('query [%s] q doc obj [%d] loaded',query,len(hQDocObj))        
+        return hQDocObj
     
     
     def RankingForOneQ(self,qid,query):
+        logging.info('Start LES ranking for [%s-%s]',qid,query)
+        
         lDoc = self.Searcher.RunQuery(query, qid)
-        logging.info('LES ranking for [%s-%s]',qid,query)
+        logging.info('doc fetched')
+        
+        hQDocObj = self.LoadQDocObj(query)
+        
+        
         QKey = 'q_%s' %(qid)
-        if not QKey in self.hQDocObj:
+        if not QKey in hQDocObj:
             #do nothing
             logging.info('query [%s] has no object, return raw raning',qid)
             return lDoc
         
         
-        lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in self.hQDocObj[QKey]]
+        lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[QKey]]
         
         lDocLESScore = []
         LesCnt = 0
         for doc in lDoc:
-            if not doc.DocNo in self.hQDocObj:
+            if not doc.DocNo in hQDocObj:
                 lDocLESScore.append(0)
                 continue
             LesCnt += 1
-            lDocObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in self.hQDocObj[doc.DocNo]]
+            lDocObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in hQDocObj[doc.DocNo]]
             
             score = self.Inferener.inference(query, doc, lQObj, lDocObj)
             lDocLESScore.append(score)
