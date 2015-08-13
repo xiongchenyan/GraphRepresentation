@@ -191,11 +191,16 @@ class DocGraphC(object):
         lNodeElseP = list(set(range(NodeMax.shape[0])) - set(lNodeZeroP) )
         lNodeElseP.sort()
         
+        logging.debug('Node zero dimension: %s',json.dumps(lNodeZeroP))
+        logging.debug('Node else dimension: %s',json.dumps(lNodeElseP))
+        logging.debug('max: %s',np.array2string(NodeMax))
+        logging.debug('min %s',np.array2string(NodeMin))
         lEdgeZeroP = [i for i in range(EdgeMax.shape[0]) if EdgeMax[i] == EdgeMin[i]]
         lEdgeElseP = list(set(range(EdgeMax.shape[0])) - set(lEdgeZeroP) )
         lEdgeElseP.sort()
         
-        logging.debug('EdgeElse P: %s',json.dumps(lEdgeElseP))
+        logging.debug('Edge Zero P: %s',json.dumps(lEdgeZeroP))
+        logging.debug('Edge else P: %s',json.dumps(lEdgeElseP))
         logging.debug('max: %s',np.array2string(EdgeMax))
         logging.debug('min %s',np.array2string(EdgeMin))
         
@@ -206,11 +211,12 @@ class DocGraphC(object):
             for j in range(len(llGraphData[i])):
                 NodeMtx = llGraphData[i][j].NodeMtx
                 EdgeTensor = llGraphData[i][j].EdgeTensor
-                
+                logging.debug('Node mtx before %s',np.array2string(NodeMtx))
                 NodeMtx[:,lNodeZeroP] = 0
                 NodeMtx[:,lNodeElseP] = (NodeMtx[:,lNodeElseP] - NodeMin[lNodeElseP]) / \
                         (NodeMax[lNodeElseP] - NodeMin[lNodeElseP])
                 
+                logging.debug('Node mtx after %s',np.array2string(NodeMtx))
                 EdgeTensor[:,:,lEdgeZeroP] = 0
                 EdgeTensor[:,:,lEdgeElseP] = (EdgeTensor[:,:,lEdgeZeroP] - EdgeMin[lEdgeElseP]) / \
                         (EdgeMax[lEdgeElseP] - EdgeMin[lEdgeElseP])
