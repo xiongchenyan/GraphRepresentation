@@ -127,6 +127,9 @@ class GraphFeaturePostProcessorC(cxBaseC):
         self.MakeNodeFeatureHash(sNodeFeatureName)
         self.MakeEdgeFeatureHash(sEdgeFeatureName)
         
+        logging.info('Node Feature hash: %s',json.dumps(self.hNodeFeatureId))
+        logging.info('Edge Feature hash: %s', json.dumps(self.hEdgeFeatureId))
+        
         return True
     
     
