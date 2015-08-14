@@ -88,33 +88,36 @@ class GraphFeaturePostProcessorC(cxBaseC):
         '''
         go through the full input dir, hash node features and edge features
         '''
-        if {} == hFeature:
+        if {} != hFeature:
             self.MakeFeatureHashFromNames(hFeature.keys())
-            return True
+        else:
+            self.MakeFeatureFromRawData()
         
+        return True
+    
+    
+    def MakeFeatureFromRawData(self):
+        sNodeFeatureName = set()
+        sEdgeFeatureName = set()
         
-        if {} == hFeature:
-            sNodeFeatureName = set()
-            sEdgeFeatureName = set()
+        lFName = WalkDir(self.InDir)
+        
+        for FName in lFName:
+#             logging.info('checking feature names in [%s]',FName)
+            lLines = open(FName).read().splitlines()
+            lNodeLines = [line for line in lLines if self.IsNodeFeatureLine(line)]
+            lEdgeLines = [line for line in lLines if not self.IsNodeFeatureLine(line)]
             
-            lFName = WalkDir(self.InDir)
+            sNodeFeatureName.update(self.GetFeatureName(lNodeLines))
+            sEdgeFeatureName.update(self.GetFeatureName(lEdgeLines))
             
-            for FName in lFName:
-    #             logging.info('checking feature names in [%s]',FName)
-                lLines = open(FName).read().splitlines()
-                lNodeLines = [line for line in lLines if self.IsNodeFeatureLine(line)]
-                lEdgeLines = [line for line in lLines if not self.IsNodeFeatureLine(line)]
-                
-                sNodeFeatureName.update(self.GetFeatureName(lNodeLines))
-                sEdgeFeatureName.update(self.GetFeatureName(lEdgeLines))
-                
-                
-                
             
-            self.MakeNodeFeatureHash(sNodeFeatureName)
-            self.MakeEdgeFeatureHash(sEdgeFeatureName)
             
-            logging.info('feature hash id assigned')
+        
+        self.MakeNodeFeatureHash(sNodeFeatureName)
+        self.MakeEdgeFeatureHash(sEdgeFeatureName)
+        
+        logging.info('feature hash id assigned from raw data')
         return True
     
     
