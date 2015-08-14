@@ -123,7 +123,7 @@ class GraphFeaturePostProcessorC(cxBaseC):
     
     def MakeFeatureHashFromNames(self,lName):
         
-        lEdgeFeatureName = [name for name in lName if name.startswith('ObjObj')]
+        lEdgeFeatureName = [name for name in lName if name.startswith('ObjObj') | name.startswith('QObj')]
         sEdgeFeatureName = set(lEdgeFeatureName)
         sNodeFeatureName = set(lName) - sEdgeFeatureName
         
