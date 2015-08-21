@@ -87,8 +87,6 @@ class DocGraphC(object):
 #         logging.debug('[%s] keep node %s',InName,json.dumps(lTargetNode))
 #         logging.debug('node shape %s, edge shape %s',json.dumps(self.NodeMtx.shape),json.dumps(self.EdgeTensor.shape))    
         
-        
-        
 
     def ReadEdgeFeatureFromDir(self,InName):
         vCol = InName.split('/')
