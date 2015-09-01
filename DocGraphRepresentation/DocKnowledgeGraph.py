@@ -20,29 +20,44 @@ class DocKnowledgeGraphC(object):
         
         
     def Init(self):
+        self.DocNo = ""
         self.hNodeId = {}   #obj id -> hash value (p) as in the node weights and edge weight mtx
         self.vNodeWeight = None
         self.mEdgeMatrix = None
         
     def dump(self,OutName):
         out = open(OutName,'w')
-        pickle.dump([self.NodeId,self.vNodeWeight,self.mEdgeMatrix],out)
+        pickle.dump([self.DocNo,self.NodeId,self.vNodeWeight,self.mEdgeMatrix],out)
         
     def load(self,InName):
-        self.NodeId,self.vNodeWeight,self.mEdgeMatrix = pickle.load(open(InName))
+        self.DocNo,self.NodeId,self.vNodeWeight,self.mEdgeMatrix = pickle.load(open(InName))
         
         
     
-    def ObjWeight(self,ObjId):
-        score = 0
-        if ObjId in self.hNodeId:
-            score = self.vNodeWeight[self.hNodeId[ObjId]]
-        return score
+#     def ObjWeight(self,ObjId):
+#         score = 0
+#         if ObjId in self.hNodeId:
+#             score = self.vNodeWeight[self.hNodeId[ObjId]]
+#         return score
     
     
     @staticmethod
     def BoeCos(DkgA,DkgB):
-        return 1 - scipy.spatial.distance.cosine(DkgA.vNodeWeight, DkgB.vNodeWeight)
+        NormA = DkgA.Norm()
+        NormB = DkgB.Norm()
+        if 0 == (NormA * NormB):
+            return 0
+        return DkgA.dot(DkgB) / DkgA.Norm() * DkgB.Norm()
+    
+    def Norm(self):
+        return np.linalg.norm(self.vNodeWeight)
+    
+    def dot(self,DocKgB):
+        score = 0
+        for node in self.hNodeId:
+            if node in DocKgB:
+                score += self[node] * DocKgB[node]
+        return score
     
     
     def CalcPageRank(self):
@@ -55,6 +70,16 @@ class DocKnowledgeGraphC(object):
         
         raise NotImplementedError
     
+    def __contains__(self,key):
+        return key in self.hNodeId
+    
+    def __getitem__(self,key):
+        if not key in self.hNodeId:
+            raise KeyError
+        return self.vNodeWeight[self.hNodeId[key]]
     
     
     
+    
+    def __len__(self):
+        return len(self.hNodeId)
