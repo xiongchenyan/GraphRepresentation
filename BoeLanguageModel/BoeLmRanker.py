@@ -1,0 +1,93 @@
+'''
+Created on Sep 1, 2015 5:08:04 PM
+@author: cx
+
+what I do:
+    I rank doc via Boe lm model
+what's my input:
+    q's entity (as in q ana format)
+    pre given doc graph dir
+    
+
+what's my output:
+    the ranking of a given set of doc
+        via BOE model (simply the doc's q'e weights)
+
+'''
+
+import site
+site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
+site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
+
+from cxBase.base import cxBaseC
+from cxBase.Conf import cxConfC
+from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
+import numpy as np
+from BoeLanguageModel.BoeLmBase import BoeLmC
+import logging
+from DocGraphRepresentation.ConstructSearchResDocGraph import SearchResDocGraphConstructorC
+
+
+class BoeLmRankerC(cxBaseC):
+    def Init(self):
+        cxBaseC.Init(self)
+        self.hQObj = {}
+        self.DocKgDir = ""
+        self.Inferencer = BoeLmC()
+        
+        
+    def SetConf(self, ConfIn):
+        cxBaseC.SetConf(self, ConfIn)
+        self.DocKgDir = self.conf.GetConf('dockgdir')
+        QAnaInName = self.conf.GetConf('qanain')
+        self.LoadQObj(QAnaInName)
+        
+        
+    def LoadQObj(self,QAnaInName):
+        for line in open(QAnaInName).read().splitlines():
+            vCol = line.strip().split('\t')
+            qid = vCol[0]
+            ObjId = vCol[2]
+            score = vCol[-1]
+            if not qid in self.hQObj:
+                self.hQObj[qid] = [[ObjId,score]]
+            else:
+                self.hQObj[qid].append([ObjId,score])
+                
+        logging.info('qobj laoded from [%s]',QAnaInName)
+        return True
+    
+    
+    def RankScoreForDoc(self,qid,doc):
+        DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
+        
+        if not qid in self.hQObj:
+            logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
+            return doc.score
+        lQObj = self.hQObj[qid]
+        score = 0
+        for ObjId,weight in lQObj:
+            score += self.Inferencer.inference(ObjId, DocKg) * weight
+        return score
+    
+    def Rank(self,qid,query,lDoc):
+        lScore = [self.RankScoreForDoc(qid, doc) for doc in lDoc]
+        lDocNoScore = zip([doc.DocNo for doc in lDoc],lScore)
+        lDocNoScore.sort(key=lambda item: item[1], reverse = True)
+        lRankRes = [item[0] for item in lDocNoScore]
+        return lRankRes
+    
+    
+        
+        
+        
+        
+        
+            
+            
+        
+        
+
+
+
+
