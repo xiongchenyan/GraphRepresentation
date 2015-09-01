@@ -17,6 +17,7 @@ what's my output:
 
 import site
 import logging
+
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 
@@ -26,6 +27,7 @@ from IndriSearch.IndriSearchCenter import IndriSearchCenterC
 
 import os
 from DocKGUnsupervisedFormer import DocKGTagMeFormerC,DocKGFaccFormerC,DocKGUnsupervisedFormerC
+from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
 
 class SearchResDocGraphConstructorC(cxBaseC):
     
@@ -70,6 +72,11 @@ class SearchResDocGraphConstructorC(cxBaseC):
         logging.info('[%s-%s] doc kg formed',qid,query)
         return True
     
+    @classmethod
+    def LoadDocGraph(cls,InDir,qid,DocNo):
+        DocKg = DocKnowledgeGraphC()
+        DocKg.load(InDir + '/' + qid + '/' + DocNo)
+        return DocKg
     
     def Process(self,QInName):
         lQidQuery = [line.split('\t') for line in open(QInName).read().splitlines()]

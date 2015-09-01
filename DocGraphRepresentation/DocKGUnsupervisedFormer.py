@@ -59,7 +59,7 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
             
         DocKg.mEdgeMatrix = np.zeros([len(sObjId),len(sObjId)])
         
-        return
+        return DocKg
     
     
 class DocKGFaccFormerC(DocKGAnaFormerC):
