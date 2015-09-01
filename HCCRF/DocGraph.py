@@ -10,7 +10,10 @@ what's my output:
 
 
 '''
-
+'''
+remind that this DocGraphC is the feature data structure
+the DocGraphRepresentation mostly contains operators on the result graph: I.E. node is score, and edge is weight 
+'''
 
 import pickle,logging,json
 import numpy as np
@@ -20,6 +23,7 @@ import os
 class DocGraphC(object):
     
     def __init__(self):
+        self.DocNo = ""
         self.NodeMtx = np.zeros([0,0])
         self.EdgeTensor = np.zeros([0,0,0])
         self.rel = 0
