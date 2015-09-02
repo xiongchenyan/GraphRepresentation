@@ -65,10 +65,6 @@ class BoeLmRankerC(cxBaseC):
     
     def RankScoreForDoc(self,qid,doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
-        
-        if not qid in self.hQObj:
-            logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
-            return doc.score
         lQObj = self.hQObj[qid]
         score = 0
         for ObjId,weight in lQObj:
@@ -76,6 +72,9 @@ class BoeLmRankerC(cxBaseC):
         return score
     
     def Rank(self,qid,query,lDoc):
+        if not qid in self.hQObj:
+            logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
+            return [doc.DocNo for doc in lDoc]
         lScore = [self.RankScoreForDoc(qid, doc) for doc in lDoc]
         lDocNoScore = zip([doc.DocNo for doc in lDoc],lScore)
         lDocNoScore.sort(key=lambda item: item[1], reverse = True)
