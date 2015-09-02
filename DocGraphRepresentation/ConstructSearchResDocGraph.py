@@ -43,7 +43,7 @@ class SearchResDocGraphConstructorC(DocGraphConstructorC):
     def SetConf(self, ConfIn):
         DocGraphConstructorC.SetConf(self, ConfIn)
         self.Searcher.SetConf(ConfIn)
-        self.OutDir = self.conf.GetConf('outdir')
+        
         
     @staticmethod
     def ShowConf():

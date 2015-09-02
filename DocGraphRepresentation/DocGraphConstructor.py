@@ -59,7 +59,7 @@ class DocGraphConstructorC(cxBaseC):
         if not self.GraphSource in set(['tagme','facc']):
             logging.error('graph formmer type [%s] not supported',self.GraphSource)
             raise NotImplementedError
-        
+        self.OutDir = self.conf.GetConf('outdir')
         
     
     @classmethod
