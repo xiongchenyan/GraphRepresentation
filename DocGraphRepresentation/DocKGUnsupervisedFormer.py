@@ -119,11 +119,11 @@ class DocKGTagMeFormerC(DocKGAnaFormerC):
             vCol = vCol[1:]
             lAna = []
             for i in range((len(vCol)) / 8):
-                FbObjId = i * 8 + 6
-                FbName = i * 8 + 7
-                score = i * 8 + 4
+                FbObjId = vCol[i * 8 + 6]
+                FbName = vCol[i * 8 + 7]
+                score = vCol[i * 8 + 4]
                 lAna.append([FbObjId,FbName,score])
-                logging.debug('[%s][%s][%f] in %s',FbObjId,FbName,score,json.dumps(vCol))
+#                 logging.debug('[%s][%s][%f] in %s',FbObjId,FbName,score,json.dumps(vCol))
             self.hDocAna[DocNo] = lAna
         
         return
