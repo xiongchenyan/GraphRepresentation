@@ -88,6 +88,7 @@ if __name__ == '__main__':
     import sys
     if 2 != len(sys.argv):
         print 'I construct given doc no doc kg'
+        print 'in'
         DocGraphConstructorC.ShowConf()
         sys.exit()
         

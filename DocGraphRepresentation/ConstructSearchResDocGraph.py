@@ -81,6 +81,7 @@ if __name__ == '__main__':
     import sys
     if 2 != len(sys.argv):
         print 'I construct query search result doc kg'
+        print 'in'
         SearchResDocGraphConstructorC.ShowConf()
         sys.exit()
         

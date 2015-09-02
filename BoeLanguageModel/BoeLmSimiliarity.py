@@ -48,8 +48,8 @@ class BoeLmSimmerC(cxBaseC):
         '''
         just use cosine similarity of their boe model
         '''
-        DocKgA = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, "lp50", DocA[0])
-        DocKgB = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, "lp50", DocB[0])
+        DocKgA = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, "LP50", DocA[0])
+        DocKgB = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, "LP50", DocB[0])
         score = DocKnowledgeGraphC.BoeCos(DocKgA, DocKgB)
         return score
     
