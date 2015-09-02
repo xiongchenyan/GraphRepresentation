@@ -21,7 +21,7 @@ from cxBase.Conf import cxConfC
 import numpy as np
 import scipy
 import pickle
-
+import json
 
 from DocKnowledgeGraph import DocKnowledgeGraphC
 import logging
@@ -123,6 +123,7 @@ class DocKGTagMeFormerC(DocKGAnaFormerC):
                 FbName = i * 8 + 7
                 score = i * 8 + 4
                 lAna.append([FbObjId,FbName,score])
+                logging.debug('[%s][%s][%f] in %s',FbObjId,FbName,score,json.dumps(vCol))
             self.hDocAna[DocNo] = lAna
         
         return
