@@ -42,6 +42,11 @@ class BoeLmRankerC(cxBaseC):
         QAnaInName = self.conf.GetConf('qanain')
         self.LoadQObj(QAnaInName)
         
+    
+    @staticmethod
+    def ShowConf():
+        cxBaseC.ShowConf()
+        print 'dockgdir\nqanain'
         
     def LoadQObj(self,QAnaInName):
         for line in open(QAnaInName).read().splitlines():
