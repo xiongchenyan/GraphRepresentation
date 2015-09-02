@@ -53,7 +53,7 @@ class BoeLmRankerC(cxBaseC):
             vCol = line.strip().split('\t')
             qid = vCol[0]
             ObjId = vCol[2]
-            score = vCol[-1]
+            score = float(vCol[-1])
             if not qid in self.hQObj:
                 self.hQObj[qid] = [[ObjId,score]]
             else:
