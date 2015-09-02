@@ -44,7 +44,7 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
         DocKg.DocNo = DocNo
         
         if not DocNo in self.hDocAna:
-            logging.warn('[%s] doc facc ana not found',DocNo)
+            logging.warn('[%s] doc ana not found',DocNo)
             return DocKg
         
         lAna = self.hDocAna[DocNo]
