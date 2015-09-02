@@ -55,7 +55,7 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
         DocKg.vNodeWeight = np.zeros(len(sObjId))
         
         for ObjId,name,score in lAna:
-            DocKg.vNodeWeight[DocKg.hDocFaccAna[ObjId]] += score
+            DocKg.vNodeWeight[DocKg.hNodeId[ObjId]] += score
         
 #         Z = np.sum(DocKg.vNodeWeight)
 #         if Z != 0:
