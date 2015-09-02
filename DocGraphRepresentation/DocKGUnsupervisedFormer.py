@@ -95,7 +95,11 @@ class DocKGTagMeFormerC(DocKGAnaFormerC):
     def Init(self):
         DocKGAnaFormerC.Init(self)
         self.TagMeResIn = ""
-        
+    
+    @staticmethod
+    def ShowConf():
+        DocKGAnaFormerC.ShowConf()
+        print 'taggeddoc'
         
     def SetConf(self, ConfIn):
         DocKGAnaFormerC.SetConf(self, ConfIn)

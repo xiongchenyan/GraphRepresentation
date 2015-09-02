@@ -27,10 +27,10 @@ class DocKnowledgeGraphC(object):
         
     def dump(self,OutName):
         out = open(OutName,'w')
-        pickle.dump([self.DocNo,self.NodeId,self.vNodeWeight,self.mEdgeMatrix],out)
+        pickle.dump([self.DocNo,self.hNodeId,self.vNodeWeight,self.mEdgeMatrix],out)
         
     def load(self,InName):
-        self.DocNo,self.NodeId,self.vNodeWeight,self.mEdgeMatrix = pickle.load(open(InName))
+        self.DocNo,self.hNodeId,self.vNodeWeight,self.mEdgeMatrix = pickle.load(open(InName))
         
         
     
