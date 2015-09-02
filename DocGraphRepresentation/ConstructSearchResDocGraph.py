@@ -37,7 +37,7 @@ class SearchResDocGraphConstructorC(DocGraphConstructorC):
         DocGraphConstructorC.Init(self)
         self.Searcher = IndriSearchCenterC()
         
-        self.OutDir = ""
+        
         
         
     def SetConf(self, ConfIn):
@@ -49,7 +49,7 @@ class SearchResDocGraphConstructorC(DocGraphConstructorC):
     def ShowConf():
         DocGraphConstructorC.ShowConf()
         IndriSearchCenterC.ShowConf()    
-        print 'outdir'
+        
         
     def FormForOneQ(self,qid,query):
         lDoc = self.Searcher.RunQuery(query, qid)

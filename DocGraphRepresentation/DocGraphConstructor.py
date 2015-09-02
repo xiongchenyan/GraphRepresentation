@@ -37,11 +37,12 @@ class DocGraphConstructorC(cxBaseC):
         
         self.GraphFormer = DocKGUnsupervisedFormerC()  #virtual here
         self.GraphSource = 'tagme'
+        self.OutDir = ""
 
     @staticmethod
     def ShowConf():
         cxBaseC.ShowConf()
-        print 'graphsource'
+        print 'graphsource\noutdir'
         DocKGFaccFormerC.ShowConf()
         DocKGTagMeFormerC.ShowConf()
         
@@ -67,3 +68,40 @@ class DocGraphConstructorC(cxBaseC):
         DocKg.load(InDir + '/' + qid + '/' + DocNo)
         return DocKg
     
+    
+    def Process(self,DocNoInName):
+        lDocNo = [line.split()[0] for line in open(DocNoInName).read().splitlines()]
+        
+        lDocKg = [self.GraphFormer.FillDocGraph(DocNo) for DocNo in lDocNo]
+        
+        if not os.path.exists(self.OutDir):
+            os.makedirs(self.OutDir)
+            
+        for DocKg in lDocKg:
+            DocKg.dump(self.OutDir + '/' + DocKg.DocNo)
+            logging.debug('[%s] dummped [%d] node',DocKg.DocNo,len(DocKg))
+            
+        logging.info('[%s] doc kg formed',DocNoInName)
+        return True
+    
+if __name__ == '__main__':
+    import sys
+    if 2 != len(sys.argv):
+        print 'I construct given doc no doc kg'
+        DocGraphConstructorC.ShowConf()
+        sys.exit()
+        
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    
+    ch = logging.StreamHandler(sys.stdout)
+#     ch.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)          
+    
+    Processor = DocGraphConstructorC(sys.argv[1])
+    
+    conf = cxConfC(sys.argv[1])
+    DocInName = conf.GetConf('in')
+    Processor.Process(DocInName)    
