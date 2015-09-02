@@ -79,15 +79,14 @@ if __name__=='__main__':
     
     
     conf = cxConfC(sys.argv[1])   
-    QIn = conf.GetConf('in')
     EvaOut = conf.GetConf('out')
     
     Simmer = BoeLmSimmerC(sys.argv[1])
     Evaluator = DocSimEvaluatorC(sys.argv[1])
     score = Evaluator.EvaluateSimFunc(Simmer.DocPairSim)
-    
-    print >> EvaOut,score
-    EvaOut.close()
+    out = open(EvaOut,'w')
+    print >> out,score
+    out.close()
         
         
         
