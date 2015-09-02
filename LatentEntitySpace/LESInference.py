@@ -51,7 +51,7 @@ class LESInferencerC(object):
             lDocObjScore = [item/Z for item in lDocObjScore]
         else:
             logging.warn('sum of doc obj scores is 0. raw scores:\n%s',json.dumps(lDocObjScore))    
-        lDocObjNoScore = zip([obj.GetId() for obj in lDocObj],lDocObjScore)            
+#         lDocObjNoScore = zip([obj.GetId() for obj in lDocObj],lDocObjScore)            
 #         logging.debug('doc [%s] obj dist:\n%s',doc.DocNo,json.dumps(lDocObjNoScore))
         return lDocObjScore
     
