@@ -1,39 +1,64 @@
 '''
-Created on Sep 1, 2015 5:08:04 PM
+Created on Sep 1, 2015 8:15:34 PM
 @author: cx
 
 what I do:
-    I rank doc via Boe lm model
-what's my input:
-    q's entity (as in q ana format)
-    pre given doc graph dir
+    I provide ranking function using LES model
     
+    1,fetch q and doc's obj id
+    2,fetch obj's infor
+    3,rank use LES
+what's my input:
+    doc's kg dir
+    q's ana obj
+    obj center to fetch obj infor
 
 what's my output:
-    the ranking of a given set of doc
-        via BOE model (simply the doc's q'e weights)
+    ranking score for given q-doc
 
 '''
 
+
+
 import site
+import math
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
+site.addsitedir('/bos/usr0/cx/PyCode/cxMachineLearning')
+site.addsitedir('/bos/usr0/cx/PyCode/SemanticSearch')
 
-from cxBase.base import cxBaseC
+import os
+import json
 from cxBase.Conf import cxConfC
-from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
-import numpy as np
-from BoeLanguageModel.BoeLmBase import BoeLmC
+from cxBase.base import cxBaseC
 import logging
+
+
+from ObjCenter.FbObjCacheCenter import FbObjCacheCenterC
+
+from LESInference import LESInferencerC
+from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
 from DocGraphRepresentation.ConstructSearchResDocGraph import SearchResDocGraphConstructorC
 
 
-class BoeLmRankerC(cxBaseC):
+
+class LESRanker(cxBaseC):
+    
     def Init(self):
         cxBaseC.Init(self)
-        self.hQObj = {}
+        
+        self.ObjCenter = FbObjCacheCenterC()
+        self.Inferener = LESInferencerC()
         self.DocKgDir = ""
-        self.Inferencer = BoeLmC()
+        self.hQObj = {}
+        self.OrigQWeight = 0.5
+        
+    
+    @classmethod
+    def ShowConf(cls):
+        cxBaseC.ShowConf()
+        FbObjCacheCenterC.ShowConf()
+        print 'origqweight 0.5'
         
         
     def SetConf(self, ConfIn):
@@ -41,6 +66,8 @@ class BoeLmRankerC(cxBaseC):
         self.DocKgDir = self.conf.GetConf('dockgdir')
         QAnaInName = self.conf.GetConf('qanain')
         self.LoadQObj(QAnaInName)
+        self.ObjCenter.SetConf(ConfIn)
+        self.OrigQWeight = self.conf.GetConf('origqweight', self.OrigQWeight)
         
         
     def LoadQObj(self,QAnaInName):
@@ -57,36 +84,40 @@ class BoeLmRankerC(cxBaseC):
         logging.info('qobj loaded from [%s]',QAnaInName)
         return True
     
-    
-    def RankScoreForDoc(self,qid,doc):
+    def RankScoreForDoc(self,qid,query,doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
         
         if not qid in self.hQObj:
             logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
             return doc.score
-        lQObj = self.hQObj[qid]
-        score = 0
-        for ObjId,weight in lQObj:
-            score += self.Inferencer.inference(ObjId, DocKg) * weight
+
+        lQObjId = [item[0] for item in self.hQObj[qid]]
+        lDocObjId = DocKg.hNodeId.keys()
+        
+        lQObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in lQObjId]
+        lDocObj =  [self.ObjCenter.FetchObj(ObjId) for ObjId in lDocObjId]
+        
+        score = self.Inferener.inference(query, doc, lQObj, lDocObj)
+        
         return score
     
     def Rank(self,qid,query,lDoc):
-        lScore = [self.RankScoreForDoc(qid, doc) for doc in lDoc]
+        lScore = [self.RankScoreForDoc(qid, query, doc) for doc in lDoc]
         lDocNoScore = zip([doc.DocNo for doc in lDoc],lScore)
         lDocNoScore.sort(key=lambda item: item[1], reverse = True)
         lRankRes = [item[0] for item in lDocNoScore]
         return lRankRes
     
     
-    
+
 
 if __name__=='__main__':
-    import sys,os
+    import sys
     from AdhocEva.RankerEvaluator import RankerEvaluatorC
     if 2 != len(sys.argv):
-        print 'I evaluate Boe lm '
+        print 'I evaluate LES '
         print 'in\nout'
-        BoeLmRankerC.ShowConf()
+        LESRanker.ShowConf()
         RankerEvaluatorC.ShowConf()
         
         sys.exit()
@@ -105,21 +136,7 @@ if __name__=='__main__':
     QIn = conf.GetConf('in')
     EvaOut = conf.GetConf('out')
     
-    Ranker = BoeLmRankerC(sys.argv[1])
+    Ranker = LESRanker(sys.argv[1])
     Evaluator = RankerEvaluatorC(sys.argv[1])
     Evaluator.Evaluate(QIn, Ranker.Rank, EvaOut)
-     
-    
-        
-        
-        
-        
-        
-            
-            
-        
-        
-
-
-
-
+  
