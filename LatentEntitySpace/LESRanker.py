@@ -86,10 +86,6 @@ class LESRanker(cxBaseC):
     
     def RankScoreForDoc(self,qid,query,doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
-        
-        if not qid in self.hQObj:
-            logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
-            return doc.score
 
         lQObjId = [item[0] for item in self.hQObj[qid]]
         lDocObjId = DocKg.hNodeId.keys()
@@ -102,6 +98,9 @@ class LESRanker(cxBaseC):
         return score
     
     def Rank(self,qid,query,lDoc):
+        if not qid in self.hQObj:
+            logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
+            return [doc.DocNo for doc in lDoc]
         lScore = [self.RankScoreForDoc(qid, query, doc) for doc in lDoc]
         lDocNoScore = zip([doc.DocNo for doc in lDoc],lScore)
         lDocNoScore.sort(key=lambda item: item[1], reverse = True)
@@ -123,7 +122,7 @@ if __name__=='__main__':
         sys.exit()
     
     root = logging.getLogger()
-    root.setLevel(logging.INFO)
+    root.setLevel(logging.DEBUG)
     
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.DEBUG)
