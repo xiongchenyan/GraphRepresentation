@@ -25,7 +25,7 @@ import math
 site.addsitedir('/bos/usr0/cx/PyCode/cxPyLib')
 site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 site.addsitedir('/bos/usr0/cx/PyCode/cxMachineLearning')
-site.addsitedir('/bos/usr0/cx/PyCode/SemanticSearch')
+site.addsitedir('/bos/usr0/cx/PyCode/GoogleAPI')
 
 import os
 import json
