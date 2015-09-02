@@ -30,3 +30,40 @@ TBD: abstract SearchResDocGraphConstructorC to this root class
 implement annotated result doc graph constructor too
 be aware of the output dump dir organization
 '''
+
+class DocGraphConstructorC(cxBaseC):
+    def Init(self):
+        cxBaseC.Init(self)
+        
+        self.GraphFormer = DocKGUnsupervisedFormerC()  #virtual here
+        self.GraphSource = 'tagme'
+
+    @staticmethod
+    def ShowConf():
+        cxBaseC.ShowConf()
+        print 'graphsource'
+        DocKGFaccFormerC.ShowConf()
+        DocKGTagMeFormerC.ShowConf()
+        
+    def SetConf(self, ConfIn):
+        cxBaseC.SetConf(self, ConfIn)
+        
+        self.GraphSource = self.conf.GetConf('graphsource',self.GraphSource)
+        
+        if self.GraphSource == 'tagme':
+            self.GraphFormer = DocKGTagMeFormerC(ConfIn)
+        if self.GraphSource == 'facc':
+            self.GraphFormer = DocKGFaccFormerC(ConfIn)
+        
+        if not self.GraphSource in set(['tagme','facc']):
+            logging.error('graph formmer type [%s] not supported',self.GraphSource)
+            raise NotImplementedError
+        
+        
+    
+    @classmethod
+    def LoadDocGraph(cls,InDir,qid,DocNo):
+        DocKg = DocKnowledgeGraphC()
+        DocKg.load(InDir + '/' + qid + '/' + DocNo)
+        return DocKg
+    

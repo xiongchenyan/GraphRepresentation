@@ -29,32 +29,27 @@ import os
 from DocKGUnsupervisedFormer import DocKGTagMeFormerC,DocKGFaccFormerC,DocKGUnsupervisedFormerC
 from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
 
-class SearchResDocGraphConstructorC(cxBaseC):
+from DocGraphRepresentation.DocGraphConstructor import DocGraphConstructorC
+
+class SearchResDocGraphConstructorC(DocGraphConstructorC):
     
     def Init(self):
-        cxBaseC.Init(self)
+        DocGraphConstructorC.Init(self)
         self.Searcher = IndriSearchCenterC()
         
-        self.GraphFormer = DocKGUnsupervisedFormerC()  #virtual here
-        self.GraphSource = 'tagme'
         self.OutDir = ""
         
         
     def SetConf(self, ConfIn):
-        cxBaseC.SetConf(self, ConfIn)
+        DocGraphConstructorC.SetConf(self, ConfIn)
         self.Searcher.SetConf(ConfIn)
+        self.OutDir = self.conf.GetConf('outdir')
         
-        self.GraphSource = self.conf.GetConf('graphsource',self.GraphSource)
-        
-        if self.GraphSource == 'tagme':
-            self.GraphFormer = DocKGTagMeFormerC(ConfIn)
-        if self.GraphSource == 'facc':
-            self.GraphFormer = DocKGFaccFormerC(ConfIn)
-        
-        if not self.GraphSource in set(['tagme','facc']):
-            logging.error('graph formmer type [%s] not supported',self.GraphSource)
-            raise NotImplementedError
-        
+    @staticmethod
+    def ShowConf():
+        DocGraphConstructorC.ShowConf()
+        IndriSearchCenterC.ShowConf()    
+        print 'outdir'
         
     def FormForOneQ(self,qid,query):
         lDoc = self.Searcher.RunQuery(query, qid)
@@ -72,11 +67,6 @@ class SearchResDocGraphConstructorC(cxBaseC):
         logging.info('[%s-%s] doc kg formed',qid,query)
         return True
     
-    @classmethod
-    def LoadDocGraph(cls,InDir,qid,DocNo):
-        DocKg = DocKnowledgeGraphC()
-        DocKg.load(InDir + '/' + qid + '/' + DocNo)
-        return DocKg
     
     def Process(self,QInName):
         lQidQuery = [line.split('\t') for line in open(QInName).read().splitlines()]
