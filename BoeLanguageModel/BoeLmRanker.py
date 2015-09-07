@@ -79,8 +79,11 @@ class BoeLmRankerC(cxBaseC):
             logging.warn('qid [%s] no ana obj, withdraw to given score',qid)
             return [doc.DocNo for doc in lDoc]
         lScore = [self.RankScoreForDoc(qid, doc) for doc in lDoc]
-        lDocNoScore = zip([doc.DocNo for doc in lDoc],lScore)
-        lDocNoScore.sort(key=lambda item: item[1], reverse = True)
+        lMid = zip(lDoc,lScore)
+        lDocNoScore = [[item[0].DocNo,item[1],item[0].score] for item in lMid]
+        #sort doc by two keys, if boe scores tie, use original ranking score
+        lDocNoScore.sort(key=lambda item: (item[1],item[2]), reverse = True)
+        
         lRankRes = [item[0] for item in lDocNoScore]
         return lRankRes
     
