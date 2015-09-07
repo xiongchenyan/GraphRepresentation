@@ -68,7 +68,10 @@ class BoeLmRankerC(cxBaseC):
         lQObj = self.hQObj[qid]
         score = 0
         for ObjId,weight in lQObj:
-            score += self.Inferencer.inference(ObjId, DocKg) * weight
+            ObjPb = self.Inferencer.inference(ObjId, DocKg)
+            score += ObjPb * weight
+            logging.info('%s - %s obj score: %f',doc.DocNo,ObjId,ObjPb)
+        logging.info('%s ranking score: %f',doc.DocNo,score)
         return score
     
     def Rank(self,qid,query,lDoc):
