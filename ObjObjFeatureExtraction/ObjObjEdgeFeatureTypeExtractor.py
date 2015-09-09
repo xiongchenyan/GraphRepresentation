@@ -58,7 +58,7 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
                 OverlapCnt += 1
                 
         hFeature[self.FeatureName + 'HasSame'] = min(OverlapCnt,1)
-        hFeature[self.FeatureName + 'SameTypeFrac'] = float(OverlapCnt) / float(max((len(lAType) + len(lBType)),1))
+        hFeature[self.FeatureName + 'SameTypeFrac'] = float(OverlapCnt) / float(max((len(lAType) + len(lBType) / 2.0),1))
         
         return hFeature
         
