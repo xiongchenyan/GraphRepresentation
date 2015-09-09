@@ -43,11 +43,11 @@ class PageRankRankerC(GraphRankerC):
     
     def RankScoreForDoc(self, qid, doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
+        DocKg.NormalizeEdgeMtx()
         lQObj = self.hQObj[qid]
         
         M = (1.0 - self.ReStartP) * DocKg.mEdgeMatrix + self.ReStartP * (np.diag(DocKg.vNodeWeight))
-        row_sums = M.sum(axis=1,keepdims=True)
-        M /= row_sums
+        
          
         vPR = self.MaximalEigenvector(M)
         score = 0

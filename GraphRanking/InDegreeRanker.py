@@ -31,6 +31,7 @@ class InDegreeRankerC(GraphRankerC):
     
     def RankScoreForDoc(self, qid, doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
+        DocKg.NormalizeEdgeMtx()
         lQObj = self.hQObj[qid]
         score = 0
         for ObjId,weight in lQObj:
@@ -46,7 +47,7 @@ class InDegreeRankerC(GraphRankerC):
         score = 0
         if QObjId in DocKg:
             p = DocKg.hNodeId[QObjId]
-            score = np.sum(DocKg.mEdgeMatrix[p,:])
+            score = np.sum(DocKg.mEdgeMatrix[:,p])
         return score
         
         

@@ -33,7 +33,9 @@ class DocKnowledgeGraphC(object):
         self.DocNo,self.hNodeId,self.vNodeWeight,self.mEdgeMatrix = pickle.load(open(InName))
         
         
-    
+    def NormalizeEdgeMtx(self):
+        row_sums = self.mEdgeMatrix.sum(axis=1,keepdims=True)
+        self.mEdgeMatrix /= row_sums
 #     def ObjWeight(self,ObjId):
 #         score = 0
 #         if ObjId in self.hNodeId:
