@@ -19,7 +19,7 @@ import gensim
 import os
 import logging
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
-
+import json
 class ObjObjEdgeFeatureEmbSimExtractorC(ObjObjEdgeFeatureExtractorC):
     
     def Init(self):
@@ -43,7 +43,7 @@ class ObjObjEdgeFeatureEmbSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def process(self, ObjA, ObjB):
         hFeature = {}
         hFeature.update(self.ExtractEmbSimFeature(ObjA,ObjB))
-#         logging.debug('[%s]-[%s] obj emb sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
+        logging.debug('[%s]-[%s] obj emb sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
         return hFeature
     
     def ExtractEmbSimFeature(self,ObjA,ObjB):

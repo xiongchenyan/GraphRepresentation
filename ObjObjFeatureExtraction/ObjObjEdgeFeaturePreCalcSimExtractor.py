@@ -33,7 +33,7 @@ import logging
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
 import pickle
 from IndriSearch.IndriSearchCenter import IndriSearchCenterC
-
+import json
 class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
     
     def Init(self):
@@ -65,7 +65,10 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         self.lDirected = [int(vCol[2]) for vCol in lvCol]
         self.lhQueryObjPairSim = [{} for vCol in lvCol]
         logging.info('pre calc sim setted as referenced by [%s]',self.PreCalcFileInName)
-        
+    
+    
+    def FeatureDims(self):
+        return [self.FeatureName + SimName.title() for SimName in self.lSimName]    
         
     def LoadOneQueryObjSim(self,query):
         for i in range(len(self.lPreCalcDir)):
@@ -81,8 +84,9 @@ class ObjObjEdgeFeaturePreCalcSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
     def process(self, ObjA, ObjB,query):
         hFeature = {}
-        logging.debug('[%s-%s] precalc sim features:',ObjA.GetId(),ObjB.GetId())
+#         logging.debug('[%s-%s] precalc sim features:',ObjA.GetId(),ObjB.GetId())
         hFeature.update(self.ExtractPreCalcSim(ObjA,ObjB,query))
+        logging.debug('[%s]-[%s] obj precalc sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
         return hFeature
     
     def ExtractPreCalcSim(self,ObjA,ObjB,query):

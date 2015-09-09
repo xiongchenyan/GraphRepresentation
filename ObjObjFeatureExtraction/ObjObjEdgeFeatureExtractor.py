@@ -37,3 +37,6 @@ class ObjObjEdgeFeatureExtractorC(cxBaseC):
     def process(self,ObjA,ObjB):
         logging.warn('please call my sub class')
         return {}
+    
+    def FeatureDims(self):
+        raise NotImplementedError

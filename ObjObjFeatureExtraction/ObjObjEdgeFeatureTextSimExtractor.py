@@ -44,6 +44,9 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         ObjObjEdgeFeatureExtractorC.ShowConf()
         print 'termctf'    
         
+    
+    def FeatureDims(self):
+        return [self.FeatureName + field.title() +  SimMetric.title() for SimMetric,field in zip(self.lFieldSimMetric,self.lObjField)]
         
     def process(self, ObjA, ObjB):
         hFeature = {}
@@ -56,7 +59,7 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
         
         for SimMetric,field in zip(self.lFieldSimMetric,self.lObjField):
             
-            FeatureName = self.FeatureName + field.title()
+            FeatureName = self.FeatureName + field.title() + SimMetric.title()
             LmA = LmBaseC(ObjA.GetField(field))
             LmB = LmBaseC(ObjB.GetField(field))
             score = LmBaseC.Similarity(LmA, LmB, self.CtfCenter, SimMetric)

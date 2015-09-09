@@ -25,6 +25,7 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
     def Init(self):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'KG'
+        self.lFeatureDim = [self.FeatureName + item for item in ['Connected','HasCommonNeighbor']]
         
         
     def process(self, ObjA, ObjB):
@@ -33,8 +34,11 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         hFeature.update(self.ExtractDirectConnectFeature(ObjA,ObjB))
         
         hFeature.update(self.ExtractTwoHopFeature(ObjA,ObjB))   #the longest path useful in literature is only two hop
-        logging.debug('kg feature done')
+        logging.debug('[%s]-[%s] obj kg sim features extracted %s',ObjA.GetId(),ObjB.GetId(),json.dumps(hFeature))
         return hFeature
+    
+    def FeatureDims(self):
+        return self.lFeatureDim
     
     
     def ExtractDirectConnectFeature(self,ObjA,ObjB):
