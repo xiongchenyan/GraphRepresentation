@@ -67,7 +67,7 @@ class DocAnaResSERPSplitterC(cxBaseC):
     def DumpOneQ(self,qid,query):
         lDoc = self.Searcher.RunQuery(query, qid)
         out = open(self.OutDir + '/%s' %(query.replace(' ','_')),'w')
-        
+        print >> out,"<doc>"
         for doc in lDoc:
             if (not doc.DocNo in self.hDocAnaData) | (not doc.DocNo in self.hDocText):
                 continue
@@ -81,7 +81,7 @@ class DocAnaResSERPSplitterC(cxBaseC):
                 vAna = vCol[1:]
                 for i in range(len(vAna)/8):
                     print >>out, '\t'.join(vAna[8*i:8*i + 8])
-            
+        print >> out,"</doc>\n\n\n"
         out.close()
         logging.info('[%s] data dumped',query)
         return True
