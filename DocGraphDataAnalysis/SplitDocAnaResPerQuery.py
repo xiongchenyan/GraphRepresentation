@@ -59,7 +59,7 @@ class DocAnaResSERPSplitterC(cxBaseC):
         
         lLines = open(DocTextIn).read().splitlines()
         
-        lDict = [line.split('#')[0].split('\t') for line in lLines]
+        lDict = [line.split('#')[0].strip().split('\t') for line in lLines]
         self.hDocText = dict(lDict)
         return True
     
