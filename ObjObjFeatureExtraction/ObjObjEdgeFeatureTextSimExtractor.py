@@ -27,8 +27,10 @@ class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def Init(self):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'TextSim'
-        self.lObjField = ['name','desp','alias']
-        self.lFieldSimMetric = ['coor','js','coor']
+#         self.lObjField = ['name','desp','alias']
+#         self.lFieldSimMetric = ['coor','js','cosine']
+        self.lObjField = ['desp']
+        self.lFieldSimMetric = ['cosine']        
         self.CtfCenter = TermCtfC()
         self.TermCtfIn = ""
         

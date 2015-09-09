@@ -8,7 +8,7 @@ What's my input:
     a score metric choice:
         default:    \frac{pair cnt}{obj a' ctf}
 What's my output:
-    a pickle dict, obj\tobj score (directed, a->b different with b->a, both should in dict)
+    a pickle dict, obj\tobj score 
 @author: chenyanxiong
 '''
 

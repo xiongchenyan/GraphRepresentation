@@ -28,6 +28,7 @@ from ObjObjFeatureExtraction.ObjObjEdgeFeatureKGExtractor import ObjObjEdgeFeatu
 from ObjObjFeatureExtraction.ObjObjEdgeFeaturePreCalcSimExtractor import ObjObjEdgeFeaturePreCalcSimExtractorC
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureTextSimExtractor import ObjObjEdgeFeatureTextSimExtractorC
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureTypeExtractor import ObjObjEdgeFeatureTypeExtractorC
+from ObjObjFeatureExtraction.ObjObjEdgeFeatureEmbeddingExtractor import ObjObjEdgeFeatureEmbSimExtractorC
 from ObjCenter.FbObjCacheCenter import FbObjCacheCenterC
 
 
@@ -41,7 +42,9 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         self.ObjObjKGExtractor = ObjObjEdgeFeatureKGExtractorC()
         self.ObjObjPreCalcExtractor = ObjObjEdgeFeaturePreCalcSimExtractorC()
         self.ObjObjTextSimExtractor = ObjObjEdgeFeatureTextSimExtractorC()
-        self.ObjObjTypeSimExtractor = ObjObjEdgeFeatureTypeExtractorC() 
+        self.ObjObjTypeSimExtractor = ObjObjEdgeFeatureTypeExtractorC()
+        self.ObjObjEmbSimExtractor = ObjObjEdgeFeatureEmbSimExtractorC() 
+        self.ObjObjEmb
         self.NodeDir = ""
         
         
@@ -59,6 +62,8 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             self.ObjObjTextSimExtractor.SetConf(ConfIn)
         if 'typesim' in self.lObjObjFeatureGroup:
             self.ObjObjTypeSimExtractor.SetConf(ConfIn)
+        if 'embsim' in self.lObjObjFeatureGroup:
+            self.ObjObjEmbSimExtractor.SetConf(ConfIn)
             
             
         logging.info('edge feature center confs setted')
@@ -74,7 +79,7 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         ObjObjEdgeFeaturePreCalcSimExtractorC.ShowConf()
         ObjObjEdgeFeatureTextSimExtractorC.ShowConf()
         ObjObjEdgeFeatureTypeExtractorC.ShowConf()
-        
+        ObjObjEdgeFeatureEmbSimExtractorC.ShowConf()
    
     
     
@@ -91,6 +96,8 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             hFeature.update(self.ObjObjTextSimExtractor.process(ObjA, ObjB))
         if 'typesim' in self.lObjObjFeatureGroup:
             hFeature.update(self.ObjObjTypeSimExtractor.process(ObjA, ObjB))
+        if 'embsim' in self.lObjObjFeatureGroup:
+            hFeature.update(self.ObjObjEmbSimExtractor.process(ObjA, ObjB))
             
         logging.debug('obj pair [%s-%s] feature extracted',ObjA.GetId(),ObjB.GetId())    
         return hFeature
