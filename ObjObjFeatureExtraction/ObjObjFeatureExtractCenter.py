@@ -44,7 +44,6 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         self.ObjObjTextSimExtractor = ObjObjEdgeFeatureTextSimExtractorC()
         self.ObjObjTypeSimExtractor = ObjObjEdgeFeatureTypeExtractorC()
         self.ObjObjEmbSimExtractor = ObjObjEdgeFeatureEmbSimExtractorC() 
-        self.ObjObjEmb
         self.NodeDir = ""
         
         
