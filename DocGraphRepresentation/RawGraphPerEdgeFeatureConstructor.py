@@ -95,18 +95,23 @@ if __name__ == '__main__':
         print 'in'
         RawGraphPerEdgeFeatureConstructorC.ShowConf()
         sys.exit()
+    conf = cxConfC(sys.argv[1])
+    
+    LogLevel = logging.INFO
+    if conf.GetConf('loglevel') == 'debug':
+        LogLevel = logging.DEBUG
         
     root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    root.setLevel(LogLevel)
     
     ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(LogLevel)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     root.addHandler(ch)          
     
     Processor = RawGraphPerEdgeFeatureConstructorC(sys.argv[1])
     
-    conf = cxConfC(sys.argv[1])
+    
     QInName = conf.GetConf('in', '/bos/usr0/cx/tmp/data/WebTrackQ09')
     Processor.Process(QInName)    
