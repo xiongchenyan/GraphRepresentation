@@ -37,7 +37,7 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
         logging.debug('extracting type sim feature for [%s]-[%s]',ObjA.GetId(),ObjB.GetId())
         hFeature.update(self.ExtractTypeSimFeature(ObjA,ObjB))
         hFeature.update(self.ExtractNotableTypeSimFeature(ObjA,ObjB))
-        logging.debug('type feature done')
+        logging.debug('type feature: %s',json.dumps(hFeature))
         return hFeature
     
     

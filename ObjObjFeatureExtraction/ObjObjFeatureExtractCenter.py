@@ -81,6 +81,17 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
         ObjObjEdgeFeatureEmbSimExtractorC.ShowConf()
    
     
+    def FeatureDims(self):
+        if 'kg' in self.lObjObjFeatureGroup:
+            self.ObjObjKGExtractor.FeatureDims()
+        if 'precalc' in self.lObjObjFeatureGroup: 
+            self.ObjObjPreCalcExtractor.FeatureDims()
+        if 'textsim' in self.lObjObjFeatureGroup:
+            self.ObjObjTextSimExtractor.FeatureDims()
+        if 'typesim' in self.lObjObjFeatureGroup:
+            self.ObjObjTypeSimExtractor.FeatureDims()
+        if 'embsim' in self.lObjObjFeatureGroup:
+            self.ObjObjEmbSimExtractor.FeatureDims()
     
     
     

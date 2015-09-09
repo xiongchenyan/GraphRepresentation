@@ -73,7 +73,6 @@ class RawGraphPerEdgeFeatureConstructorC(SearchResDocGraphConstructorC):
             lObjId = DocKg.hNodeId
             lObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in lObjId]
             mhFeature = self.EdgeFeatureCenter.ExtractObjObjFeature(lObj, query) 
-        
             for FeatureName in mhFeature[0][0].keys():
                 OutDir = self.OutDir + '/' + FeatureName + '/' + qid
                 if not os.path.exists(OutDir):
