@@ -43,9 +43,9 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         
         
         lObjANeighbor = ObjA.GetNeighbor()
-        sANeighborId = set([item[1].GetId() for item in lObjANeighbor])
+        sANeighborId = set([item[1] for item in lObjANeighbor])
         lObjBNeighbor = ObjB.GetNeighbor()
-        sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
+        sBNeighborId = set([item[1] for item in lObjBNeighbor])
         
 #         logging.debug('%s neighbor: %s  target %s',ObjA.GetId(),json.dumps(list(sANeighborId)),ObjB.GetId())
         
@@ -70,9 +70,9 @@ class ObjObjEdgeFeatureKGExtractorC(ObjObjEdgeFeatureExtractorC):
         
         
         lObjANeighbor = ObjA.GetNeighbor()
-        sANeighborId = set([item[1].GetId() for item in lObjANeighbor])
+        sANeighborId = set([item[1] for item in lObjANeighbor])
         lObjBNeighbor = ObjB.GetNeighbor()
-        sBNeighborId = set([item[1].GetId() for item in lObjBNeighbor])
+        sBNeighborId = set([item[1] for item in lObjBNeighbor])
         
 #         FeatureName = self.FeatureName + 'CommonNeighborFrac'
 #         score = 0
