@@ -40,7 +40,7 @@ class DocAnaResSERPSplitterC(cxBaseC):
         self.Searcher.SetConf(ConfIn)
         DocAnaIn = self.conf.GetConf('docanain')
         self.ReadDocAna(DocAnaIn)
-        self.OutDir = self.conf.GetConf('ourdir')
+        self.OutDir = self.conf.GetConf('outdir')
         self.QInName = self.conf.GetConf('in')
         
         
