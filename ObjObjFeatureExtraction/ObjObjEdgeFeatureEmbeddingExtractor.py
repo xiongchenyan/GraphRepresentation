@@ -26,6 +26,7 @@ class ObjObjEdgeFeatureEmbSimExtractorC(ObjObjEdgeFeatureExtractorC):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'EmbSim'
         self.Word2VecModel = None
+        self.lFeatureName = [self.FeatureName + 'Cosine']
         
     def SetConf(self, ConfIn):
         ObjObjEdgeFeatureExtractorC.SetConf(self, ConfIn)
@@ -38,7 +39,9 @@ class ObjObjEdgeFeatureEmbSimExtractorC(ObjObjEdgeFeatureExtractorC):
     def ShowConf():
         ObjObjEdgeFeatureExtractorC.ShowConf()
         print 'word2vecin'    
-        
+    
+    def FeatureDims(self):
+        return self.lFeatureName    
         
     def process(self, ObjA, ObjB):
         hFeature = {}
