@@ -29,7 +29,6 @@ class GraphRankerC(cxBaseC):
         cxBaseC.Init(self)
         self.hQObj = {}
         self.DocKgDir = ""
-        self.Inferencer = BoeLmC()
         
         
     def SetConf(self, ConfIn):
