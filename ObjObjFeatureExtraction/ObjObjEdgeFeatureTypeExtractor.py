@@ -30,6 +30,7 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
     def Init(self):
         ObjObjEdgeFeatureExtractorC.Init(self)
         self.FeatureName += 'Type'
+        self.lFeatureName = [self.FeatureName + item for item in ['HasSame','SameTypeFrac','SameNotable']]
         
         
     def process(self, ObjA, ObjB):
@@ -40,6 +41,8 @@ class ObjObjEdgeFeatureTypeExtractorC(ObjObjEdgeFeatureExtractorC):
         logging.debug('type feature: %s',json.dumps(hFeature))
         return hFeature
     
+    def FeatureDims(self):
+        return self.lFeatureName
     
     def ExtractTypeSimFeature(self,ObjA,ObjB):
         
