@@ -31,6 +31,7 @@ class DocAnaResSERPSplitterC(cxBaseC):
         cxBaseC.Init(self)
         self.Searcher = IndriSearchCenterC()
         self.hDocAnaData = {}
+        self.hDocText = {}
         self.OutDir = ''
         self.QInName = ""
         
@@ -39,7 +40,8 @@ class DocAnaResSERPSplitterC(cxBaseC):
         cxBaseC.SetConf(self, ConfIn)
         self.Searcher.SetConf(ConfIn)
         DocAnaIn = self.conf.GetConf('docanain')
-        self.ReadDocAna(DocAnaIn)
+        DocTextIn = self.conf.GetConf('doctextin')
+        self.ReadDocAna(DocAnaIn,DocTextIn)
         self.OutDir = self.conf.GetConf('outdir')
         self.QInName = self.conf.GetConf('in')
         
@@ -47,14 +49,18 @@ class DocAnaResSERPSplitterC(cxBaseC):
     @staticmethod
     def ShowConf():
         cxBaseC.ShowConf()
-        print 'docanain\noutdir\nin'
+        print 'docanain\noutdir\nin\ndoctextin'
         IndriSearchCenterC.ShowConf()
 
-    def ReadDocAna(self,InName):
-        lLines = open(InName).read().splitlines()
+    def ReadDocAna(self,DocAnaIn,DocTextIn):
+        lLines = open(DocAnaIn).read().splitlines()
         lDict = [[line.split()[0],line] for line in lLines]
         self.hDocAnaData = dict(lDict)
         
+        lLines = open(DocTextIn).read().splitlines()
+        
+        lDict = [line.split('#')[0].split('\t')]
+        self.hDocText = dict(lDict)
         return True
     
     
@@ -63,15 +69,16 @@ class DocAnaResSERPSplitterC(cxBaseC):
         out = open(self.OutDir + '/%s' %(query.replace(' ','_')),'w')
         
         for doc in lDoc:
-            if not doc.DocNo in self.hDocAnaData:
+            if (not doc.DocNo in self.hDocAnaData) | (not doc.DocNo in self.hDocText):
                 continue
             line = self.hDocAnaData[doc.DocNo]
             
-            vCol = line.split('#')
-            print >>out, vCol[0]
+            vCol = line.split('\t')
+            text = self.hDocText[doc.DocNo]
+            print >>out, vCol[0] + '\t' + text
             
             if len(vCol) > 2:
-                vAna = vCol[1].split('\t')
+                vAna = vCol[1:]
                 for i in range(len(vAna)/8):
                     print >>out, '\t'.join(vAna[8*i:8*i + 8])
             
