@@ -31,7 +31,7 @@ site.addsitedir('/bos/usr0/cx/PyCode/GraphRepresentation')
 site.addsitedir('/bos/usr0/cx/PyCode/GoogleAPI')
 from cxBase.base import cxBaseC
 from cxBase.Conf import cxConfC
-from IndriSearch.IndriSearchCenter import IndriSearchCenterC
+# from IndriSearch.IndriSearchCenter import IndriSearchCenterC
 from ObjCenter.FbObjCacheCenter import FbObjCacheCenterC
 import os
 # from DocKGUnsupervisedFormer import DocKGTagMeFormerC,DocKGFaccFormerC,DocKGUnsupervisedFormerC
