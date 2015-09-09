@@ -93,6 +93,7 @@ class ObjObjFeatureExtractCenterC(cxBaseC):
             lFeatureDims += self.ObjObjTypeSimExtractor.FeatureDims()
         if 'embsim' in self.lObjObjFeatureGroup:
             lFeatureDims += self.ObjObjEmbSimExtractor.FeatureDims()
+        return lFeatureDims
     
     
     
