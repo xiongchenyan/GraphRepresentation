@@ -20,7 +20,7 @@ import os
 import logging
 from ObjObjFeatureExtraction.ObjObjEdgeFeatureExtractor import ObjObjEdgeFeatureExtractorC
 
-class ObjObjEdgeFeatureTextSimExtractorC(ObjObjEdgeFeatureExtractorC):
+class ObjObjEdgeFeatureEmbSimExtractorC(ObjObjEdgeFeatureExtractorC):
     
     def Init(self):
         ObjObjEdgeFeatureExtractorC.Init(self)
