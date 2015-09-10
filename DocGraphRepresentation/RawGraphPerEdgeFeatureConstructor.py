@@ -70,7 +70,8 @@ class RawGraphPerEdgeFeatureConstructorC(SearchResDocGraphConstructorC):
         
         
         for DocKg in lDocKg:
-            lObjId = DocKg.hNodeId
+            logging.info('forming edge mtx for [%s] [%d] obj',DocKg.DocNo,len(DocKg.hNodeId))
+            lObjId = DocKg.hNodeId.keys()
             lObj = [self.ObjCenter.FetchObj(ObjId) for ObjId in lObjId]
             mhFeature = self.EdgeFeatureCenter.ExtractObjObjFeature(lObj, query) 
             for FeatureName in self.EdgeFeatureCenter.FeatureDims():
@@ -83,7 +84,7 @@ class RawGraphPerEdgeFeatureConstructorC(SearchResDocGraphConstructorC):
                 DocKg.dump(OutDir + '/' + DocKg.DocNo)
                 logging.debug('[%s] feature for doc [%s] dummped',FeatureName,DocKg.DocNo)
                 
-            logging.debug('[%s] dummped [%d] node',DocKg.DocNo,len(DocKg))
+            logging.info('[%s] dummped [%d] node',DocKg.DocNo,len(DocKg))
         logging.info('[%s-%s] doc kg formed',qid,query)
         return True
     
