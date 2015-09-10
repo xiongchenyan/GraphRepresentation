@@ -37,7 +37,16 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
     def Init(self):
         DocKGUnsupervisedFormerC.Init(self)
         self.hDocAna = {}   # preloaded from QueryFaccDir I would say for now.
+        self.MaxNodePerGraph = 500
+        
+    def SetConf(self, ConfIn):
+        DocKGUnsupervisedFormerC.SetConf(self, ConfIn)
+        self.MaxNodePerGraph = self.conf.GetConf('maxnodepergraph', self.MaxNodePerGraph)
     
+    @staticmethod
+    def ShowConf():
+        DocKGUnsupervisedFormerC.ShowConf()
+        print 'maxnodepergraph'
     
     def FillDocGraph(self, DocNo):
         DocKg = DocKnowledgeGraphC()
@@ -49,7 +58,19 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
         
         lAna = self.hDocAna[DocNo]
         
-        sObjId = set([item[0] for item in lAna])
+        sObjId = set()
+        
+        '''
+        only keep first 500 seen entities
+        '''
+        for ana in lAna:
+            if not ana[0] in sObjId:
+                sObjId.add(ana[0])
+                if len(sObjId) >= self.MaxNodePerGraph:
+                    logging.warn('doc [%s] has more than [%d] ana [%d]',DocNo,self.MaxNodePerGraph,len(lAna))
+                    break
+        
+#         sObjId = set([item[0] for item in lAna])
         DocKg.hNodeId = dict(zip(list(sObjId),range(len(sObjId))))
         
         DocKg.vNodeWeight = np.zeros(len(sObjId))
