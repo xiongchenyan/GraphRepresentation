@@ -58,31 +58,31 @@ class DocKGAnaFormerC(DocKGUnsupervisedFormerC):
         
         lAna = self.hDocAna[DocNo]
         
-        sObjId = set()
+        '''
+        keep top self.MaxNodePerGraph node, via sum ana score as weights
+        '''
         
-        '''
-        only keep first 500 seen entities
-        '''
-        for ana in lAna:
-            if not ana[0] in sObjId:
-                sObjId.add(ana[0])
-                if len(sObjId) >= self.MaxNodePerGraph:
-                    logging.warn('doc [%s] has more than [%d] ana [%d]',DocNo,self.MaxNodePerGraph,len(lAna))
-                    break
+        hObjScore = {}
+        for ObjId,name,score in lAna:
+            if not ObjId in hObjScore:
+                hObjScore[ObjId] = score
+            else:
+                hObjScore[ObjId] += score
+                
+        lObjScore = hObjScore.items()
+        lObjScore.sort(key=lambda item:item[1],reverse = True)
+        lObjScore = lObjScore[:self.MaxNodePerGraph]
+        
         
 #         sObjId = set([item[0] for item in lAna])
-        DocKg.hNodeId = dict(zip(list(sObjId),range(len(sObjId))))
-        
-        DocKg.vNodeWeight = np.zeros(len(sObjId))
-        
-        for ObjId,name,score in lAna:
-            DocKg.vNodeWeight[DocKg.hNodeId[ObjId]] += score
+        DocKg.hNodeId = dict(zip([item[0] for item in lObjScore],range(len(lObjScore))))
+        DocKg.vNodeWeight = np.array([item[1] for item in lObjScore])
         
 #         Z = np.sum(DocKg.vNodeWeight)
 #         if Z != 0:
 #             DocKg.vNodeWeight /= Z 
             
-        DocKg.mEdgeMatrix = np.zeros([len(sObjId),len(sObjId)])
+        DocKg.mEdgeMatrix = np.zeros([len(lObjScore),len(lObjScore)])
         
         return DocKg
     
