@@ -31,9 +31,10 @@ class InDegreeRankerC(GraphRankerC):
     
     def RankScoreForDoc(self, qid, doc):
         logging.debug('start in degree ranking for [%s-%s]',qid,doc.DocNo)
-        if len(doc.hNodeId) == 0:
-            return 0  #no kg, default min zero score
+
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
+        if len(DocKg.hNodeId) == 0:
+            return 0  #no kg, default min zero score
         logging.debug('[%s] doc kg loaded, [%d] [%d-%d]',DocKg.DocNo,\
                       DocKg.vNodeWeight.shape[0],DocKg.mEdgeMatrix.shape[0],DocKg.mEdgeMatrix.shape[1])
         DocKg.NormalizeEdgeMtx()
