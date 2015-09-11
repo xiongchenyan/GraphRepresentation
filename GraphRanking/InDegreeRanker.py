@@ -30,6 +30,7 @@ import numpy as np
 class InDegreeRankerC(GraphRankerC):
     
     def RankScoreForDoc(self, qid, doc):
+        logging.debug('start in degree ranking for [%s-%s]',qid,doc.DocNo)
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
         logging.debug('[%s] doc kg loaded, [%d] [%d-%d]',DocKg.DocNo,\
                       DocKg.vNodeWeight.shape[0],DocKg.mEdgeMatrix.shape[0],DocKg.mEdgeMatrix.shape[1])
@@ -50,6 +51,9 @@ class InDegreeRankerC(GraphRankerC):
         if QObjId in DocKg:
             p = DocKg.hNodeId[QObjId]
             score = np.sum(DocKg.mEdgeMatrix[:,p])
+            logging.debug('q obj [%s] indegree [%f]',QObjId,score)
+        else:
+            logging.debug('q obj [%s] not in doc',QObjId)
         return score
         
         
