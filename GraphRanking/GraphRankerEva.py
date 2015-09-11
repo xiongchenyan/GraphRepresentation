@@ -26,7 +26,9 @@ import logging
 
 from GraphRanker import GraphRankerC
 from InDegreeRanker import InDegreeRankerC
+from PageRankRanker import PageRankRankerC
 from BoeLanguageModel.BoeLmRanker import BoeLmRankerC
+
 
 def ChooseRanker(RankerName):
     if RankerName == 'boe':
@@ -34,7 +36,7 @@ def ChooseRanker(RankerName):
     if RankerName == 'indegree':
         return InDegreeRankerC
     if RankerName == 'pr':
-        raise NotImplementedError
+        return PageRankRankerC
     
     logging.error('[%s] not implemented',RankerName)
     raise NotImplementedError
@@ -46,7 +48,7 @@ if 2 != len(sys.argv):
     print 'in\nout'
     GraphRankerC.ShowConf()
     RankerEvaluatorC.ShowConf()
-    print 'ranker indegree|boe|pr(not implemented yet)'
+    print 'ranker indegree|boe|pr'
     InDegreeRankerC.ShowConf()
     BoeLmRankerC.ShowConf()
     sys.exit()
