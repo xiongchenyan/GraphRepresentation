@@ -22,8 +22,8 @@ class DocKnowledgeGraphC(object):
     def Init(self):
         self.DocNo = ""
         self.hNodeId = {}   #obj id -> hash value (p) as in the node weights and edge weight mtx
-        self.vNodeWeight = None
-        self.mEdgeMatrix = None
+        self.vNodeWeight = np.zeros(0)
+        self.mEdgeMatrix = np.zeros([0,0])
         
     def dump(self,OutName):
         out = open(OutName,'w')
