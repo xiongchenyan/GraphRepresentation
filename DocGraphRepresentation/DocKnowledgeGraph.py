@@ -41,7 +41,7 @@ class DocKnowledgeGraphC(object):
         '''
         logging.debug('edge mtx:\n %s',np.array2string(self.mEdgeMatrix))
         if self.mEdgeMatrix.max() == self.mEdgeMatrix.min():
-            self.mEdgeMatrix = 1
+            self.mEdgeMatrix = np.ones(self.mEdgeMatrix.shape)
             return
         
         self.mEdgeMatrix -= self.mEdgeMatrix.min()
