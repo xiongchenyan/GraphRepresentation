@@ -34,12 +34,25 @@ class DocKnowledgeGraphC(object):
         
         
     def NormalizeEdgeMtx(self):
+        '''
+        1 min-max normalization
+        2 if all row is 0, put 1 to diagonal
+        3 row normalize
+        '''
         logging.debug('edge mtx:\n %s',np.array2string(self.mEdgeMatrix))
+        if self.mEdgeMatrix.max() == self.mEdgeMatrix.min():
+            self.mEdgeMatrix = 1
+            return
+        
+        self.mEdgeMatrix -= self.mEdgeMatrix.min()
+        self.mEdgeMatrix /= self.mEdgeMatrix.max() - self.mEdgeMatrix.min()
+        
+        for i in range(self.mEdgeMatrix.shape[0]):
+            if self.mEdgeMatrix[i,:].sum() == 0:
+                self.mEdgeMatrix[i,i] = 1
+        
         row_sums = self.mEdgeMatrix.sum(axis=1,keepdims=True)
-        if 0 == row_sums.all():
-            logging.warn('some node has no out degree')
-        else:
-            self.mEdgeMatrix /= row_sums
+        self.mEdgeMatrix /= row_sums
 #     def ObjWeight(self,ObjId):
 #         score = 0
 #         if ObjId in self.hNodeId:
