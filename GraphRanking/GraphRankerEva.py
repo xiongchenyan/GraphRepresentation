@@ -44,26 +44,32 @@ def ChooseRanker(RankerName):
 
 
 if 2 != len(sys.argv):
-    print 'I evaluate Boe lm '
+    print 'I evaluate graph ranking'
     print 'in\nout'
-    GraphRankerC.ShowConf()
     RankerEvaluatorC.ShowConf()
     print 'ranker indegree|boe|pr'
     InDegreeRankerC.ShowConf()
     BoeLmRankerC.ShowConf()
+    PageRankRankerC.ShowConf()
     sys.exit()
 
+conf = cxConfC(sys.argv[1])  
+
+
+LogLevel = logging.INFO
+if conf.GetConf('loglevel') == 'debug':
+    LogLevel = logging.DEBUG
 root = logging.getLogger()
-root.setLevel(logging.INFO)
-
+root.setLevel(LogLevel)
 ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+ch.setLevel(LogLevel)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
+root.addHandler(ch)         
 
 
 
-conf = cxConfC(sys.argv[1])   
+ 
 QIn = conf.GetConf('in')
 EvaOut = conf.GetConf('out')
 RankerName = conf.GetConf('ranker')

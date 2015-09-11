@@ -31,6 +31,7 @@ class InDegreeRankerC(GraphRankerC):
     
     def RankScoreForDoc(self, qid, doc):
         DocKg = SearchResDocGraphConstructorC.LoadDocGraph(self.DocKgDir, qid, doc.DocNo)
+        logging.debug('[%s] doc kg loaded, [%d] [%d-%d]',doc.DocNo,doc.vNodeWeight.shape[0],doc.mEdgeMatrix.shape[0],doc.mEdgeMatrix.shape[1])
         DocKg.NormalizeEdgeMtx()
         lQObj = self.hQObj[qid]
         score = 0
