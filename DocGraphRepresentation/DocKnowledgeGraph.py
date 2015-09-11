@@ -36,10 +36,10 @@ class DocKnowledgeGraphC(object):
     def NormalizeEdgeMtx(self):
         logging.debug('edge mtx:\n %s',np.array2string(self.mEdgeMatrix))
         row_sums = self.mEdgeMatrix.sum(axis=1,keepdims=True)
-        if 0 != row_sums:
-            self.mEdgeMatrix /= row_sums
+        if 0 == row_sums.all():
+            logging.warn('some node has no out degree')
         else:
-            logging.warn('some node has no indegree')
+            self.mEdgeMatrix /= row_sums
 #     def ObjWeight(self,ObjId):
 #         score = 0
 #         if ObjId in self.hNodeId:
