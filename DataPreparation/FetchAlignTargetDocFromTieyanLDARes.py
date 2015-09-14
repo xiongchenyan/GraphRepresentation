@@ -40,6 +40,8 @@ def FetchTargetDocLines(InDir,hUrlDocNo,OutName):
         print 'start reading [%s]' %(fname)
         for line in open(fname):
             vCol = line.strip().split('\t')
+            if len(vCol) < 2:
+                continue
             url = vCol[0]
             data = '\t'.join(vCol[1:])
             if url in hUrlDocNo:
