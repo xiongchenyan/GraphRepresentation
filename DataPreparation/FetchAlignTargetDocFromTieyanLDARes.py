@@ -32,7 +32,7 @@ def LoadTargetUrl(InDir,sDocNo):
             DocNo,Url = vCol[:2]
             if DocNo in sDocNo:
                 hUrlDocNo[Url] = DocNo
-    print "loaded [%d/%d] target url" %(len(hUrlDocNo,len(sDocNo)))            
+    print "loaded [%d/%d] target url" %(len(hUrlDocNo),len(sDocNo))            
     return hUrlDocNo
 
 
