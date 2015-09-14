@@ -26,7 +26,10 @@ def LoadTargetUrl(InDir,sDocNo):
     lFName = WalkDir(InDir)
     for fname in lFName:
         for line in open(fname):
-            DocNo,Url = line.strip().splitlines()
+            vCol = line.strip().split()
+            if len(vCol) < 2:
+                continue
+            DocNo,Url = vCol
             if DocNo in sDocNo:
                 hUrlDocNo[Url] = DocNo
     print "loaded [%d/%d] target url" %(len(hUrlDocNo,len(sDocNo)))            
