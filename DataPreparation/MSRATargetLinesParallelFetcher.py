@@ -56,7 +56,7 @@ class MSRATargetLinesParalledlFetcherC(cxBaseC):
         for i in range(self.PartNum):
             InName = self.MSRAInDataPre + '%d' %(i)
             OutName = self.OutPre + '%d' %(i)
-            MappingName = self.OutPre + '%d' %(i)
+            MappingName = self.DocUrlMappingDataPre + '%d' %(i)
             lCmd = self.lCmd + [InName,MappingName,OutName]
             print subprocess.check_output(lCmd)
         print 'all submitted'
