@@ -31,7 +31,7 @@ for cnt,line in enumerate(open(sys.argv[1])):
     if len(vCol) < 3:
         continue
     Url = vCol[0]
-    text = vCol[1]
+    text = vCol[2]
     if Url in hUrlDocNo:
         print >> out,Url + '\t' + hUrlDocNo[Url] + '\t' + text
         FindCnt += 1
