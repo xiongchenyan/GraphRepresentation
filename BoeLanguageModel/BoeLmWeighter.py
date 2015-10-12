@@ -32,13 +32,15 @@ class BoeLmWeighterC(BoeLmC):
         self.ObjCenter = FbObjCacheCenterC()
         self.CtfCenter = TermCtfC()
         self.lInferenceWeight = [1,0,0]
+        self.hDocText = {}
+        
         
         
     def SetConf(self,ConfIn):
         conf = cxConfC(ConfIn)
         
         self.DocTextDir = conf.GetConf('doctextdir')
-        self.hDocText = self.LoadDocText()
+        self.LoadDocText()
         
         self.ObjCenter.SetConf(ConfIn)
         
