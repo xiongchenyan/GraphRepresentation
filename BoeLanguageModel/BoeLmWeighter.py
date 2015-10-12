@@ -30,6 +30,7 @@ class BoeLmWeighterC(BoeLmC):
         self.DocTextDir = ""
         self.ObjCenter = FbObjCacheCenterC()
         self.CtfCenter = TermCtfC()
+        self.lInferenceWeight = [1,0,0]
         
         
     def SetConf(self,ConfIn):
@@ -95,7 +96,7 @@ class BoeLmWeighterC(BoeLmC):
         return lCos
     
     
-    def LinearWeightTfIdfTextSim(self,qid,query,ObjId,DocKg,TfScore = 1,IdfScore = 0, TextSimScore = 0):
+    def LinearWeightTfIdfTextSim(self,ObjId,DocKg,TfScore = 1,IdfScore = 0, TextSimScore = 0):
         
         if not ObjId in DocKg:
             return self.MinLogProb
@@ -112,6 +113,9 @@ class BoeLmWeighterC(BoeLmC):
         p = DocKg.hNodeId[ObjId]
         
         return lScore[p]
+        
+    def inference(self, ObjId, DocKg):
+        return self.LinearWeightTfIdfTextSim(ObjId, DocKg, self.lInferenceWeight[0], self.lInferenceWeight[1], self.lInferenceWeight[2])
         
         
         

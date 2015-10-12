@@ -24,9 +24,9 @@ from cxBase.Conf import cxConfC
 from DocGraphRepresentation.DocKnowledgeGraph import DocKnowledgeGraphC
 import numpy as np
 from BoeLanguageModel.BoeLmBase import BoeLmC
-import logging
+import logging,json
 from DocGraphRepresentation.ConstructSearchResDocGraph import SearchResDocGraphConstructorC
-
+from BoeLmWeighter import BoeLmWeighterC
 
 class BoeLmRankerC(cxBaseC):
     def Init(self):
@@ -34,6 +34,7 @@ class BoeLmRankerC(cxBaseC):
         self.hQObj = {}
         self.DocKgDir = ""
         self.Inferencer = BoeLmC()
+        self.lInferenceWeight = [1,0,0]
         
         
     def SetConf(self, ConfIn):
@@ -46,8 +47,27 @@ class BoeLmRankerC(cxBaseC):
     @staticmethod
     def ShowConf():
         cxBaseC.ShowConf()
-        print 'dockgdir\nqanain'
+        print 'dockgdir\nqanain\ninference lm|tfidfcos\ntfidfcosweight 1#0#0'
         
+    
+    def SetInferencer(self):
+        InferenceMethod = self.conf.GetConf('inference','lm')
+        if 'lm' == InferenceMethod:
+            self.Inferencer = BoeLmC()
+            return
+        if 'tfidfcos' == InferenceMethod:
+            self.Inferencer = BoeLmWeighterC()
+            self.Inferencer.SetConf(self.ConfIn)
+            self.lInferenceWeight = self.conf.GetConf('tfidfcosweight', self.lInferenceWeight)
+            self.lInferenceWeight = [float(item) for item in self.lInferenceWeight]
+            self.Inferencer.lInferenceWeight = self.lInferenceWeight
+            logging.info('use tf-idf-cos weighted scoring function, weight = %s',json.dumps(self.lInferenceWeight))
+            return
+        
+        #default is BoeLm
+        return
+            
+    
     def LoadQObj(self,QAnaInName):
         for line in open(QAnaInName).read().splitlines():
             vCol = line.strip().split('\t')
@@ -94,7 +114,7 @@ if __name__=='__main__':
     import sys,os
     from AdhocEva.RankerEvaluator import RankerEvaluatorC
     if 2 != len(sys.argv):
-        print 'I evaluate Boe lm '
+        print 'I evaluate Boe model '
         print 'in\nout'
         BoeLmRankerC.ShowConf()
         RankerEvaluatorC.ShowConf()
