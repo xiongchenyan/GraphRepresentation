@@ -22,7 +22,7 @@ import numpy as np
 class BoeLmWeighterC(BoeLmC):
     
     def __init__(self,ConfIn = ""):
-        self.Init(self)
+        self.Init()
         if "" != ConfIn:
             self.SetConf(ConfIn)
     
