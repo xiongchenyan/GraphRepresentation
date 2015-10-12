@@ -42,6 +42,7 @@ class BoeLmRankerC(cxBaseC):
         self.DocKgDir = self.conf.GetConf('dockgdir')
         QAnaInName = self.conf.GetConf('qanain')
         self.LoadQObj(QAnaInName)
+        self.SetInferencer()
         
     
     @staticmethod
