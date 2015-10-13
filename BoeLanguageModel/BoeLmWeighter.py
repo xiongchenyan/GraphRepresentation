@@ -18,7 +18,7 @@ import logging
 from cxBase.WalkDirectory import WalkDir
 from IndriRelate.LmBase import LmBaseC
 import numpy as np
-
+import math
 class BoeLmWeighterC(BoeLmC):
     
     def __init__(self,ConfIn = ""):
@@ -98,24 +98,47 @@ class BoeLmWeighterC(BoeLmC):
         
         return lCos
     
+    def GetTextCosine(self,ObjId,DocKg):
+        DocText = ""
+        if DocKg.DocNo in self.hDocText:
+            DocText = self.hDocText[DocKg.DocNo]
+        DocLm = LmBaseC(DocText)
+        desp = self.ObjCenter.FetchObjDesp(ObjId)
+        lm = LmBaseC(desp)
+        score = LmBaseC.Cosine(lm, DocLm)
+        if 0 == score:
+            return self.MinLogProb
+        return math.log(score)
+        
     
     def LinearWeightTfIdfTextSim(self,ObjId,DocKg,TfScore = 1,IdfScore = 0, TextSimScore = 0):
         
         if not ObjId in DocKg:
             return self.MinLogProb
         
-        lTf = np.array(self.GetAllTf(DocKg))
-        lIdf = np.array(self.GetAllIdf(DocKg))
-        lCos = np.array(self.GetAllTextCosine(DocKg))
         
+        lTf = np.zeros(len(DocKg))
+        lIdf = np.zeros(len(DocKg))
+        if TfScore != 0:
+            lTf = np.array(self.GetAllTf(DocKg))
+        if IdfScore != 0:
+            lIdf = np.array(self.GetAllIdf(DocKg))
+#         lCos = np.array(self.GetAllTextCosine(DocKg))
+        TextSim = 0
+        if TextSimScore != 0:
+            TextSim = self.GetTextCosine(ObjId,DocKg)
         W = np.array([TfScore,IdfScore,TextSimScore])
         
         W = W / float(sum(W))
         
-        lScore = lTf * W[0] + lIdf * W[1] + lCos * W[2]
-        p = DocKg.hNodeId[ObjId]
+        lScore = lTf * W[0] + lIdf * W[1]
         
-        return lScore[p]
+        res = self.MinLogProb * (W[0] + W[1])
+        if ObjId in DocKg:
+            p = DocKg.hNodeId[ObjId]
+            res = lScore[p]
+        res = res + TextSim * TextSimScore
+        return res
         
     def inference(self, ObjId, DocKg):
         return self.LinearWeightTfIdfTextSim(ObjId, DocKg, self.lInferenceWeight[0], self.lInferenceWeight[1], self.lInferenceWeight[2])
